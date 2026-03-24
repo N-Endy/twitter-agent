@@ -1,0 +1,35 @@
+{
+  "name": "@twitter-agent/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "latest",
+    "@prisma/client": "latest",
+    "@xdevplatform/xdk": "latest",
+    "bullmq": "latest",
+    "cheerio": "latest",
+    "date-fns": "latest",
+    "date-fns-tz": "latest",
+    "ioredis": "latest",
+    "openai": "latest",
+    "pg": "latest",
+    "rss-parser": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest"
+  }
+}

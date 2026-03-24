@@ -1,0 +1,1534 @@
+import type * as runtime from "@prisma/client/runtime/client";
+import type * as Prisma from "../internal/prismaNamespace";
+/**
+ * Model ReplySuggestion
+ *
+ */
+export type ReplySuggestionModel = runtime.Types.Result.DefaultSelection<Prisma.$ReplySuggestionPayload>;
+export type AggregateReplySuggestion = {
+    _count: ReplySuggestionCountAggregateOutputType | null;
+    _avg: ReplySuggestionAvgAggregateOutputType | null;
+    _sum: ReplySuggestionSumAggregateOutputType | null;
+    _min: ReplySuggestionMinAggregateOutputType | null;
+    _max: ReplySuggestionMaxAggregateOutputType | null;
+};
+export type ReplySuggestionAvgAggregateOutputType = {
+    confidence: number | null;
+};
+export type ReplySuggestionSumAggregateOutputType = {
+    confidence: number | null;
+};
+export type ReplySuggestionMinAggregateOutputType = {
+    id: string | null;
+    mentionId: string | null;
+    draftText: string | null;
+    rationale: string | null;
+    confidence: number | null;
+    selected: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+};
+export type ReplySuggestionMaxAggregateOutputType = {
+    id: string | null;
+    mentionId: string | null;
+    draftText: string | null;
+    rationale: string | null;
+    confidence: number | null;
+    selected: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+};
+export type ReplySuggestionCountAggregateOutputType = {
+    id: number;
+    mentionId: number;
+    draftText: number;
+    rationale: number;
+    confidence: number;
+    toneChecklist: number;
+    safetyNotes: number;
+    selected: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+};
+export type ReplySuggestionAvgAggregateInputType = {
+    confidence?: true;
+};
+export type ReplySuggestionSumAggregateInputType = {
+    confidence?: true;
+};
+export type ReplySuggestionMinAggregateInputType = {
+    id?: true;
+    mentionId?: true;
+    draftText?: true;
+    rationale?: true;
+    confidence?: true;
+    selected?: true;
+    createdAt?: true;
+    updatedAt?: true;
+};
+export type ReplySuggestionMaxAggregateInputType = {
+    id?: true;
+    mentionId?: true;
+    draftText?: true;
+    rationale?: true;
+    confidence?: true;
+    selected?: true;
+    createdAt?: true;
+    updatedAt?: true;
+};
+export type ReplySuggestionCountAggregateInputType = {
+    id?: true;
+    mentionId?: true;
+    draftText?: true;
+    rationale?: true;
+    confidence?: true;
+    toneChecklist?: true;
+    safetyNotes?: true;
+    selected?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+};
+export type ReplySuggestionAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReplySuggestion to aggregate.
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ReplySuggestions to fetch.
+     */
+    orderBy?: Prisma.ReplySuggestionOrderByWithRelationInput | Prisma.ReplySuggestionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: Prisma.ReplySuggestionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ReplySuggestions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ReplySuggestions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ReplySuggestions
+    **/
+    _count?: true | ReplySuggestionCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+    **/
+    _avg?: ReplySuggestionAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: ReplySuggestionSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReplySuggestionMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReplySuggestionMaxAggregateInputType;
+};
+export type GetReplySuggestionAggregateType<T extends ReplySuggestionAggregateArgs> = {
+    [P in keyof T & keyof AggregateReplySuggestion]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateReplySuggestion[P]> : Prisma.GetScalarType<T[P], AggregateReplySuggestion[P]>;
+};
+export type ReplySuggestionGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ReplySuggestionWhereInput;
+    orderBy?: Prisma.ReplySuggestionOrderByWithAggregationInput | Prisma.ReplySuggestionOrderByWithAggregationInput[];
+    by: Prisma.ReplySuggestionScalarFieldEnum[] | Prisma.ReplySuggestionScalarFieldEnum;
+    having?: Prisma.ReplySuggestionScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: ReplySuggestionCountAggregateInputType | true;
+    _avg?: ReplySuggestionAvgAggregateInputType;
+    _sum?: ReplySuggestionSumAggregateInputType;
+    _min?: ReplySuggestionMinAggregateInputType;
+    _max?: ReplySuggestionMaxAggregateInputType;
+};
+export type ReplySuggestionGroupByOutputType = {
+    id: string;
+    mentionId: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist: string[];
+    safetyNotes: string[];
+    selected: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: ReplySuggestionCountAggregateOutputType | null;
+    _avg: ReplySuggestionAvgAggregateOutputType | null;
+    _sum: ReplySuggestionSumAggregateOutputType | null;
+    _min: ReplySuggestionMinAggregateOutputType | null;
+    _max: ReplySuggestionMaxAggregateOutputType | null;
+};
+type GetReplySuggestionGroupByPayload<T extends ReplySuggestionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ReplySuggestionGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof ReplySuggestionGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ReplySuggestionGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ReplySuggestionGroupByOutputType[P]>;
+}>>;
+export type ReplySuggestionWhereInput = {
+    AND?: Prisma.ReplySuggestionWhereInput | Prisma.ReplySuggestionWhereInput[];
+    OR?: Prisma.ReplySuggestionWhereInput[];
+    NOT?: Prisma.ReplySuggestionWhereInput | Prisma.ReplySuggestionWhereInput[];
+    id?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    mentionId?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    draftText?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    rationale?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    confidence?: Prisma.FloatFilter<"ReplySuggestion"> | number;
+    toneChecklist?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    safetyNotes?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    selected?: Prisma.BoolFilter<"ReplySuggestion"> | boolean;
+    createdAt?: Prisma.DateTimeFilter<"ReplySuggestion"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ReplySuggestion"> | Date | string;
+    mention?: Prisma.XOR<Prisma.MentionScalarRelationFilter, Prisma.MentionWhereInput>;
+    replyActions?: Prisma.ReplyActionListRelationFilter;
+};
+export type ReplySuggestionOrderByWithRelationInput = {
+    id?: Prisma.SortOrder;
+    mentionId?: Prisma.SortOrder;
+    draftText?: Prisma.SortOrder;
+    rationale?: Prisma.SortOrder;
+    confidence?: Prisma.SortOrder;
+    toneChecklist?: Prisma.SortOrder;
+    safetyNotes?: Prisma.SortOrder;
+    selected?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+    mention?: Prisma.MentionOrderByWithRelationInput;
+    replyActions?: Prisma.ReplyActionOrderByRelationAggregateInput;
+};
+export type ReplySuggestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string;
+    AND?: Prisma.ReplySuggestionWhereInput | Prisma.ReplySuggestionWhereInput[];
+    OR?: Prisma.ReplySuggestionWhereInput[];
+    NOT?: Prisma.ReplySuggestionWhereInput | Prisma.ReplySuggestionWhereInput[];
+    mentionId?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    draftText?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    rationale?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    confidence?: Prisma.FloatFilter<"ReplySuggestion"> | number;
+    toneChecklist?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    safetyNotes?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    selected?: Prisma.BoolFilter<"ReplySuggestion"> | boolean;
+    createdAt?: Prisma.DateTimeFilter<"ReplySuggestion"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ReplySuggestion"> | Date | string;
+    mention?: Prisma.XOR<Prisma.MentionScalarRelationFilter, Prisma.MentionWhereInput>;
+    replyActions?: Prisma.ReplyActionListRelationFilter;
+}, "id">;
+export type ReplySuggestionOrderByWithAggregationInput = {
+    id?: Prisma.SortOrder;
+    mentionId?: Prisma.SortOrder;
+    draftText?: Prisma.SortOrder;
+    rationale?: Prisma.SortOrder;
+    confidence?: Prisma.SortOrder;
+    toneChecklist?: Prisma.SortOrder;
+    safetyNotes?: Prisma.SortOrder;
+    selected?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+    _count?: Prisma.ReplySuggestionCountOrderByAggregateInput;
+    _avg?: Prisma.ReplySuggestionAvgOrderByAggregateInput;
+    _max?: Prisma.ReplySuggestionMaxOrderByAggregateInput;
+    _min?: Prisma.ReplySuggestionMinOrderByAggregateInput;
+    _sum?: Prisma.ReplySuggestionSumOrderByAggregateInput;
+};
+export type ReplySuggestionScalarWhereWithAggregatesInput = {
+    AND?: Prisma.ReplySuggestionScalarWhereWithAggregatesInput | Prisma.ReplySuggestionScalarWhereWithAggregatesInput[];
+    OR?: Prisma.ReplySuggestionScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.ReplySuggestionScalarWhereWithAggregatesInput | Prisma.ReplySuggestionScalarWhereWithAggregatesInput[];
+    id?: Prisma.StringWithAggregatesFilter<"ReplySuggestion"> | string;
+    mentionId?: Prisma.StringWithAggregatesFilter<"ReplySuggestion"> | string;
+    draftText?: Prisma.StringWithAggregatesFilter<"ReplySuggestion"> | string;
+    rationale?: Prisma.StringWithAggregatesFilter<"ReplySuggestion"> | string;
+    confidence?: Prisma.FloatWithAggregatesFilter<"ReplySuggestion"> | number;
+    toneChecklist?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    safetyNotes?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    selected?: Prisma.BoolWithAggregatesFilter<"ReplySuggestion"> | boolean;
+    createdAt?: Prisma.DateTimeWithAggregatesFilter<"ReplySuggestion"> | Date | string;
+    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ReplySuggestion"> | Date | string;
+};
+export type ReplySuggestionCreateInput = {
+    id?: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    mention: Prisma.MentionCreateNestedOneWithoutReplySuggestionsInput;
+    replyActions?: Prisma.ReplyActionCreateNestedManyWithoutSuggestionInput;
+};
+export type ReplySuggestionUncheckedCreateInput = {
+    id?: string;
+    mentionId: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    replyActions?: Prisma.ReplyActionUncheckedCreateNestedManyWithoutSuggestionInput;
+};
+export type ReplySuggestionUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    mention?: Prisma.MentionUpdateOneRequiredWithoutReplySuggestionsNestedInput;
+    replyActions?: Prisma.ReplyActionUpdateManyWithoutSuggestionNestedInput;
+};
+export type ReplySuggestionUncheckedUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    mentionId?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    replyActions?: Prisma.ReplyActionUncheckedUpdateManyWithoutSuggestionNestedInput;
+};
+export type ReplySuggestionCreateManyInput = {
+    id?: string;
+    mentionId: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ReplySuggestionUpdateManyMutationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ReplySuggestionUncheckedUpdateManyInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    mentionId?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ReplySuggestionListRelationFilter = {
+    every?: Prisma.ReplySuggestionWhereInput;
+    some?: Prisma.ReplySuggestionWhereInput;
+    none?: Prisma.ReplySuggestionWhereInput;
+};
+export type ReplySuggestionOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type ReplySuggestionCountOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    mentionId?: Prisma.SortOrder;
+    draftText?: Prisma.SortOrder;
+    rationale?: Prisma.SortOrder;
+    confidence?: Prisma.SortOrder;
+    toneChecklist?: Prisma.SortOrder;
+    safetyNotes?: Prisma.SortOrder;
+    selected?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type ReplySuggestionAvgOrderByAggregateInput = {
+    confidence?: Prisma.SortOrder;
+};
+export type ReplySuggestionMaxOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    mentionId?: Prisma.SortOrder;
+    draftText?: Prisma.SortOrder;
+    rationale?: Prisma.SortOrder;
+    confidence?: Prisma.SortOrder;
+    selected?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type ReplySuggestionMinOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    mentionId?: Prisma.SortOrder;
+    draftText?: Prisma.SortOrder;
+    rationale?: Prisma.SortOrder;
+    confidence?: Prisma.SortOrder;
+    selected?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type ReplySuggestionSumOrderByAggregateInput = {
+    confidence?: Prisma.SortOrder;
+};
+export type ReplySuggestionNullableScalarRelationFilter = {
+    is?: Prisma.ReplySuggestionWhereInput | null;
+    isNot?: Prisma.ReplySuggestionWhereInput | null;
+};
+export type ReplySuggestionCreateNestedManyWithoutMentionInput = {
+    create?: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutMentionInput, Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput> | Prisma.ReplySuggestionCreateWithoutMentionInput[] | Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput[];
+    connectOrCreate?: Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput | Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput[];
+    createMany?: Prisma.ReplySuggestionCreateManyMentionInputEnvelope;
+    connect?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+};
+export type ReplySuggestionUncheckedCreateNestedManyWithoutMentionInput = {
+    create?: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutMentionInput, Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput> | Prisma.ReplySuggestionCreateWithoutMentionInput[] | Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput[];
+    connectOrCreate?: Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput | Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput[];
+    createMany?: Prisma.ReplySuggestionCreateManyMentionInputEnvelope;
+    connect?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+};
+export type ReplySuggestionUpdateManyWithoutMentionNestedInput = {
+    create?: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutMentionInput, Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput> | Prisma.ReplySuggestionCreateWithoutMentionInput[] | Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput[];
+    connectOrCreate?: Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput | Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput[];
+    upsert?: Prisma.ReplySuggestionUpsertWithWhereUniqueWithoutMentionInput | Prisma.ReplySuggestionUpsertWithWhereUniqueWithoutMentionInput[];
+    createMany?: Prisma.ReplySuggestionCreateManyMentionInputEnvelope;
+    set?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    disconnect?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    delete?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    connect?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    update?: Prisma.ReplySuggestionUpdateWithWhereUniqueWithoutMentionInput | Prisma.ReplySuggestionUpdateWithWhereUniqueWithoutMentionInput[];
+    updateMany?: Prisma.ReplySuggestionUpdateManyWithWhereWithoutMentionInput | Prisma.ReplySuggestionUpdateManyWithWhereWithoutMentionInput[];
+    deleteMany?: Prisma.ReplySuggestionScalarWhereInput | Prisma.ReplySuggestionScalarWhereInput[];
+};
+export type ReplySuggestionUncheckedUpdateManyWithoutMentionNestedInput = {
+    create?: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutMentionInput, Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput> | Prisma.ReplySuggestionCreateWithoutMentionInput[] | Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput[];
+    connectOrCreate?: Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput | Prisma.ReplySuggestionCreateOrConnectWithoutMentionInput[];
+    upsert?: Prisma.ReplySuggestionUpsertWithWhereUniqueWithoutMentionInput | Prisma.ReplySuggestionUpsertWithWhereUniqueWithoutMentionInput[];
+    createMany?: Prisma.ReplySuggestionCreateManyMentionInputEnvelope;
+    set?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    disconnect?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    delete?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    connect?: Prisma.ReplySuggestionWhereUniqueInput | Prisma.ReplySuggestionWhereUniqueInput[];
+    update?: Prisma.ReplySuggestionUpdateWithWhereUniqueWithoutMentionInput | Prisma.ReplySuggestionUpdateWithWhereUniqueWithoutMentionInput[];
+    updateMany?: Prisma.ReplySuggestionUpdateManyWithWhereWithoutMentionInput | Prisma.ReplySuggestionUpdateManyWithWhereWithoutMentionInput[];
+    deleteMany?: Prisma.ReplySuggestionScalarWhereInput | Prisma.ReplySuggestionScalarWhereInput[];
+};
+export type ReplySuggestionCreatetoneChecklistInput = {
+    set: string[];
+};
+export type ReplySuggestionCreatesafetyNotesInput = {
+    set: string[];
+};
+export type ReplySuggestionUpdatetoneChecklistInput = {
+    set?: string[];
+    push?: string | string[];
+};
+export type ReplySuggestionUpdatesafetyNotesInput = {
+    set?: string[];
+    push?: string | string[];
+};
+export type ReplySuggestionCreateNestedOneWithoutReplyActionsInput = {
+    create?: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutReplyActionsInput, Prisma.ReplySuggestionUncheckedCreateWithoutReplyActionsInput>;
+    connectOrCreate?: Prisma.ReplySuggestionCreateOrConnectWithoutReplyActionsInput;
+    connect?: Prisma.ReplySuggestionWhereUniqueInput;
+};
+export type ReplySuggestionUpdateOneWithoutReplyActionsNestedInput = {
+    create?: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutReplyActionsInput, Prisma.ReplySuggestionUncheckedCreateWithoutReplyActionsInput>;
+    connectOrCreate?: Prisma.ReplySuggestionCreateOrConnectWithoutReplyActionsInput;
+    upsert?: Prisma.ReplySuggestionUpsertWithoutReplyActionsInput;
+    disconnect?: Prisma.ReplySuggestionWhereInput | boolean;
+    delete?: Prisma.ReplySuggestionWhereInput | boolean;
+    connect?: Prisma.ReplySuggestionWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.ReplySuggestionUpdateToOneWithWhereWithoutReplyActionsInput, Prisma.ReplySuggestionUpdateWithoutReplyActionsInput>, Prisma.ReplySuggestionUncheckedUpdateWithoutReplyActionsInput>;
+};
+export type ReplySuggestionCreateWithoutMentionInput = {
+    id?: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    replyActions?: Prisma.ReplyActionCreateNestedManyWithoutSuggestionInput;
+};
+export type ReplySuggestionUncheckedCreateWithoutMentionInput = {
+    id?: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    replyActions?: Prisma.ReplyActionUncheckedCreateNestedManyWithoutSuggestionInput;
+};
+export type ReplySuggestionCreateOrConnectWithoutMentionInput = {
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutMentionInput, Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput>;
+};
+export type ReplySuggestionCreateManyMentionInputEnvelope = {
+    data: Prisma.ReplySuggestionCreateManyMentionInput | Prisma.ReplySuggestionCreateManyMentionInput[];
+    skipDuplicates?: boolean;
+};
+export type ReplySuggestionUpsertWithWhereUniqueWithoutMentionInput = {
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+    update: Prisma.XOR<Prisma.ReplySuggestionUpdateWithoutMentionInput, Prisma.ReplySuggestionUncheckedUpdateWithoutMentionInput>;
+    create: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutMentionInput, Prisma.ReplySuggestionUncheckedCreateWithoutMentionInput>;
+};
+export type ReplySuggestionUpdateWithWhereUniqueWithoutMentionInput = {
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+    data: Prisma.XOR<Prisma.ReplySuggestionUpdateWithoutMentionInput, Prisma.ReplySuggestionUncheckedUpdateWithoutMentionInput>;
+};
+export type ReplySuggestionUpdateManyWithWhereWithoutMentionInput = {
+    where: Prisma.ReplySuggestionScalarWhereInput;
+    data: Prisma.XOR<Prisma.ReplySuggestionUpdateManyMutationInput, Prisma.ReplySuggestionUncheckedUpdateManyWithoutMentionInput>;
+};
+export type ReplySuggestionScalarWhereInput = {
+    AND?: Prisma.ReplySuggestionScalarWhereInput | Prisma.ReplySuggestionScalarWhereInput[];
+    OR?: Prisma.ReplySuggestionScalarWhereInput[];
+    NOT?: Prisma.ReplySuggestionScalarWhereInput | Prisma.ReplySuggestionScalarWhereInput[];
+    id?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    mentionId?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    draftText?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    rationale?: Prisma.StringFilter<"ReplySuggestion"> | string;
+    confidence?: Prisma.FloatFilter<"ReplySuggestion"> | number;
+    toneChecklist?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    safetyNotes?: Prisma.StringNullableListFilter<"ReplySuggestion">;
+    selected?: Prisma.BoolFilter<"ReplySuggestion"> | boolean;
+    createdAt?: Prisma.DateTimeFilter<"ReplySuggestion"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ReplySuggestion"> | Date | string;
+};
+export type ReplySuggestionCreateWithoutReplyActionsInput = {
+    id?: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    mention: Prisma.MentionCreateNestedOneWithoutReplySuggestionsInput;
+};
+export type ReplySuggestionUncheckedCreateWithoutReplyActionsInput = {
+    id?: string;
+    mentionId: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ReplySuggestionCreateOrConnectWithoutReplyActionsInput = {
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutReplyActionsInput, Prisma.ReplySuggestionUncheckedCreateWithoutReplyActionsInput>;
+};
+export type ReplySuggestionUpsertWithoutReplyActionsInput = {
+    update: Prisma.XOR<Prisma.ReplySuggestionUpdateWithoutReplyActionsInput, Prisma.ReplySuggestionUncheckedUpdateWithoutReplyActionsInput>;
+    create: Prisma.XOR<Prisma.ReplySuggestionCreateWithoutReplyActionsInput, Prisma.ReplySuggestionUncheckedCreateWithoutReplyActionsInput>;
+    where?: Prisma.ReplySuggestionWhereInput;
+};
+export type ReplySuggestionUpdateToOneWithWhereWithoutReplyActionsInput = {
+    where?: Prisma.ReplySuggestionWhereInput;
+    data: Prisma.XOR<Prisma.ReplySuggestionUpdateWithoutReplyActionsInput, Prisma.ReplySuggestionUncheckedUpdateWithoutReplyActionsInput>;
+};
+export type ReplySuggestionUpdateWithoutReplyActionsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    mention?: Prisma.MentionUpdateOneRequiredWithoutReplySuggestionsNestedInput;
+};
+export type ReplySuggestionUncheckedUpdateWithoutReplyActionsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    mentionId?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ReplySuggestionCreateManyMentionInput = {
+    id?: string;
+    draftText: string;
+    rationale: string;
+    confidence: number;
+    toneChecklist?: Prisma.ReplySuggestionCreatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionCreatesafetyNotesInput | string[];
+    selected?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ReplySuggestionUpdateWithoutMentionInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    replyActions?: Prisma.ReplyActionUpdateManyWithoutSuggestionNestedInput;
+};
+export type ReplySuggestionUncheckedUpdateWithoutMentionInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    replyActions?: Prisma.ReplyActionUncheckedUpdateManyWithoutSuggestionNestedInput;
+};
+export type ReplySuggestionUncheckedUpdateManyWithoutMentionInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    draftText?: Prisma.StringFieldUpdateOperationsInput | string;
+    rationale?: Prisma.StringFieldUpdateOperationsInput | string;
+    confidence?: Prisma.FloatFieldUpdateOperationsInput | number;
+    toneChecklist?: Prisma.ReplySuggestionUpdatetoneChecklistInput | string[];
+    safetyNotes?: Prisma.ReplySuggestionUpdatesafetyNotesInput | string[];
+    selected?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+/**
+ * Count Type ReplySuggestionCountOutputType
+ */
+export type ReplySuggestionCountOutputType = {
+    replyActions: number;
+};
+export type ReplySuggestionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    replyActions?: boolean | ReplySuggestionCountOutputTypeCountReplyActionsArgs;
+};
+/**
+ * ReplySuggestionCountOutputType without action
+ */
+export type ReplySuggestionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestionCountOutputType
+     */
+    select?: Prisma.ReplySuggestionCountOutputTypeSelect<ExtArgs> | null;
+};
+/**
+ * ReplySuggestionCountOutputType without action
+ */
+export type ReplySuggestionCountOutputTypeCountReplyActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ReplyActionWhereInput;
+};
+export type ReplySuggestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    mentionId?: boolean;
+    draftText?: boolean;
+    rationale?: boolean;
+    confidence?: boolean;
+    toneChecklist?: boolean;
+    safetyNotes?: boolean;
+    selected?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    mention?: boolean | Prisma.MentionDefaultArgs<ExtArgs>;
+    replyActions?: boolean | Prisma.ReplySuggestion$replyActionsArgs<ExtArgs>;
+    _count?: boolean | Prisma.ReplySuggestionCountOutputTypeDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["replySuggestion"]>;
+export type ReplySuggestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    mentionId?: boolean;
+    draftText?: boolean;
+    rationale?: boolean;
+    confidence?: boolean;
+    toneChecklist?: boolean;
+    safetyNotes?: boolean;
+    selected?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    mention?: boolean | Prisma.MentionDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["replySuggestion"]>;
+export type ReplySuggestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    mentionId?: boolean;
+    draftText?: boolean;
+    rationale?: boolean;
+    confidence?: boolean;
+    toneChecklist?: boolean;
+    safetyNotes?: boolean;
+    selected?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    mention?: boolean | Prisma.MentionDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["replySuggestion"]>;
+export type ReplySuggestionSelectScalar = {
+    id?: boolean;
+    mentionId?: boolean;
+    draftText?: boolean;
+    rationale?: boolean;
+    confidence?: boolean;
+    toneChecklist?: boolean;
+    safetyNotes?: boolean;
+    selected?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+};
+export type ReplySuggestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentionId" | "draftText" | "rationale" | "confidence" | "toneChecklist" | "safetyNotes" | "selected" | "createdAt" | "updatedAt", ExtArgs["result"]["replySuggestion"]>;
+export type ReplySuggestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    mention?: boolean | Prisma.MentionDefaultArgs<ExtArgs>;
+    replyActions?: boolean | Prisma.ReplySuggestion$replyActionsArgs<ExtArgs>;
+    _count?: boolean | Prisma.ReplySuggestionCountOutputTypeDefaultArgs<ExtArgs>;
+};
+export type ReplySuggestionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    mention?: boolean | Prisma.MentionDefaultArgs<ExtArgs>;
+};
+export type ReplySuggestionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    mention?: boolean | Prisma.MentionDefaultArgs<ExtArgs>;
+};
+export type $ReplySuggestionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "ReplySuggestion";
+    objects: {
+        mention: Prisma.$MentionPayload<ExtArgs>;
+        replyActions: Prisma.$ReplyActionPayload<ExtArgs>[];
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        id: string;
+        mentionId: string;
+        draftText: string;
+        rationale: string;
+        confidence: number;
+        toneChecklist: string[];
+        safetyNotes: string[];
+        selected: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }, ExtArgs["result"]["replySuggestion"]>;
+    composites: {};
+};
+export type ReplySuggestionGetPayload<S extends boolean | null | undefined | ReplySuggestionDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload, S>;
+export type ReplySuggestionCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<ReplySuggestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: ReplySuggestionCountAggregateInputType | true;
+};
+export interface ReplySuggestionDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['ReplySuggestion'];
+        meta: {
+            name: 'ReplySuggestion';
+        };
+    };
+    /**
+     * Find zero or one ReplySuggestion that matches the filter.
+     * @param {ReplySuggestionFindUniqueArgs} args - Arguments to find a ReplySuggestion
+     * @example
+     * // Get one ReplySuggestion
+     * const replySuggestion = await prisma.replySuggestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReplySuggestionFindUniqueArgs>(args: Prisma.SelectSubset<T, ReplySuggestionFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find one ReplySuggestion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReplySuggestionFindUniqueOrThrowArgs} args - Arguments to find a ReplySuggestion
+     * @example
+     * // Get one ReplySuggestion
+     * const replySuggestion = await prisma.replySuggestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReplySuggestionFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ReplySuggestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first ReplySuggestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionFindFirstArgs} args - Arguments to find a ReplySuggestion
+     * @example
+     * // Get one ReplySuggestion
+     * const replySuggestion = await prisma.replySuggestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReplySuggestionFindFirstArgs>(args?: Prisma.SelectSubset<T, ReplySuggestionFindFirstArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first ReplySuggestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionFindFirstOrThrowArgs} args - Arguments to find a ReplySuggestion
+     * @example
+     * // Get one ReplySuggestion
+     * const replySuggestion = await prisma.replySuggestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReplySuggestionFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ReplySuggestionFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find zero or more ReplySuggestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReplySuggestions
+     * const replySuggestions = await prisma.replySuggestion.findMany()
+     *
+     * // Get first 10 ReplySuggestions
+     * const replySuggestions = await prisma.replySuggestion.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const replySuggestionWithIdOnly = await prisma.replySuggestion.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ReplySuggestionFindManyArgs>(args?: Prisma.SelectSubset<T, ReplySuggestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    /**
+     * Create a ReplySuggestion.
+     * @param {ReplySuggestionCreateArgs} args - Arguments to create a ReplySuggestion.
+     * @example
+     * // Create one ReplySuggestion
+     * const ReplySuggestion = await prisma.replySuggestion.create({
+     *   data: {
+     *     // ... data to create a ReplySuggestion
+     *   }
+     * })
+     *
+     */
+    create<T extends ReplySuggestionCreateArgs>(args: Prisma.SelectSubset<T, ReplySuggestionCreateArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Create many ReplySuggestions.
+     * @param {ReplySuggestionCreateManyArgs} args - Arguments to create many ReplySuggestions.
+     * @example
+     * // Create many ReplySuggestions
+     * const replySuggestion = await prisma.replySuggestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ReplySuggestionCreateManyArgs>(args?: Prisma.SelectSubset<T, ReplySuggestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Create many ReplySuggestions and returns the data saved in the database.
+     * @param {ReplySuggestionCreateManyAndReturnArgs} args - Arguments to create many ReplySuggestions.
+     * @example
+     * // Create many ReplySuggestions
+     * const replySuggestion = await prisma.replySuggestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ReplySuggestions and only return the `id`
+     * const replySuggestionWithIdOnly = await prisma.replySuggestion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ReplySuggestionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ReplySuggestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Delete a ReplySuggestion.
+     * @param {ReplySuggestionDeleteArgs} args - Arguments to delete one ReplySuggestion.
+     * @example
+     * // Delete one ReplySuggestion
+     * const ReplySuggestion = await prisma.replySuggestion.delete({
+     *   where: {
+     *     // ... filter to delete one ReplySuggestion
+     *   }
+     * })
+     *
+     */
+    delete<T extends ReplySuggestionDeleteArgs>(args: Prisma.SelectSubset<T, ReplySuggestionDeleteArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Update one ReplySuggestion.
+     * @param {ReplySuggestionUpdateArgs} args - Arguments to update one ReplySuggestion.
+     * @example
+     * // Update one ReplySuggestion
+     * const replySuggestion = await prisma.replySuggestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ReplySuggestionUpdateArgs>(args: Prisma.SelectSubset<T, ReplySuggestionUpdateArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Delete zero or more ReplySuggestions.
+     * @param {ReplySuggestionDeleteManyArgs} args - Arguments to filter ReplySuggestions to delete.
+     * @example
+     * // Delete a few ReplySuggestions
+     * const { count } = await prisma.replySuggestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ReplySuggestionDeleteManyArgs>(args?: Prisma.SelectSubset<T, ReplySuggestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more ReplySuggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReplySuggestions
+     * const replySuggestion = await prisma.replySuggestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ReplySuggestionUpdateManyArgs>(args: Prisma.SelectSubset<T, ReplySuggestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more ReplySuggestions and returns the data updated in the database.
+     * @param {ReplySuggestionUpdateManyAndReturnArgs} args - Arguments to update many ReplySuggestions.
+     * @example
+     * // Update many ReplySuggestions
+     * const replySuggestion = await prisma.replySuggestion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ReplySuggestions and only return the `id`
+     * const replySuggestionWithIdOnly = await prisma.replySuggestion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ReplySuggestionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ReplySuggestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Create or update one ReplySuggestion.
+     * @param {ReplySuggestionUpsertArgs} args - Arguments to update or create a ReplySuggestion.
+     * @example
+     * // Update or create a ReplySuggestion
+     * const replySuggestion = await prisma.replySuggestion.upsert({
+     *   create: {
+     *     // ... data to create a ReplySuggestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReplySuggestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReplySuggestionUpsertArgs>(args: Prisma.SelectSubset<T, ReplySuggestionUpsertArgs<ExtArgs>>): Prisma.Prisma__ReplySuggestionClient<runtime.Types.Result.GetResult<Prisma.$ReplySuggestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Count the number of ReplySuggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionCountArgs} args - Arguments to filter ReplySuggestions to count.
+     * @example
+     * // Count the number of ReplySuggestions
+     * const count = await prisma.replySuggestion.count({
+     *   where: {
+     *     // ... the filter for the ReplySuggestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReplySuggestionCountArgs>(args?: Prisma.Subset<T, ReplySuggestionCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], ReplySuggestionCountAggregateOutputType> : number>;
+    /**
+     * Allows you to perform aggregations operations on a ReplySuggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReplySuggestionAggregateArgs>(args: Prisma.Subset<T, ReplySuggestionAggregateArgs>): Prisma.PrismaPromise<GetReplySuggestionAggregateType<T>>;
+    /**
+     * Group by ReplySuggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReplySuggestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<T extends ReplySuggestionGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: ReplySuggestionGroupByArgs['orderBy'];
+    } : {
+        orderBy?: ReplySuggestionGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, ReplySuggestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReplySuggestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the ReplySuggestion model
+     */
+    readonly fields: ReplySuggestionFieldRefs;
+}
+/**
+ * The delegate class that acts as a "Promise-like" for ReplySuggestion.
+ * Why is this prefixed with `Prisma__`?
+ * Because we want to prevent naming conflicts as mentioned in
+ * https://github.com/prisma/prisma-client-js/issues/707
+ */
+export interface Prisma__ReplySuggestionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    mention<T extends Prisma.MentionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MentionDefaultArgs<ExtArgs>>): Prisma.Prisma__MentionClient<runtime.Types.Result.GetResult<Prisma.$MentionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    replyActions<T extends Prisma.ReplySuggestion$replyActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ReplySuggestion$replyActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReplyActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+/**
+ * Fields of the ReplySuggestion model
+ */
+export interface ReplySuggestionFieldRefs {
+    readonly id: Prisma.FieldRef<"ReplySuggestion", 'String'>;
+    readonly mentionId: Prisma.FieldRef<"ReplySuggestion", 'String'>;
+    readonly draftText: Prisma.FieldRef<"ReplySuggestion", 'String'>;
+    readonly rationale: Prisma.FieldRef<"ReplySuggestion", 'String'>;
+    readonly confidence: Prisma.FieldRef<"ReplySuggestion", 'Float'>;
+    readonly toneChecklist: Prisma.FieldRef<"ReplySuggestion", 'String[]'>;
+    readonly safetyNotes: Prisma.FieldRef<"ReplySuggestion", 'String[]'>;
+    readonly selected: Prisma.FieldRef<"ReplySuggestion", 'Boolean'>;
+    readonly createdAt: Prisma.FieldRef<"ReplySuggestion", 'DateTime'>;
+    readonly updatedAt: Prisma.FieldRef<"ReplySuggestion", 'DateTime'>;
+}
+/**
+ * ReplySuggestion findUnique
+ */
+export type ReplySuggestionFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * Filter, which ReplySuggestion to fetch.
+     */
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+};
+/**
+ * ReplySuggestion findUniqueOrThrow
+ */
+export type ReplySuggestionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * Filter, which ReplySuggestion to fetch.
+     */
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+};
+/**
+ * ReplySuggestion findFirst
+ */
+export type ReplySuggestionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * Filter, which ReplySuggestion to fetch.
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ReplySuggestions to fetch.
+     */
+    orderBy?: Prisma.ReplySuggestionOrderByWithRelationInput | Prisma.ReplySuggestionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ReplySuggestions.
+     */
+    cursor?: Prisma.ReplySuggestionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ReplySuggestions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ReplySuggestions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ReplySuggestions.
+     */
+    distinct?: Prisma.ReplySuggestionScalarFieldEnum | Prisma.ReplySuggestionScalarFieldEnum[];
+};
+/**
+ * ReplySuggestion findFirstOrThrow
+ */
+export type ReplySuggestionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * Filter, which ReplySuggestion to fetch.
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ReplySuggestions to fetch.
+     */
+    orderBy?: Prisma.ReplySuggestionOrderByWithRelationInput | Prisma.ReplySuggestionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ReplySuggestions.
+     */
+    cursor?: Prisma.ReplySuggestionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ReplySuggestions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ReplySuggestions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ReplySuggestions.
+     */
+    distinct?: Prisma.ReplySuggestionScalarFieldEnum | Prisma.ReplySuggestionScalarFieldEnum[];
+};
+/**
+ * ReplySuggestion findMany
+ */
+export type ReplySuggestionFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * Filter, which ReplySuggestions to fetch.
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ReplySuggestions to fetch.
+     */
+    orderBy?: Prisma.ReplySuggestionOrderByWithRelationInput | Prisma.ReplySuggestionOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ReplySuggestions.
+     */
+    cursor?: Prisma.ReplySuggestionWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ReplySuggestions from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ReplySuggestions.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ReplySuggestions.
+     */
+    distinct?: Prisma.ReplySuggestionScalarFieldEnum | Prisma.ReplySuggestionScalarFieldEnum[];
+};
+/**
+ * ReplySuggestion create
+ */
+export type ReplySuggestionCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a ReplySuggestion.
+     */
+    data: Prisma.XOR<Prisma.ReplySuggestionCreateInput, Prisma.ReplySuggestionUncheckedCreateInput>;
+};
+/**
+ * ReplySuggestion createMany
+ */
+export type ReplySuggestionCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReplySuggestions.
+     */
+    data: Prisma.ReplySuggestionCreateManyInput | Prisma.ReplySuggestionCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+/**
+ * ReplySuggestion createManyAndReturn
+ */
+export type ReplySuggestionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * The data used to create many ReplySuggestions.
+     */
+    data: Prisma.ReplySuggestionCreateManyInput | Prisma.ReplySuggestionCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionIncludeCreateManyAndReturn<ExtArgs> | null;
+};
+/**
+ * ReplySuggestion update
+ */
+export type ReplySuggestionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a ReplySuggestion.
+     */
+    data: Prisma.XOR<Prisma.ReplySuggestionUpdateInput, Prisma.ReplySuggestionUncheckedUpdateInput>;
+    /**
+     * Choose, which ReplySuggestion to update.
+     */
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+};
+/**
+ * ReplySuggestion updateMany
+ */
+export type ReplySuggestionUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReplySuggestions.
+     */
+    data: Prisma.XOR<Prisma.ReplySuggestionUpdateManyMutationInput, Prisma.ReplySuggestionUncheckedUpdateManyInput>;
+    /**
+     * Filter which ReplySuggestions to update
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * Limit how many ReplySuggestions to update.
+     */
+    limit?: number;
+};
+/**
+ * ReplySuggestion updateManyAndReturn
+ */
+export type ReplySuggestionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * The data used to update ReplySuggestions.
+     */
+    data: Prisma.XOR<Prisma.ReplySuggestionUpdateManyMutationInput, Prisma.ReplySuggestionUncheckedUpdateManyInput>;
+    /**
+     * Filter which ReplySuggestions to update
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * Limit how many ReplySuggestions to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionIncludeUpdateManyAndReturn<ExtArgs> | null;
+};
+/**
+ * ReplySuggestion upsert
+ */
+export type ReplySuggestionUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the ReplySuggestion to update in case it exists.
+     */
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+    /**
+     * In case the ReplySuggestion found by the `where` argument doesn't exist, create a new ReplySuggestion with this data.
+     */
+    create: Prisma.XOR<Prisma.ReplySuggestionCreateInput, Prisma.ReplySuggestionUncheckedCreateInput>;
+    /**
+     * In case the ReplySuggestion was found with the provided `where` argument, update it with this data.
+     */
+    update: Prisma.XOR<Prisma.ReplySuggestionUpdateInput, Prisma.ReplySuggestionUncheckedUpdateInput>;
+};
+/**
+ * ReplySuggestion delete
+ */
+export type ReplySuggestionDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+    /**
+     * Filter which ReplySuggestion to delete.
+     */
+    where: Prisma.ReplySuggestionWhereUniqueInput;
+};
+/**
+ * ReplySuggestion deleteMany
+ */
+export type ReplySuggestionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReplySuggestions to delete
+     */
+    where?: Prisma.ReplySuggestionWhereInput;
+    /**
+     * Limit how many ReplySuggestions to delete.
+     */
+    limit?: number;
+};
+/**
+ * ReplySuggestion.replyActions
+ */
+export type ReplySuggestion$replyActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplyAction
+     */
+    select?: Prisma.ReplyActionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplyAction
+     */
+    omit?: Prisma.ReplyActionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplyActionInclude<ExtArgs> | null;
+    where?: Prisma.ReplyActionWhereInput;
+    orderBy?: Prisma.ReplyActionOrderByWithRelationInput | Prisma.ReplyActionOrderByWithRelationInput[];
+    cursor?: Prisma.ReplyActionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ReplyActionScalarFieldEnum | Prisma.ReplyActionScalarFieldEnum[];
+};
+/**
+ * ReplySuggestion without action
+ */
+export type ReplySuggestionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReplySuggestion
+     */
+    select?: Prisma.ReplySuggestionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ReplySuggestion
+     */
+    omit?: Prisma.ReplySuggestionOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ReplySuggestionInclude<ExtArgs> | null;
+};
+export {};

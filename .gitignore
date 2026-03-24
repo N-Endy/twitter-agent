@@ -1,0 +1,15 @@
+node_modules
+.next
+dist
+coverage
+.turbo
+.env
+.env.local
+.env.*.local
+apps/web/.next
+apps/web/coverage
+apps/worker/dist
+packages/core/dist
+prisma/dev.db
+*.log
+.DS_Store

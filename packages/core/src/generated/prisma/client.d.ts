@@ -1,0 +1,98 @@
+import * as runtime from "@prisma/client/runtime/client";
+import * as $Class from "./internal/class";
+import * as Prisma from "./internal/prismaNamespace";
+export * as $Enums from './enums';
+export * from "./enums";
+/**
+ * ## Prisma Client
+ *
+ * Type-safe database client for TypeScript
+ * @example
+ * ```
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
+ * // Fetch zero or more SourceItems
+ * const sourceItems = await prisma.sourceItem.findMany()
+ * ```
+ *
+ * Read more in our [docs](https://pris.ly/d/client).
+ */
+export declare const PrismaClient: $Class.PrismaClientConstructor;
+export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>;
+export { Prisma };
+/**
+ * Model SourceItem
+ *
+ */
+export type SourceItem = Prisma.SourceItemModel;
+/**
+ * Model ResearchSnapshot
+ *
+ */
+export type ResearchSnapshot = Prisma.ResearchSnapshotModel;
+/**
+ * Model ContentIdea
+ *
+ */
+export type ContentIdea = Prisma.ContentIdeaModel;
+/**
+ * Model Draft
+ *
+ */
+export type Draft = Prisma.DraftModel;
+/**
+ * Model DraftReview
+ *
+ */
+export type DraftReview = Prisma.DraftReviewModel;
+/**
+ * Model ScheduleSlot
+ *
+ */
+export type ScheduleSlot = Prisma.ScheduleSlotModel;
+/**
+ * Model PublishedPost
+ *
+ */
+export type PublishedPost = Prisma.PublishedPostModel;
+/**
+ * Model PostMetric
+ *
+ */
+export type PostMetric = Prisma.PostMetricModel;
+/**
+ * Model Mention
+ *
+ */
+export type Mention = Prisma.MentionModel;
+/**
+ * Model ReplySuggestion
+ *
+ */
+export type ReplySuggestion = Prisma.ReplySuggestionModel;
+/**
+ * Model ReplyAction
+ *
+ */
+export type ReplyAction = Prisma.ReplyActionModel;
+/**
+ * Model ModerationEvent
+ *
+ */
+export type ModerationEvent = Prisma.ModerationEventModel;
+/**
+ * Model AuditLog
+ *
+ */
+export type AuditLog = Prisma.AuditLogModel;
+/**
+ * Model PromptVersion
+ *
+ */
+export type PromptVersion = Prisma.PromptVersionModel;
+/**
+ * Model SystemState
+ *
+ */
+export type SystemState = Prisma.SystemStateModel;

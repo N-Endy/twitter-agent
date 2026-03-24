@@ -1,0 +1,32 @@
+{
+  "name": "twitter-agent-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev:web": "npm run dev --workspace @twitter-agent/web",
+    "dev:worker": "npm run dev --workspace @twitter-agent/worker",
+    "build": "npm run build --workspace @twitter-agent/core && npm run build --workspace @twitter-agent/web && npm run build --workspace @twitter-agent/worker",
+    "lint": "npm run lint --workspace @twitter-agent/web && npm run lint --workspace @twitter-agent/worker",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:push": "prisma db push",
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "dotenv": "latest",
+    "prisma": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}

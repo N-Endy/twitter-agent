@@ -1,0 +1,22 @@
+export declare function getEnv(): {
+    DATABASE_URL: string;
+    REDIS_URL: string;
+    NEXTAUTH_SECRET: string;
+    ADMIN_EMAIL: string;
+    DEFAULT_TIMEZONE: string;
+    OPENAI_FAST_MODEL: string;
+    OPENAI_QUALITY_MODEL: string;
+    TOKEN_ENCRYPTION_KEY: string;
+    DEFAULT_POST_SLOT_HOURS: string;
+    ENABLE_EXPERIMENTAL_SLOT: boolean;
+    CRON_SHARED_SECRET: string;
+    ADMIN_PASSWORD?: string | undefined;
+    ADMIN_PASSWORD_HASH?: string | undefined;
+    OPENAI_API_KEY?: string | undefined;
+    X_CLIENT_ID?: string | undefined;
+    X_CLIENT_SECRET?: string | undefined;
+    X_REDIRECT_URI?: string | undefined;
+    X_BEARER_TOKEN?: string | undefined;
+    X_OWNER_USER_ID?: string | undefined;
+    NEXTAUTH_URL?: string | undefined;
+};

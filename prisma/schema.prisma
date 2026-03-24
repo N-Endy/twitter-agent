@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../packages/core/src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SourceKind {
+  URL
+  RSS
+  X_POST
+  X_ACCOUNT
+}
+
+enum IdeaStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum DraftStatus {
+  PENDING_QA
+  NEEDS_REVIEW
+  APPROVED
+  SCHEDULED
+  PUBLISHED
+  REJECTED
+}
+
+enum ReviewStatus {
+  PASS
+  FAIL
+  REWRITE
+}
+
+enum ScheduleStatus {
+  OPEN
+  RESERVED
+  POSTED
+  SKIPPED
+}
+
+enum MentionStatus {
+  NEW
+  CLASSIFIED
+  DRAFTED
+  APPROVED
+  SENT
+  IGNORED
+  ESCALATED
+  BLOCKED
+}
+
+enum ReplyActionType {
+  APPROVE
+  IGNORE
+  SEND
+  REJECT
+  ESCALATE
+}
+
+enum MetricWindow {
+  H1
+  D1
+  D7
+}
+
+enum PromptKind {
+  STRATEGIST
+  IDEATION
+  WRITER
+  EDITOR
+  VOICE_CHECKER
+  COMPLIANCE_CHECKER
+  REPLY_CLASSIFIER
+  REPLY_DRAFTER
+  ESCALATION
+}
+
+enum ModerationDecision {
+  ALLOW
+  REVIEW
+  BLOCK
+  IGNORE
+  ESCALATE
+}
+
+model SourceItem {
+  id             String             @id @default(cuid())
+  kind           SourceKind
+  title          String
+  uri            String             @unique
+  allowlistHandle String?
+  notes          String?
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  researchSnapshots ResearchSnapshot[]
+  contentIdeas   ContentIdea[]
+}
+
+model ResearchSnapshot {
+  id               String      @id @default(cuid())
+  sourceItemId     String
+  title            String
+  rawText          String
+  summary          String
+  keyFacts         String[]
+  quoteCandidates  String[]
+  hookIdeas        String[]
+  pillarCandidates String[]
+  safetyFlags      String[]
+  sourcePublishedAt DateTime?
+  metadata         Json
+  createdAt        DateTime    @default(now())
+  sourceItem       SourceItem  @relation(fields: [sourceItemId], references: [id], onDelete: Cascade)
+  contentIdeas     ContentIdea[]
+}
+
+model ContentIdea {
+  id             String      @id @default(cuid())
+  sourceItemId   String
+  snapshotId     String?
+  pillar         String
+  hook           String
+  angle          String
+  audience       String
+  rationale      String
+  sourceBacked   Boolean     @default(true)
+  topical        Boolean     @default(false)
+  hookTags       String[]
+  pillarTags     String[]
+  tags           String[]
+  status         IdeaStatus  @default(ACTIVE)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  sourceItem     SourceItem  @relation(fields: [sourceItemId], references: [id], onDelete: Cascade)
+  snapshot       ResearchSnapshot? @relation(fields: [snapshotId], references: [id], onDelete: SetNull)
+  drafts         Draft[]
+}
+
+model Draft {
+  id                 String       @id @default(cuid())
+  ideaId             String
+  scheduleSlotId     String?      @unique
+  variantLabel       String?
+  text               String
+  rationale          String?
+  score              Float?
+  qualitySummary     String?
+  sourceBacked       Boolean      @default(true)
+  topical            Boolean      @default(false)
+  characterCount     Int
+  hookTag            String?
+  pillarTag          String?
+  evidenceUsed       String[]
+  suggestedCta       String?
+  confidence         Float?
+  status             DraftStatus  @default(PENDING_QA)
+  approvedAt         DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  idea               ContentIdea  @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  scheduleSlot       ScheduleSlot? @relation(fields: [scheduleSlotId], references: [id], onDelete: SetNull)
+  reviews            DraftReview[]
+  publishedPosts     PublishedPost[]
+}
+
+model DraftReview {
+  id                    String        @id @default(cuid())
+  draftId               String
+  reviewer              String
+  status                ReviewStatus
+  notes                 String
+  issues                String[]
+  rewrite               String?
+  voiceScore            Float
+  clarityScore          Float
+  noveltyScore          Float
+  safetyScore           Float
+  sourceConfidenceScore Float
+  triggeredRules        String[]
+  createdAt             DateTime      @default(now())
+  draft                 Draft         @relation(fields: [draftId], references: [id], onDelete: Cascade)
+}
+
+model ScheduleSlot {
+  id             String         @id @default(cuid())
+  slotAt         DateTime       @unique
+  timezone       String
+  isExperimental Boolean        @default(false)
+  status         ScheduleStatus @default(OPEN)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  draft          Draft?
+  publishedPost  PublishedPost?
+}
+
+model PublishedPost {
+  id              String       @id @default(cuid())
+  draftId         String
+  scheduleSlotId  String?      @unique
+  xPostId         String       @unique
+  text            String
+  postedAt        DateTime
+  metricsSyncedAt DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  draft           Draft        @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  scheduleSlot    ScheduleSlot? @relation(fields: [scheduleSlotId], references: [id], onDelete: SetNull)
+  metrics         PostMetric[]
+}
+
+model PostMetric {
+  id              String       @id @default(cuid())
+  publishedPostId String
+  window          MetricWindow
+  impressions     Int?
+  likes           Int?
+  replies         Int?
+  reposts         Int?
+  bookmarks       Int?
+  profileClicks   Int?
+  capturedAt      DateTime     @default(now())
+  publishedPost   PublishedPost @relation(fields: [publishedPostId], references: [id], onDelete: Cascade)
+
+  @@unique([publishedPostId, window])
+}
+
+model Mention {
+  id                   String          @id @default(cuid())
+  xMentionId           String          @unique
+  conversationId       String?
+  sourcePostId         String?
+  authorId             String
+  authorUsername       String
+  text                 String
+  classification       String?
+  riskLevel            String?
+  shouldRespond        Boolean?
+  status               MentionStatus   @default(NEW)
+  rawPayload           Json
+  receivedAt           DateTime
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  replySuggestions     ReplySuggestion[]
+  replyActions         ReplyAction[]
+}
+
+model ReplySuggestion {
+  id               String        @id @default(cuid())
+  mentionId        String
+  draftText        String
+  rationale        String
+  confidence       Float
+  toneChecklist    String[]
+  safetyNotes      String[]
+  selected         Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  mention          Mention       @relation(fields: [mentionId], references: [id], onDelete: Cascade)
+  replyActions     ReplyAction[]
+}
+
+model ReplyAction {
+  id                String          @id @default(cuid())
+  mentionId         String
+  suggestionId      String?
+  sentForMentionId  String?         @unique
+  xReplyPostId      String?         @unique
+  actionType        ReplyActionType
+  actor             String
+  notes             String?
+  createdAt         DateTime        @default(now())
+  mention           Mention         @relation(fields: [mentionId], references: [id], onDelete: Cascade)
+  suggestion        ReplySuggestion? @relation(fields: [suggestionId], references: [id], onDelete: SetNull)
+}
+
+model ModerationEvent {
+  id             String             @id @default(cuid())
+  targetType     String
+  targetId       String
+  decision       ModerationDecision
+  riskLevel      String
+  reasons        String[]
+  metadata       Json
+  createdAt      DateTime           @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actor      String
+  action     String
+  entityType String
+  entityId   String
+  details    Json
+  createdAt  DateTime @default(now())
+}
+
+model PromptVersion {
+  id               String      @id @default(cuid())
+  kind             PromptKind
+  version          Int
+  name             String
+  systemPrompt     String
+  userTemplate     String
+  schemaName       String
+  isActive         Boolean     @default(false)
+  createdAt        DateTime    @default(now())
+  activatedAt      DateTime?
+
+  @@unique([kind, version])
+}
+
+model SystemState {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

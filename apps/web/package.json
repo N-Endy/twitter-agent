@@ -1,0 +1,31 @@
+{
+  "name": "@twitter-agent/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build --workspace @twitter-agent/core && next dev",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/client": "latest",
+    "@twitter-agent/core": "file:../../packages/core",
+    "bcryptjs": "latest",
+    "clsx": "latest",
+    "date-fns": "latest",
+    "date-fns-tz": "latest",
+    "next": "latest",
+    "next-auth": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest"
+  }
+}
