@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "npm run build --workspace @twitter-agent/core && tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "npm run build --workspace @twitter-agent/core && tsc -p tsconfig.json",
+    "start": "tsx src/index.ts",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
@@ -13,11 +14,11 @@
     "@twitter-agent/core": "file:../../packages/core",
     "bullmq": "latest",
     "date-fns": "latest",
-    "ioredis": "latest"
+    "ioredis": "latest",
+    "tsx": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
-    "tsx": "latest",
     "typescript": "latest"
   }
 }
