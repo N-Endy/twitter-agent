@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runMentionPollJob } from "../lib/pipeline.js";
+import { runMentionPollJob } from "../lib/pipeline";
 
 export async function handleMentionPoll(job: Job) {
   const result = await runMentionPollJob();

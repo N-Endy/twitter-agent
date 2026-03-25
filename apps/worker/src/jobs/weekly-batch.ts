@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runWeeklyBatchJob } from "../lib/pipeline.js";
+import { runWeeklyBatchJob } from "../lib/pipeline";
 
 export async function handleWeeklyBatch(job: Job) {
   const result = await runWeeklyBatchJob();

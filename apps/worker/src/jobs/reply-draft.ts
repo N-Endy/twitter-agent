@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runReplyDraftJob } from "../lib/pipeline.js";
+import { runReplyDraftJob } from "../lib/pipeline";
 
 export async function handleReplyDraft(job: Job<{ mentionId?: string }>) {
   const result = await runReplyDraftJob(job.data.mentionId);

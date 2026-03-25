@@ -2,14 +2,14 @@ import { Worker } from "bullmq";
 
 import { getRedisConnection, queueNames } from "@twitter-agent/core";
 
-import { handleCleanup } from "./jobs/cleanup.js";
-import { handleDraftQa } from "./jobs/draft-qa.js";
-import { handleMentionPoll } from "./jobs/mention-poll.js";
-import { handleMetricsSync } from "./jobs/metrics-sync.js";
-import { handlePublishPost } from "./jobs/publish-post.js";
-import { handleReplyDraft } from "./jobs/reply-draft.js";
-import { handleSourceIngest } from "./jobs/source-ingest.js";
-import { handleWeeklyBatch } from "./jobs/weekly-batch.js";
+import { handleCleanup } from "./jobs/cleanup";
+import { handleDraftQa } from "./jobs/draft-qa";
+import { handleMentionPoll } from "./jobs/mention-poll";
+import { handleMetricsSync } from "./jobs/metrics-sync";
+import { handlePublishPost } from "./jobs/publish-post";
+import { handleReplyDraft } from "./jobs/reply-draft";
+import { handleSourceIngest } from "./jobs/source-ingest";
+import { handleWeeklyBatch } from "./jobs/weekly-batch";
 
 const connection = getRedisConnection();
 
