@@ -1,7 +1,7 @@
 import { Queue, type ConnectionOptions } from "bullmq";
 
-import { getEnv } from "../env.js";
-import { queueNames } from "./names.js";
+import { getEnv } from "../env";
+import { queueNames } from "./names";
 
 export function getRedisConnection() {
   const redisUrl = new URL(getEnv().REDIS_URL);

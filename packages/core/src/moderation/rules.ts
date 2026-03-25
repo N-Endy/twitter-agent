@@ -1,4 +1,4 @@
-import { moderationEventSchema, type ModerationDecision } from "../types/contracts.js";
+import { moderationEventSchema, type ModerationDecision } from "../types/contracts";
 
 const sensitivePatterns = [
   /\bmedical\b/i,

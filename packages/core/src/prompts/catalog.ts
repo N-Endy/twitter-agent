@@ -1,4 +1,4 @@
-import { promptKindSchema, type PromptKind } from "../types/contracts.js";
+import { promptKindSchema, type PromptKind } from "../types/contracts";
 
 export type PromptDefinition = {
   kind: PromptKind;
