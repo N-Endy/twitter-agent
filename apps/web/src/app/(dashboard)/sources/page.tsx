@@ -1,4 +1,5 @@
 import { Panel, StatusPill, Table, TableCell } from "@/components/dashboard";
+import { AddSourceForm } from "@/components/add-source-form";
 import { formatDashboardDate, getSourcesPageData } from "@/lib/data";
 
 export default async function SourcesPage() {
@@ -6,6 +7,10 @@ export default async function SourcesPage() {
 
   return (
     <Panel title="Research sources" kicker="Curated intake">
+      <div className="mb-5">
+        <AddSourceForm />
+      </div>
+
       <Table headers={["Source", "Kind", "Snapshots", "Ideas", "Last updated", "State"]}>
         {sources.map((source) => (
           <tr key={source.id}>
