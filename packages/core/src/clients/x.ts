@@ -1,6 +1,6 @@
 import { Client, OAuth2, generateCodeChallenge, generateCodeVerifier } from "@xdevplatform/xdk";
 
-import { getEnv } from "../env";
+import { getEnv } from "../env.js";
 
 type XTokens = {
   access_token: string;

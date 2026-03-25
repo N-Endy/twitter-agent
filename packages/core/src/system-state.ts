@@ -1,9 +1,9 @@
-import { refreshAccessToken } from "./clients/x";
-import { getPrismaClient } from "./db";
-import { getEnv } from "./env";
-import { Prisma } from "./generated/prisma/client";
-import { decryptString, encryptString } from "./security";
-import { buildWeeklySlots, parseSlotWindows } from "./scheduling";
+import { refreshAccessToken } from "./clients/x.js";
+import { getPrismaClient } from "./db.js";
+import { getEnv } from "./env.js";
+import { Prisma } from "./generated/prisma/client.js";
+import { decryptString, encryptString } from "./security.js";
+import { buildWeeklySlots, parseSlotWindows } from "./scheduling.js";
 
 export type StoredXTokens = {
   accessToken: string;

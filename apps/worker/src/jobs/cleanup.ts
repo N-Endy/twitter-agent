@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runCleanupJob } from "../lib/pipeline";
+import { runCleanupJob } from "../lib/pipeline.js";
 
 export async function handleCleanup(job: Job) {
   const result = await runCleanupJob();

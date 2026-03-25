@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runSourceIngestJob } from "../lib/pipeline";
+import { runSourceIngestJob } from "../lib/pipeline.js";
 
 export async function handleSourceIngest(job: Job) {
   const result = await runSourceIngestJob();

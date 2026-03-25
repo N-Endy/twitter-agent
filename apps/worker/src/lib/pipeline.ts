@@ -27,7 +27,7 @@ import {
   generateIdeas,
   reviewDraft,
   writeDraft
-} from "./ai";
+} from "./ai.js";
 
 const prisma = getPrismaClient();
 const voiceRules =
@@ -120,12 +120,12 @@ export async function runWeeklyBatchJob() {
   });
 
   const recentWinners = recentMetrics
-    .filter((metric) => (metric.likes ?? 0) >= 10)
-    .map((metric) => metric.publishedPost.text)
+    .filter((metric: (typeof recentMetrics)[number]) => (metric.likes ?? 0) >= 10)
+    .map((metric: (typeof recentMetrics)[number]) => metric.publishedPost.text)
     .slice(0, 6);
   const recentLosers = recentMetrics
-    .filter((metric) => (metric.likes ?? 0) < 10)
-    .map((metric) => metric.publishedPost.text)
+    .filter((metric: (typeof recentMetrics)[number]) => (metric.likes ?? 0) < 10)
+    .map((metric: (typeof recentMetrics)[number]) => metric.publishedPost.text)
     .slice(0, 6);
 
   let ideasCreated = 0;
@@ -229,7 +229,7 @@ export async function runDraftQaJob(draftId?: string) {
     const nextStatus =
       moderation.decision === "BLOCK" || !review.approvedForReview ? "REJECTED" : "NEEDS_REVIEW";
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: typeof prisma) => {
       await tx.draft.update({
         where: { id: draft.id },
         data: {
@@ -315,7 +315,7 @@ export async function runPublishPostJob() {
     });
     const xPostId = String((response.data.data as { id?: string } | undefined)?.id ?? "");
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: typeof prisma) => {
       await tx.publishedPost.create({
         data: {
           draftId: draft.id,
@@ -496,10 +496,10 @@ export async function runReplyDraftJob(mentionId?: string) {
       mentionText: mention.text,
       classification: stringify(classification),
       conversationContext: mention.conversationId ?? "No extra context",
-      supportingEvidence: supportingEvidence.flatMap((item) => item.keyFacts).slice(0, 5)
+      supportingEvidence: supportingEvidence.flatMap((item: (typeof supportingEvidence)[number]) => item.keyFacts).slice(0, 5)
     });
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: typeof prisma) => {
       await tx.replySuggestion.create({
         data: {
           mentionId: mention.id,

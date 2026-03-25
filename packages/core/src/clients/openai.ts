@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z, type ZodTypeAny } from "zod";
 
-import { getEnv } from "../env";
+import { getEnv } from "../env.js";
 
 let cachedClient: OpenAI | null = null;
 

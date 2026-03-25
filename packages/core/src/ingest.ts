@@ -1,8 +1,8 @@
 import { load } from "cheerio";
 import Parser from "rss-parser";
 
-import { extractTweetIdFromUrl, getPost, getUserByUsername, getUserPosts } from "./clients/x";
-import { getEnv } from "./env";
+import { extractTweetIdFromUrl, getPost, getUserByUsername, getUserPosts } from "./clients/x.js";
+import { getEnv } from "./env.js";
 
 const rssParser = new Parser();
 

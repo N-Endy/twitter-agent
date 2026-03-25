@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runPublishPostJob } from "../lib/pipeline";
+import { runPublishPostJob } from "../lib/pipeline.js";
 
 export async function handlePublishPost(job: Job) {
   const result = await runPublishPostJob();

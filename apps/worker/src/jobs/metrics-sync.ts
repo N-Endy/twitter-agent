@@ -1,6 +1,6 @@
 import type { Job } from "bullmq";
 
-import { runMetricsSyncJob } from "../lib/pipeline";
+import { runMetricsSyncJob } from "../lib/pipeline.js";
 
 export async function handleMetricsSync(job: Job) {
   const result = await runMetricsSyncJob();
