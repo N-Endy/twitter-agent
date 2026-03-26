@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { AppShell } from "@/components/dashboard";
 import { SignOutButton } from "@/components/sign-out-button";
 import { requireSession } from "@/lib/guards";
@@ -19,12 +17,12 @@ export default async function DashboardLayout({
       subtitle="Keep the content engine moving while preserving human control over anything that can create brand or policy risk."
       actions={
         <>
-          <Link
+          <a
             href="/api/auth/x/start"
             className="inline-flex w-full justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 transition hover:bg-cyan-300/20 sm:w-auto"
           >
             Connect X account
-          </Link>
+          </a>
           <SignOutButton email={session.user.email} />
         </>
       }

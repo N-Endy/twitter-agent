@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import {
@@ -7,16 +6,17 @@ import {
   saveSystemState,
   saveXTokens
 } from "@twitter-agent/core";
+import { getAppOrigin } from "@/lib/app-origin";
 
 export async function GET(request: NextRequest) {
-  const cookieStore = await cookies();
+  const appOrigin = getAppOrigin(request.url);
   const state = request.nextUrl.searchParams.get("state");
   const code = request.nextUrl.searchParams.get("code");
-  const storedState = cookieStore.get("x_oauth_state")?.value;
-  const codeVerifier = cookieStore.get("x_code_verifier")?.value;
+  const storedState = request.cookies.get("x_oauth_state")?.value;
+  const codeVerifier = request.cookies.get("x_code_verifier")?.value;
 
   if (!state || !code || !storedState || !codeVerifier || state !== storedState) {
-    return NextResponse.redirect(new URL("/?x=invalid-callback", request.url));
+    return NextResponse.redirect(new URL("/?x=invalid-callback", appOrigin));
   }
 
   const tokens = await exchangeCodeForTokens(code, codeVerifier);
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const response = NextResponse.redirect(new URL("/", request.url));
+  const response = NextResponse.redirect(new URL("/", appOrigin));
 
   response.cookies.delete("x_oauth_state");
   response.cookies.delete("x_code_verifier");
