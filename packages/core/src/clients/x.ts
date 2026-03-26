@@ -79,8 +79,8 @@ export async function exchangeCodeForTokens(code: string, codeVerifier: string) 
 export async function refreshAccessToken(refreshToken: string) {
   const env = getEnv();
 
-  if (!env.X_CLIENT_ID) {
-    throw new Error("X_CLIENT_ID is required to refresh access tokens.");
+  if (!env.X_CLIENT_ID || !env.X_CLIENT_SECRET) {
+    throw new Error("X_CLIENT_ID and X_CLIENT_SECRET are required to refresh access tokens.");
   }
 
   const body = new URLSearchParams({
@@ -89,10 +89,13 @@ export async function refreshAccessToken(refreshToken: string) {
     client_id: env.X_CLIENT_ID
   });
 
+  const credentials = Buffer.from(`${env.X_CLIENT_ID}:${env.X_CLIENT_SECRET}`).toString("base64");
+
   const response = await fetch(`${X_API_BASE}/2/oauth2/token`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${credentials}`
     },
     body
   });
