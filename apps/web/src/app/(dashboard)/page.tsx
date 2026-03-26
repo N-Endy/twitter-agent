@@ -13,7 +13,7 @@ export default async function OverviewPage() {
           { label: "Published posts", value: metrics.published, tone: "good" },
           { label: "Mentions pending", value: metrics.mentions, tone: "warning" },
           { label: "Active prompts", value: metrics.prompts },
-          { label: "X connection", value: metrics.xConnected ? "Connected" : "Missing", tone: metrics.xConnected ? "good" : "warning" }
+          { label: "X integration", value: metrics.xStatus.label, tone: metrics.xStatus.tone }
         ]}
       />
 
@@ -28,7 +28,19 @@ export default async function OverviewPage() {
                     <p className="text-sm font-medium text-white">{draft.idea.hook}</p>
                     <p className="mt-2 text-sm leading-6 text-slate-300">{draft.text}</p>
                   </div>
-                  <StatusPill tone={draft.status === "APPROVED" ? "good" : "warning"}>{draft.status}</StatusPill>
+                  <StatusPill
+                    tone={
+                      draft.status === "PUBLISHED"
+                        ? "good"
+                        : draft.status === "REJECTED"
+                          ? "bad"
+                          : draft.status === "APPROVED"
+                            ? "good"
+                            : "warning"
+                    }
+                  >
+                    {draft.status}
+                  </StatusPill>
                 </div>
                 <p className="mt-3 text-xs text-slate-400">Updated {formatRelative(draft.updatedAt)}</p>
               </article>
@@ -68,6 +80,8 @@ export default async function OverviewPage() {
                     tone={
                       mention.status === "SENT"
                         ? "good"
+                        : mention.status === "SENDING"
+                          ? "warning"
                         : mention.status === "ESCALATED" || mention.status === "BLOCKED"
                           ? "bad"
                           : "warning"
@@ -99,8 +113,12 @@ export default async function OverviewPage() {
           />
           <div className="mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4">
             <div>
-              <p className="text-sm font-medium text-white">Mention cursor</p>
-              <p className="mt-1 text-xs text-slate-400">{feed.lastCursor ?? "Not started yet"}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-sm font-medium text-white">X integration</p>
+                <StatusPill tone={feed.xStatus.tone}>{feed.xStatus.label}</StatusPill>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">{feed.xStatus.detail}</p>
+              <p className="mt-2 text-xs text-slate-500">Mention cursor: {feed.lastCursor ?? "Not started yet"}</p>
             </div>
             <GhostLink href="/prompts">Manage prompts</GhostLink>
           </div>

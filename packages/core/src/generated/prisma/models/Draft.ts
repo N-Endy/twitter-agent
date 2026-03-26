@@ -343,7 +343,7 @@ export type DraftWhereInput = {
   idea?: Prisma.XOR<Prisma.ContentIdeaScalarRelationFilter, Prisma.ContentIdeaWhereInput>
   scheduleSlot?: Prisma.XOR<Prisma.ScheduleSlotNullableScalarRelationFilter, Prisma.ScheduleSlotWhereInput> | null
   reviews?: Prisma.DraftReviewListRelationFilter
-  publishedPosts?: Prisma.PublishedPostListRelationFilter
+  publishedPost?: Prisma.XOR<Prisma.PublishedPostNullableScalarRelationFilter, Prisma.PublishedPostWhereInput> | null
 }
 
 export type DraftOrderByWithRelationInput = {
@@ -370,7 +370,7 @@ export type DraftOrderByWithRelationInput = {
   idea?: Prisma.ContentIdeaOrderByWithRelationInput
   scheduleSlot?: Prisma.ScheduleSlotOrderByWithRelationInput
   reviews?: Prisma.DraftReviewOrderByRelationAggregateInput
-  publishedPosts?: Prisma.PublishedPostOrderByRelationAggregateInput
+  publishedPost?: Prisma.PublishedPostOrderByWithRelationInput
 }
 
 export type DraftWhereUniqueInput = Prisma.AtLeast<{
@@ -400,7 +400,7 @@ export type DraftWhereUniqueInput = Prisma.AtLeast<{
   idea?: Prisma.XOR<Prisma.ContentIdeaScalarRelationFilter, Prisma.ContentIdeaWhereInput>
   scheduleSlot?: Prisma.XOR<Prisma.ScheduleSlotNullableScalarRelationFilter, Prisma.ScheduleSlotWhereInput> | null
   reviews?: Prisma.DraftReviewListRelationFilter
-  publishedPosts?: Prisma.PublishedPostListRelationFilter
+  publishedPost?: Prisma.XOR<Prisma.PublishedPostNullableScalarRelationFilter, Prisma.PublishedPostWhereInput> | null
 }, "id" | "scheduleSlotId">
 
 export type DraftOrderByWithAggregationInput = {
@@ -479,7 +479,7 @@ export type DraftCreateInput = {
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
 export type DraftUncheckedCreateInput = {
@@ -504,7 +504,7 @@ export type DraftUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostUncheckedCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
 export type DraftUpdateInput = {
@@ -529,7 +529,7 @@ export type DraftUpdateInput = {
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateInput = {
@@ -554,7 +554,7 @@ export type DraftUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUncheckedUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftCreateManyInput = {
@@ -840,18 +840,18 @@ export type DraftUncheckedUpdateOneWithoutScheduleSlotNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutScheduleSlotInput, Prisma.DraftUpdateWithoutScheduleSlotInput>, Prisma.DraftUncheckedUpdateWithoutScheduleSlotInput>
 }
 
-export type DraftCreateNestedOneWithoutPublishedPostsInput = {
-  create?: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostsInput, Prisma.DraftUncheckedCreateWithoutPublishedPostsInput>
-  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutPublishedPostsInput
+export type DraftCreateNestedOneWithoutPublishedPostInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostInput, Prisma.DraftUncheckedCreateWithoutPublishedPostInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutPublishedPostInput
   connect?: Prisma.DraftWhereUniqueInput
 }
 
-export type DraftUpdateOneRequiredWithoutPublishedPostsNestedInput = {
-  create?: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostsInput, Prisma.DraftUncheckedCreateWithoutPublishedPostsInput>
-  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutPublishedPostsInput
-  upsert?: Prisma.DraftUpsertWithoutPublishedPostsInput
+export type DraftUpdateOneRequiredWithoutPublishedPostNestedInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostInput, Prisma.DraftUncheckedCreateWithoutPublishedPostInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutPublishedPostInput
+  upsert?: Prisma.DraftUpsertWithoutPublishedPostInput
   connect?: Prisma.DraftWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutPublishedPostsInput, Prisma.DraftUpdateWithoutPublishedPostsInput>, Prisma.DraftUncheckedUpdateWithoutPublishedPostsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutPublishedPostInput, Prisma.DraftUpdateWithoutPublishedPostInput>, Prisma.DraftUncheckedUpdateWithoutPublishedPostInput>
 }
 
 export type DraftCreateWithoutIdeaInput = {
@@ -875,7 +875,7 @@ export type DraftCreateWithoutIdeaInput = {
   updatedAt?: Date | string
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutIdeaInput = {
@@ -899,7 +899,7 @@ export type DraftUncheckedCreateWithoutIdeaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostUncheckedCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutIdeaInput = {
@@ -975,7 +975,7 @@ export type DraftCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutReviewsInput = {
@@ -999,7 +999,7 @@ export type DraftUncheckedCreateWithoutReviewsInput = {
   approvedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  publishedPosts?: Prisma.PublishedPostUncheckedCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutReviewsInput = {
@@ -1039,7 +1039,7 @@ export type DraftUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutReviewsInput = {
@@ -1063,7 +1063,7 @@ export type DraftUncheckedUpdateWithoutReviewsInput = {
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publishedPosts?: Prisma.PublishedPostUncheckedUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftCreateWithoutScheduleSlotInput = {
@@ -1087,7 +1087,7 @@ export type DraftCreateWithoutScheduleSlotInput = {
   updatedAt?: Date | string
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutScheduleSlotInput = {
@@ -1111,7 +1111,7 @@ export type DraftUncheckedCreateWithoutScheduleSlotInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
-  publishedPosts?: Prisma.PublishedPostUncheckedCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutScheduleSlotInput = {
@@ -1151,7 +1151,7 @@ export type DraftUpdateWithoutScheduleSlotInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutScheduleSlotInput = {
@@ -1175,10 +1175,10 @@ export type DraftUncheckedUpdateWithoutScheduleSlotInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUncheckedUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
-export type DraftCreateWithoutPublishedPostsInput = {
+export type DraftCreateWithoutPublishedPostInput = {
   id?: string
   variantLabel?: string | null
   text: string
@@ -1202,7 +1202,7 @@ export type DraftCreateWithoutPublishedPostsInput = {
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
 }
 
-export type DraftUncheckedCreateWithoutPublishedPostsInput = {
+export type DraftUncheckedCreateWithoutPublishedPostInput = {
   id?: string
   ideaId: string
   scheduleSlotId?: string | null
@@ -1226,23 +1226,23 @@ export type DraftUncheckedCreateWithoutPublishedPostsInput = {
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
 }
 
-export type DraftCreateOrConnectWithoutPublishedPostsInput = {
+export type DraftCreateOrConnectWithoutPublishedPostInput = {
   where: Prisma.DraftWhereUniqueInput
-  create: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostsInput, Prisma.DraftUncheckedCreateWithoutPublishedPostsInput>
+  create: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostInput, Prisma.DraftUncheckedCreateWithoutPublishedPostInput>
 }
 
-export type DraftUpsertWithoutPublishedPostsInput = {
-  update: Prisma.XOR<Prisma.DraftUpdateWithoutPublishedPostsInput, Prisma.DraftUncheckedUpdateWithoutPublishedPostsInput>
-  create: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostsInput, Prisma.DraftUncheckedCreateWithoutPublishedPostsInput>
+export type DraftUpsertWithoutPublishedPostInput = {
+  update: Prisma.XOR<Prisma.DraftUpdateWithoutPublishedPostInput, Prisma.DraftUncheckedUpdateWithoutPublishedPostInput>
+  create: Prisma.XOR<Prisma.DraftCreateWithoutPublishedPostInput, Prisma.DraftUncheckedCreateWithoutPublishedPostInput>
   where?: Prisma.DraftWhereInput
 }
 
-export type DraftUpdateToOneWithWhereWithoutPublishedPostsInput = {
+export type DraftUpdateToOneWithWhereWithoutPublishedPostInput = {
   where?: Prisma.DraftWhereInput
-  data: Prisma.XOR<Prisma.DraftUpdateWithoutPublishedPostsInput, Prisma.DraftUncheckedUpdateWithoutPublishedPostsInput>
+  data: Prisma.XOR<Prisma.DraftUpdateWithoutPublishedPostInput, Prisma.DraftUncheckedUpdateWithoutPublishedPostInput>
 }
 
-export type DraftUpdateWithoutPublishedPostsInput = {
+export type DraftUpdateWithoutPublishedPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   variantLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1266,7 +1266,7 @@ export type DraftUpdateWithoutPublishedPostsInput = {
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
 }
 
-export type DraftUncheckedUpdateWithoutPublishedPostsInput = {
+export type DraftUncheckedUpdateWithoutPublishedPostInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ideaId?: Prisma.StringFieldUpdateOperationsInput | string
   scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1333,7 +1333,7 @@ export type DraftUpdateWithoutIdeaInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutIdeaInput = {
@@ -1357,7 +1357,7 @@ export type DraftUncheckedUpdateWithoutIdeaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
-  publishedPosts?: Prisma.PublishedPostUncheckedUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateManyWithoutIdeaInput = {
@@ -1389,12 +1389,10 @@ export type DraftUncheckedUpdateManyWithoutIdeaInput = {
 
 export type DraftCountOutputType = {
   reviews: number
-  publishedPosts: number
 }
 
 export type DraftCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviews?: boolean | DraftCountOutputTypeCountReviewsArgs
-  publishedPosts?: boolean | DraftCountOutputTypeCountPublishedPostsArgs
 }
 
 /**
@@ -1412,13 +1410,6 @@ export type DraftCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type DraftCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DraftReviewWhereInput
-}
-
-/**
- * DraftCountOutputType without action
- */
-export type DraftCountOutputTypeCountPublishedPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PublishedPostWhereInput
 }
 
 
@@ -1446,7 +1437,7 @@ export type DraftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   idea?: boolean | Prisma.ContentIdeaDefaultArgs<ExtArgs>
   scheduleSlot?: boolean | Prisma.Draft$scheduleSlotArgs<ExtArgs>
   reviews?: boolean | Prisma.Draft$reviewsArgs<ExtArgs>
-  publishedPosts?: boolean | Prisma.Draft$publishedPostsArgs<ExtArgs>
+  publishedPost?: boolean | Prisma.Draft$publishedPostArgs<ExtArgs>
   _count?: boolean | Prisma.DraftCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["draft"]>
 
@@ -1528,7 +1519,7 @@ export type DraftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   idea?: boolean | Prisma.ContentIdeaDefaultArgs<ExtArgs>
   scheduleSlot?: boolean | Prisma.Draft$scheduleSlotArgs<ExtArgs>
   reviews?: boolean | Prisma.Draft$reviewsArgs<ExtArgs>
-  publishedPosts?: boolean | Prisma.Draft$publishedPostsArgs<ExtArgs>
+  publishedPost?: boolean | Prisma.Draft$publishedPostArgs<ExtArgs>
   _count?: boolean | Prisma.DraftCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DraftIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1546,7 +1537,7 @@ export type $DraftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     idea: Prisma.$ContentIdeaPayload<ExtArgs>
     scheduleSlot: Prisma.$ScheduleSlotPayload<ExtArgs> | null
     reviews: Prisma.$DraftReviewPayload<ExtArgs>[]
-    publishedPosts: Prisma.$PublishedPostPayload<ExtArgs>[]
+    publishedPost: Prisma.$PublishedPostPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1966,7 +1957,7 @@ export interface Prisma__DraftClient<T, Null = never, ExtArgs extends runtime.Ty
   idea<T extends Prisma.ContentIdeaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentIdeaDefaultArgs<ExtArgs>>): Prisma.Prisma__ContentIdeaClient<runtime.Types.Result.GetResult<Prisma.$ContentIdeaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   scheduleSlot<T extends Prisma.Draft$scheduleSlotArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$scheduleSlotArgs<ExtArgs>>): Prisma.Prisma__ScheduleSlotClient<runtime.Types.Result.GetResult<Prisma.$ScheduleSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.Draft$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  publishedPosts<T extends Prisma.Draft$publishedPostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$publishedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublishedPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publishedPost<T extends Prisma.Draft$publishedPostArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$publishedPostArgs<ExtArgs>>): Prisma.Prisma__PublishedPostClient<runtime.Types.Result.GetResult<Prisma.$PublishedPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2460,9 +2451,9 @@ export type Draft$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * Draft.publishedPosts
+ * Draft.publishedPost
  */
-export type Draft$publishedPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Draft$publishedPostArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the PublishedPost
    */
@@ -2476,11 +2467,6 @@ export type Draft$publishedPostsArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.PublishedPostInclude<ExtArgs> | null
   where?: Prisma.PublishedPostWhereInput
-  orderBy?: Prisma.PublishedPostOrderByWithRelationInput | Prisma.PublishedPostOrderByWithRelationInput[]
-  cursor?: Prisma.PublishedPostWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PublishedPostScalarFieldEnum | Prisma.PublishedPostScalarFieldEnum[]
 }
 
 /**

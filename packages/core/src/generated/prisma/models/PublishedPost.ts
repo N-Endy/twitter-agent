@@ -236,12 +236,12 @@ export type PublishedPostOrderByWithRelationInput = {
 
 export type PublishedPostWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  draftId?: string
   scheduleSlotId?: string
   xPostId?: string
   AND?: Prisma.PublishedPostWhereInput | Prisma.PublishedPostWhereInput[]
   OR?: Prisma.PublishedPostWhereInput[]
   NOT?: Prisma.PublishedPostWhereInput | Prisma.PublishedPostWhereInput[]
-  draftId?: Prisma.StringFilter<"PublishedPost"> | string
   text?: Prisma.StringFilter<"PublishedPost"> | string
   postedAt?: Prisma.DateTimeFilter<"PublishedPost"> | Date | string
   metricsSyncedAt?: Prisma.DateTimeNullableFilter<"PublishedPost"> | Date | string | null
@@ -250,7 +250,7 @@ export type PublishedPostWhereUniqueInput = Prisma.AtLeast<{
   draft?: Prisma.XOR<Prisma.DraftScalarRelationFilter, Prisma.DraftWhereInput>
   scheduleSlot?: Prisma.XOR<Prisma.ScheduleSlotNullableScalarRelationFilter, Prisma.ScheduleSlotWhereInput> | null
   metrics?: Prisma.PostMetricListRelationFilter
-}, "id" | "scheduleSlotId" | "xPostId">
+}, "id" | "draftId" | "scheduleSlotId" | "xPostId">
 
 export type PublishedPostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -290,7 +290,7 @@ export type PublishedPostCreateInput = {
   metricsSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  draft: Prisma.DraftCreateNestedOneWithoutPublishedPostsInput
+  draft: Prisma.DraftCreateNestedOneWithoutPublishedPostInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutPublishedPostInput
   metrics?: Prisma.PostMetricCreateNestedManyWithoutPublishedPostInput
 }
@@ -316,7 +316,7 @@ export type PublishedPostUpdateInput = {
   metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  draft?: Prisma.DraftUpdateOneRequiredWithoutPublishedPostsNestedInput
+  draft?: Prisma.DraftUpdateOneRequiredWithoutPublishedPostNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutPublishedPostNestedInput
   metrics?: Prisma.PostMetricUpdateManyWithoutPublishedPostNestedInput
 }
@@ -368,16 +368,6 @@ export type PublishedPostUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PublishedPostListRelationFilter = {
-  every?: Prisma.PublishedPostWhereInput
-  some?: Prisma.PublishedPostWhereInput
-  none?: Prisma.PublishedPostWhereInput
-}
-
-export type PublishedPostOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
 export type PublishedPostNullableScalarRelationFilter = {
   is?: Prisma.PublishedPostWhereInput | null
   isNot?: Prisma.PublishedPostWhereInput | null
@@ -424,46 +414,36 @@ export type PublishedPostScalarRelationFilter = {
   isNot?: Prisma.PublishedPostWhereInput
 }
 
-export type PublishedPostCreateNestedManyWithoutDraftInput = {
-  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput> | Prisma.PublishedPostCreateWithoutDraftInput[] | Prisma.PublishedPostUncheckedCreateWithoutDraftInput[]
-  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput | Prisma.PublishedPostCreateOrConnectWithoutDraftInput[]
-  createMany?: Prisma.PublishedPostCreateManyDraftInputEnvelope
-  connect?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
+export type PublishedPostCreateNestedOneWithoutDraftInput = {
+  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput>
+  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput
+  connect?: Prisma.PublishedPostWhereUniqueInput
 }
 
-export type PublishedPostUncheckedCreateNestedManyWithoutDraftInput = {
-  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput> | Prisma.PublishedPostCreateWithoutDraftInput[] | Prisma.PublishedPostUncheckedCreateWithoutDraftInput[]
-  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput | Prisma.PublishedPostCreateOrConnectWithoutDraftInput[]
-  createMany?: Prisma.PublishedPostCreateManyDraftInputEnvelope
-  connect?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
+export type PublishedPostUncheckedCreateNestedOneWithoutDraftInput = {
+  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput>
+  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput
+  connect?: Prisma.PublishedPostWhereUniqueInput
 }
 
-export type PublishedPostUpdateManyWithoutDraftNestedInput = {
-  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput> | Prisma.PublishedPostCreateWithoutDraftInput[] | Prisma.PublishedPostUncheckedCreateWithoutDraftInput[]
-  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput | Prisma.PublishedPostCreateOrConnectWithoutDraftInput[]
-  upsert?: Prisma.PublishedPostUpsertWithWhereUniqueWithoutDraftInput | Prisma.PublishedPostUpsertWithWhereUniqueWithoutDraftInput[]
-  createMany?: Prisma.PublishedPostCreateManyDraftInputEnvelope
-  set?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  disconnect?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  delete?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  connect?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  update?: Prisma.PublishedPostUpdateWithWhereUniqueWithoutDraftInput | Prisma.PublishedPostUpdateWithWhereUniqueWithoutDraftInput[]
-  updateMany?: Prisma.PublishedPostUpdateManyWithWhereWithoutDraftInput | Prisma.PublishedPostUpdateManyWithWhereWithoutDraftInput[]
-  deleteMany?: Prisma.PublishedPostScalarWhereInput | Prisma.PublishedPostScalarWhereInput[]
+export type PublishedPostUpdateOneWithoutDraftNestedInput = {
+  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput>
+  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput
+  upsert?: Prisma.PublishedPostUpsertWithoutDraftInput
+  disconnect?: Prisma.PublishedPostWhereInput | boolean
+  delete?: Prisma.PublishedPostWhereInput | boolean
+  connect?: Prisma.PublishedPostWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PublishedPostUpdateToOneWithWhereWithoutDraftInput, Prisma.PublishedPostUpdateWithoutDraftInput>, Prisma.PublishedPostUncheckedUpdateWithoutDraftInput>
 }
 
-export type PublishedPostUncheckedUpdateManyWithoutDraftNestedInput = {
-  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput> | Prisma.PublishedPostCreateWithoutDraftInput[] | Prisma.PublishedPostUncheckedCreateWithoutDraftInput[]
-  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput | Prisma.PublishedPostCreateOrConnectWithoutDraftInput[]
-  upsert?: Prisma.PublishedPostUpsertWithWhereUniqueWithoutDraftInput | Prisma.PublishedPostUpsertWithWhereUniqueWithoutDraftInput[]
-  createMany?: Prisma.PublishedPostCreateManyDraftInputEnvelope
-  set?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  disconnect?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  delete?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  connect?: Prisma.PublishedPostWhereUniqueInput | Prisma.PublishedPostWhereUniqueInput[]
-  update?: Prisma.PublishedPostUpdateWithWhereUniqueWithoutDraftInput | Prisma.PublishedPostUpdateWithWhereUniqueWithoutDraftInput[]
-  updateMany?: Prisma.PublishedPostUpdateManyWithWhereWithoutDraftInput | Prisma.PublishedPostUpdateManyWithWhereWithoutDraftInput[]
-  deleteMany?: Prisma.PublishedPostScalarWhereInput | Prisma.PublishedPostScalarWhereInput[]
+export type PublishedPostUncheckedUpdateOneWithoutDraftNestedInput = {
+  create?: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput>
+  connectOrCreate?: Prisma.PublishedPostCreateOrConnectWithoutDraftInput
+  upsert?: Prisma.PublishedPostUpsertWithoutDraftInput
+  disconnect?: Prisma.PublishedPostWhereInput | boolean
+  delete?: Prisma.PublishedPostWhereInput | boolean
+  connect?: Prisma.PublishedPostWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PublishedPostUpdateToOneWithWhereWithoutDraftInput, Prisma.PublishedPostUpdateWithoutDraftInput>, Prisma.PublishedPostUncheckedUpdateWithoutDraftInput>
 }
 
 export type PublishedPostCreateNestedOneWithoutScheduleSlotInput = {
@@ -541,40 +521,39 @@ export type PublishedPostCreateOrConnectWithoutDraftInput = {
   create: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput>
 }
 
-export type PublishedPostCreateManyDraftInputEnvelope = {
-  data: Prisma.PublishedPostCreateManyDraftInput | Prisma.PublishedPostCreateManyDraftInput[]
-  skipDuplicates?: boolean
-}
-
-export type PublishedPostUpsertWithWhereUniqueWithoutDraftInput = {
-  where: Prisma.PublishedPostWhereUniqueInput
+export type PublishedPostUpsertWithoutDraftInput = {
   update: Prisma.XOR<Prisma.PublishedPostUpdateWithoutDraftInput, Prisma.PublishedPostUncheckedUpdateWithoutDraftInput>
   create: Prisma.XOR<Prisma.PublishedPostCreateWithoutDraftInput, Prisma.PublishedPostUncheckedCreateWithoutDraftInput>
+  where?: Prisma.PublishedPostWhereInput
 }
 
-export type PublishedPostUpdateWithWhereUniqueWithoutDraftInput = {
-  where: Prisma.PublishedPostWhereUniqueInput
+export type PublishedPostUpdateToOneWithWhereWithoutDraftInput = {
+  where?: Prisma.PublishedPostWhereInput
   data: Prisma.XOR<Prisma.PublishedPostUpdateWithoutDraftInput, Prisma.PublishedPostUncheckedUpdateWithoutDraftInput>
 }
 
-export type PublishedPostUpdateManyWithWhereWithoutDraftInput = {
-  where: Prisma.PublishedPostScalarWhereInput
-  data: Prisma.XOR<Prisma.PublishedPostUpdateManyMutationInput, Prisma.PublishedPostUncheckedUpdateManyWithoutDraftInput>
+export type PublishedPostUpdateWithoutDraftInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  xPostId?: Prisma.StringFieldUpdateOperationsInput | string
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutPublishedPostNestedInput
+  metrics?: Prisma.PostMetricUpdateManyWithoutPublishedPostNestedInput
 }
 
-export type PublishedPostScalarWhereInput = {
-  AND?: Prisma.PublishedPostScalarWhereInput | Prisma.PublishedPostScalarWhereInput[]
-  OR?: Prisma.PublishedPostScalarWhereInput[]
-  NOT?: Prisma.PublishedPostScalarWhereInput | Prisma.PublishedPostScalarWhereInput[]
-  id?: Prisma.StringFilter<"PublishedPost"> | string
-  draftId?: Prisma.StringFilter<"PublishedPost"> | string
-  scheduleSlotId?: Prisma.StringNullableFilter<"PublishedPost"> | string | null
-  xPostId?: Prisma.StringFilter<"PublishedPost"> | string
-  text?: Prisma.StringFilter<"PublishedPost"> | string
-  postedAt?: Prisma.DateTimeFilter<"PublishedPost"> | Date | string
-  metricsSyncedAt?: Prisma.DateTimeNullableFilter<"PublishedPost"> | Date | string | null
-  createdAt?: Prisma.DateTimeFilter<"PublishedPost"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"PublishedPost"> | Date | string
+export type PublishedPostUncheckedUpdateWithoutDraftInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xPostId?: Prisma.StringFieldUpdateOperationsInput | string
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metrics?: Prisma.PostMetricUncheckedUpdateManyWithoutPublishedPostNestedInput
 }
 
 export type PublishedPostCreateWithoutScheduleSlotInput = {
@@ -585,7 +564,7 @@ export type PublishedPostCreateWithoutScheduleSlotInput = {
   metricsSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  draft: Prisma.DraftCreateNestedOneWithoutPublishedPostsInput
+  draft: Prisma.DraftCreateNestedOneWithoutPublishedPostInput
   metrics?: Prisma.PostMetricCreateNestedManyWithoutPublishedPostInput
 }
 
@@ -625,7 +604,7 @@ export type PublishedPostUpdateWithoutScheduleSlotInput = {
   metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  draft?: Prisma.DraftUpdateOneRequiredWithoutPublishedPostsNestedInput
+  draft?: Prisma.DraftUpdateOneRequiredWithoutPublishedPostNestedInput
   metrics?: Prisma.PostMetricUpdateManyWithoutPublishedPostNestedInput
 }
 
@@ -649,7 +628,7 @@ export type PublishedPostCreateWithoutMetricsInput = {
   metricsSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  draft: Prisma.DraftCreateNestedOneWithoutPublishedPostsInput
+  draft: Prisma.DraftCreateNestedOneWithoutPublishedPostInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutPublishedPostInput
 }
 
@@ -689,59 +668,13 @@ export type PublishedPostUpdateWithoutMetricsInput = {
   metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  draft?: Prisma.DraftUpdateOneRequiredWithoutPublishedPostsNestedInput
+  draft?: Prisma.DraftUpdateOneRequiredWithoutPublishedPostNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutPublishedPostNestedInput
 }
 
 export type PublishedPostUncheckedUpdateWithoutMetricsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   draftId?: Prisma.StringFieldUpdateOperationsInput | string
-  scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  xPostId?: Prisma.StringFieldUpdateOperationsInput | string
-  text?: Prisma.StringFieldUpdateOperationsInput | string
-  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type PublishedPostCreateManyDraftInput = {
-  id?: string
-  scheduleSlotId?: string | null
-  xPostId: string
-  text: string
-  postedAt: Date | string
-  metricsSyncedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type PublishedPostUpdateWithoutDraftInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  xPostId?: Prisma.StringFieldUpdateOperationsInput | string
-  text?: Prisma.StringFieldUpdateOperationsInput | string
-  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutPublishedPostNestedInput
-  metrics?: Prisma.PostMetricUpdateManyWithoutPublishedPostNestedInput
-}
-
-export type PublishedPostUncheckedUpdateWithoutDraftInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  xPostId?: Prisma.StringFieldUpdateOperationsInput | string
-  text?: Prisma.StringFieldUpdateOperationsInput | string
-  postedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metrics?: Prisma.PostMetricUncheckedUpdateManyWithoutPublishedPostNestedInput
-}
-
-export type PublishedPostUncheckedUpdateManyWithoutDraftInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xPostId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string

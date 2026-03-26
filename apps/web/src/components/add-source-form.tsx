@@ -51,7 +51,7 @@ export function AddSourceForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-5 py-2.5 text-sm font-medium text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/20"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-5 py-2.5 text-sm font-medium text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/20 sm:w-auto"
       >
         <span className="text-lg leading-none">+</span> Add source
       </button>
@@ -61,7 +61,7 @@ export function AddSourceForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[20px] border border-white/10 bg-white/[0.04] p-5 space-y-4"
+      className="space-y-4 rounded-[20px] border border-white/10 bg-white/[0.04] p-4 sm:p-5"
     >
       <h3 className="text-lg font-semibold text-white">Add a new source</h3>
 
@@ -116,7 +116,7 @@ export function AddSourceForm() {
         />
       </div>
 
-      <div className="flex gap-3 pt-2">
+      <div className="flex flex-col gap-3 pt-2 sm:flex-row">
         <button
           type="submit"
           disabled={loading}

@@ -20,6 +20,10 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     return NextResponse.json({ error: "Draft not found." }, { status: 404 });
   }
 
+  if (draft.status !== "NEEDS_REVIEW") {
+    return NextResponse.json({ error: "Only drafts awaiting human review can be approved." }, { status: 409 });
+  }
+
   const updated = await prisma.draft.update({
     where: { id },
     data: {

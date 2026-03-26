@@ -1,17 +1,47 @@
 import { formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
-import { getEnv, getPrismaClient, readSystemState, readXTokens } from "@twitter-agent/core";
+import { getEnv, getPrismaClient, isXIntegrationPaused, readSystemState, readXIntegrationState, readXTokens } from "@twitter-agent/core";
 
 const prisma = getPrismaClient();
 
+function getXStatusSummary(params: {
+  tokens: Awaited<ReturnType<typeof readXTokens>>;
+  integration: Awaited<ReturnType<typeof readXIntegrationState>>;
+}) {
+  if (isXIntegrationPaused(params.integration)) {
+    return {
+      label: "Billing blocked",
+      tone: "bad" as const,
+      detail: params.integration?.reason ?? "X credits are required before publish, mention polling, and metrics sync can continue.",
+      timestamp: params.integration?.lastFailureAt ?? null
+    };
+  }
+
+  if (params.tokens?.accessToken) {
+    return {
+      label: "Connected",
+      tone: "good" as const,
+      detail: params.integration?.lastSuccessAt ? "Recent X calls are succeeding." : "Owner account connected.",
+      timestamp: params.integration?.lastSuccessAt ?? null
+    };
+  }
+
+  return {
+    label: "Missing",
+    tone: "warning" as const,
+    detail: "Connect the owner X account to publish, poll mentions, and send replies.",
+    timestamp: null
+  };
+}
+
 export async function getDashboardMetrics() {
-  const [sources, drafts, published, mentions, prompts, incidents, xTokens] = await Promise.all([
+  const [sources, drafts, published, mentions, prompts, incidents, xTokens, xIntegration] = await Promise.all([
     prisma.sourceItem.count({ where: { isActive: true } }),
     prisma.draft.count({
       where: {
         status: {
-          in: ["NEEDS_REVIEW", "APPROVED", "SCHEDULED"]
+          in: ["NEEDS_REVIEW", "APPROVED", "SCHEDULED", "PUBLISHING"]
         }
       }
     }),
@@ -19,7 +49,7 @@ export async function getDashboardMetrics() {
     prisma.mention.count({
       where: {
         status: {
-          in: ["NEW", "DRAFTED", "APPROVED", "ESCALATED"]
+          in: ["NEW", "DRAFTED", "APPROVED", "SENDING", "ESCALATED"]
         }
       }
     }),
@@ -31,8 +61,10 @@ export async function getDashboardMetrics() {
         }
       }
     }),
-    readXTokens()
+    readXTokens(),
+    readXIntegrationState()
   ]);
+  const xStatus = getXStatusSummary({ tokens: xTokens, integration: xIntegration });
 
   return {
     sources,
@@ -41,12 +73,13 @@ export async function getDashboardMetrics() {
     mentions,
     prompts,
     incidents,
-    xConnected: Boolean(xTokens?.accessToken)
+    xConnected: Boolean(xTokens?.accessToken),
+    xStatus
   };
 }
 
 export async function getOverviewFeed() {
-  const [recentDrafts, recentMentions, nextSlots, activePrompts, lastCursor] = await Promise.all([
+  const [recentDrafts, recentMentions, nextSlots, activePrompts, lastCursor, xTokens, xIntegration] = await Promise.all([
     prisma.draft.findMany({
       orderBy: { updatedAt: "desc" },
       take: 6,
@@ -72,7 +105,9 @@ export async function getOverviewFeed() {
       where: { isActive: true },
       orderBy: [{ kind: "asc" }]
     }),
-    readSystemState<{ value?: string | null }>("lastMentionSinceId")
+    readSystemState<{ value?: string | null }>("lastMentionSinceId"),
+    readXTokens(),
+    readXIntegrationState()
   ]);
 
   return {
@@ -80,7 +115,8 @@ export async function getOverviewFeed() {
     recentMentions,
     nextSlots,
     activePrompts,
-    lastCursor: lastCursor?.value ?? null
+    lastCursor: lastCursor?.value ?? null,
+    xStatus: getXStatusSummary({ tokens: xTokens, integration: xIntegration })
   };
 }
 
@@ -113,18 +149,39 @@ export async function getIdeasPageData() {
 }
 
 export async function getDraftsPageData() {
-  return prisma.draft.findMany({
-    orderBy: { updatedAt: "desc" },
-    take: 50,
-    include: {
-      idea: true,
-      reviews: {
-        orderBy: { createdAt: "desc" },
-        take: 1
+  const [drafts, availableSlots] = await Promise.all([
+    prisma.draft.findMany({
+      orderBy: { updatedAt: "desc" },
+      take: 50,
+      include: {
+        idea: true,
+        reviews: {
+          orderBy: { createdAt: "desc" },
+          take: 1
+        },
+        scheduleSlot: true
+      }
+    }),
+    prisma.scheduleSlot.findMany({
+      where: {
+        status: "OPEN",
+        slotAt: {
+          gt: new Date()
+        }
       },
-      scheduleSlot: true
-    }
-  });
+      orderBy: { slotAt: "asc" },
+      take: 12
+    })
+  ]);
+
+  return {
+    drafts,
+    availableSlots: availableSlots.map((slot) => ({
+      id: slot.id,
+      label: formatDashboardDate(slot.slotAt),
+      isExperimental: slot.isExperimental
+    }))
+  };
 }
 
 export async function getScheduledPageData() {

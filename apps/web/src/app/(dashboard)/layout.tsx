@@ -21,7 +21,7 @@ export default async function DashboardLayout({
         <>
           <Link
             href="/api/auth/x/start"
-            className="inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 transition hover:bg-cyan-300/20"
+            className="inline-flex w-full justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 transition hover:bg-cyan-300/20 sm:w-auto"
           >
             Connect X account
           </Link>

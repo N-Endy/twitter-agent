@@ -10,7 +10,7 @@ const envSchema = z.object({
   DEFAULT_TIMEZONE: z.string().default("Africa/Lagos"),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_FAST_MODEL: z.string().default("gpt-5-mini"),
-  OPENAI_QUALITY_MODEL: z.string().default("gpt-5"),
+  OPENAI_QUALITY_MODEL: z.string().default("gpt-5.2"),
   X_CLIENT_ID: z.string().optional(),
   X_CLIENT_SECRET: z.string().optional(),
   X_REDIRECT_URI: z.string().optional(),

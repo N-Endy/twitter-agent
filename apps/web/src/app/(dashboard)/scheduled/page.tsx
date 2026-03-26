@@ -9,8 +9,8 @@ export default async function ScheduledPage() {
       <Table headers={["Slot", "Draft", "Pillar", "Experimental", "Status"]}>
         {slots.map((slot) => (
           <tr key={slot.id}>
-            <TableCell>{formatDashboardDate(slot.slotAt)}</TableCell>
-            <TableCell>
+            <TableCell label="Slot">{formatDashboardDate(slot.slotAt)}</TableCell>
+            <TableCell label="Draft">
               {slot.draft ? (
                 <>
                   <p className="text-white">{slot.draft.text}</p>
@@ -20,9 +20,9 @@ export default async function ScheduledPage() {
                 <span className="text-slate-400">Open slot</span>
               )}
             </TableCell>
-            <TableCell>{slot.draft?.idea.pillar ?? "—"}</TableCell>
-            <TableCell>{slot.isExperimental ? "Yes" : "No"}</TableCell>
-            <TableCell>
+            <TableCell label="Pillar">{slot.draft?.idea.pillar ?? "—"}</TableCell>
+            <TableCell label="Experimental">{slot.isExperimental ? "Yes" : "No"}</TableCell>
+            <TableCell label="Status">
               <StatusPill tone={slot.status === "POSTED" ? "good" : slot.status === "OPEN" ? "warning" : "neutral"}>
                 {slot.status}
               </StatusPill>

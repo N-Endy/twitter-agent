@@ -5,6 +5,9 @@ import { Prisma } from "./generated/prisma/client";
 import { decryptString, encryptString } from "./security";
 import { buildWeeklySlots, parseSlotWindows } from "./scheduling";
 
+const X_INTEGRATION_KEY = "xIntegration";
+const X_BILLING_BLOCK_WINDOW_MS = 60 * 60 * 1000;
+
 export type StoredXTokens = {
   accessToken: string;
   refreshToken?: string;
@@ -12,6 +15,15 @@ export type StoredXTokens = {
   scope?: string;
   userId?: string;
   username?: string;
+};
+
+export type XIntegrationState = {
+  status: "AVAILABLE" | "BILLING_BLOCKED" | "ERROR";
+  reason?: string | null;
+  lastFailureAt?: string | null;
+  lastSuccessAt?: string | null;
+  lastStatusCode?: number | null;
+  pauseUntil?: string | null;
 };
 
 export async function saveSystemState(key: string, value: Record<string, unknown>) {
@@ -75,6 +87,57 @@ export async function getValidXAccessToken() {
   await saveXTokens(nextTokens);
 
   return nextTokens;
+}
+
+export async function readXIntegrationState() {
+  return readSystemState<XIntegrationState>(X_INTEGRATION_KEY);
+}
+
+export async function markXIntegrationHealthy() {
+  const current = await readXIntegrationState();
+
+  await saveSystemState(X_INTEGRATION_KEY, {
+    status: "AVAILABLE",
+    reason: null,
+    lastFailureAt: current?.lastFailureAt ?? null,
+    lastSuccessAt: new Date().toISOString(),
+    lastStatusCode: null,
+    pauseUntil: null
+  });
+}
+
+export async function markXIntegrationFailure(params: {
+  billingRequired?: boolean;
+  reason: string;
+  statusCode?: number | null;
+}) {
+  const current = await readXIntegrationState();
+
+  await saveSystemState(X_INTEGRATION_KEY, {
+    status: params.billingRequired ? "BILLING_BLOCKED" : "ERROR",
+    reason: params.reason,
+    lastFailureAt: new Date().toISOString(),
+    lastSuccessAt: current?.lastSuccessAt ?? null,
+    lastStatusCode: params.statusCode ?? null,
+    pauseUntil: params.billingRequired
+      ? new Date(Date.now() + X_BILLING_BLOCK_WINDOW_MS).toISOString()
+      : null
+  });
+}
+
+export function isXIntegrationPaused(
+  state: Pick<XIntegrationState, "status" | "pauseUntil"> | null | undefined,
+  now = new Date()
+) {
+  if (state?.status !== "BILLING_BLOCKED") {
+    return false;
+  }
+
+  if (!state.pauseUntil) {
+    return true;
+  }
+
+  return new Date(state.pauseUntil).getTime() > now.getTime();
 }
 
 export async function saveMentionCursor(sinceId: string | null) {

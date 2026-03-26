@@ -24,6 +24,7 @@ enum DraftStatus {
   NEEDS_REVIEW
   APPROVED
   SCHEDULED
+  PUBLISHING
   PUBLISHED
   REJECTED
 }
@@ -46,6 +47,7 @@ enum MentionStatus {
   CLASSIFIED
   DRAFTED
   APPROVED
+  SENDING
   SENT
   IGNORED
   ESCALATED
@@ -164,7 +166,7 @@ model Draft {
   idea               ContentIdea  @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   scheduleSlot       ScheduleSlot? @relation(fields: [scheduleSlotId], references: [id], onDelete: SetNull)
   reviews            DraftReview[]
-  publishedPosts     PublishedPost[]
+  publishedPost      PublishedPost?
 }
 
 model DraftReview {
@@ -199,7 +201,7 @@ model ScheduleSlot {
 
 model PublishedPost {
   id              String       @id @default(cuid())
-  draftId         String
+  draftId         String       @unique
   scheduleSlotId  String?      @unique
   xPostId         String       @unique
   text            String

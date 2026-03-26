@@ -39,3 +39,60 @@ select {
 ::selection {
   background: rgba(103, 232, 249, 0.35);
 }
+
+.dashboard-table-wrap {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.dashboard-table {
+  width: 100%;
+  min-width: 100%;
+}
+
+@media (max-width: 767px) {
+  .dashboard-table-wrap {
+    overflow: visible;
+  }
+
+  .dashboard-table,
+  .dashboard-table tbody,
+  .dashboard-table tr,
+  .dashboard-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-table thead {
+    display: none;
+  }
+
+  .dashboard-table tbody {
+    background: rgba(2, 6, 23, 0.18);
+  }
+
+  .dashboard-table tr {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .dashboard-table tr:first-child {
+    border-top: 0;
+  }
+
+  .dashboard-cell {
+    padding: 0.55rem 0 !important;
+  }
+
+  .dashboard-cell::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.65rem;
+    line-height: 1rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.95);
+  }
+}

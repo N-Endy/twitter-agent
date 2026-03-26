@@ -10,16 +10,16 @@ export default async function PromptsPage() {
       <Table headers={["Kind", "Version", "Name", "Status", "Activated", "Action"]}>
         {prompts.map((prompt) => (
           <tr key={prompt.id}>
-            <TableCell>{prompt.kind}</TableCell>
-            <TableCell>v{prompt.version}</TableCell>
-            <TableCell>{prompt.name}</TableCell>
-            <TableCell>
+            <TableCell label="Kind">{prompt.kind}</TableCell>
+            <TableCell label="Version">v{prompt.version}</TableCell>
+            <TableCell label="Name">{prompt.name}</TableCell>
+            <TableCell label="Status">
               <StatusPill tone={prompt.isActive ? "good" : "warning"}>
                 {prompt.isActive ? "ACTIVE" : "INACTIVE"}
               </StatusPill>
             </TableCell>
-            <TableCell>{formatDashboardDate(prompt.activatedAt)}</TableCell>
-            <TableCell>
+            <TableCell label="Activated">{formatDashboardDate(prompt.activatedAt)}</TableCell>
+            <TableCell label="Action">
               {!prompt.isActive ? (
                 <MutationButton
                   url={`/api/admin/prompts/${prompt.id}/activate`}

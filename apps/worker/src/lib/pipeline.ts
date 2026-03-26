@@ -1,4 +1,5 @@
 import {
+  compareXIds,
   createPost,
   ensureUpcomingScheduleSlots,
   extractTweetIdFromUrl,
@@ -12,11 +13,16 @@ import {
   ingestUrlSource,
   ingestXAccountSource,
   ingestXPostSource,
+  isXApiError,
+  isXIntegrationPaused,
+  markXIntegrationFailure,
+  markXIntegrationHealthy,
   moderateDraft,
   moderateMention,
   Prisma,
   queueNames,
   readMentionCursor,
+  readXIntegrationState,
   saveMentionCursor
 } from "@twitter-agent/core";
 
@@ -32,9 +38,112 @@ import {
 const prisma = getPrismaClient();
 const voiceRules =
   "Voice: sharp, practical, technical, credible, useful, plain English, no empty hype, no lazy motivation, no spammy calls to action.";
+const X_BILLING_BLOCKED_SKIP = "x-billing-blocked";
 
 function stringify(value: unknown) {
   return JSON.stringify(value, null, 2);
+}
+
+function extractXFailureReason(error: { bodyJson?: Record<string, unknown> | null; bodyText?: string; message: string }) {
+  const errors = error.bodyJson?.errors;
+
+  if (Array.isArray(errors)) {
+    const firstMessage = errors.find(
+      (entry): entry is { message: string } =>
+        typeof entry === "object" && entry !== null && "message" in entry && typeof entry.message === "string"
+    );
+
+    if (firstMessage?.message) {
+      return firstMessage.message;
+    }
+  }
+
+  const detail = error.bodyJson?.detail;
+
+  if (typeof detail === "string" && detail.trim()) {
+    return detail;
+  }
+
+  return error.bodyText || error.message;
+}
+
+async function registerXFailure(error: unknown) {
+  if (!isXApiError(error)) {
+    return false;
+  }
+
+  await markXIntegrationFailure({
+    billingRequired: error.billingRequired,
+    reason: extractXFailureReason(error),
+    statusCode: error.status
+  });
+
+  return error.billingRequired;
+}
+
+async function getOperationalXTokens() {
+  try {
+    return await getValidXAccessToken();
+  } catch (error) {
+    const billingRequired = await registerXFailure(error);
+
+    if (billingRequired) {
+      return null;
+    }
+
+    throw error;
+  }
+}
+
+async function shouldSkipXWork() {
+  const state = await readXIntegrationState();
+  return isXIntegrationPaused(state) ? state : null;
+}
+
+function isXSourceKind(kind: string) {
+  return kind === "X_POST" || kind === "X_ACCOUNT";
+}
+
+function extractReferencedTweetId(value: unknown) {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+
+  const firstReference = value.find(
+    (entry): entry is { id?: string | number } => typeof entry === "object" && entry !== null && "id" in entry
+  );
+
+  return firstReference?.id ? String(firstReference.id) : null;
+}
+
+function parseStoredSourcePostId(value: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  if (/^\d+$/.test(value)) {
+    return value;
+  }
+
+  try {
+    return extractReferencedTweetId(JSON.parse(value));
+  } catch {
+    return null;
+  }
+}
+
+function buildConversationContext(params: { conversationId: string | null; referencedPostText?: string | null }) {
+  const parts: string[] = [];
+
+  if (params.referencedPostText) {
+    parts.push(`Referenced post: ${params.referencedPostText}`);
+  }
+
+  if (params.conversationId) {
+    parts.push(`Conversation ID: ${params.conversationId}`);
+  }
+
+  return parts.join("\n") || "No extra context";
 }
 
 export async function runSourceIngestJob() {
@@ -44,19 +153,40 @@ export async function runSourceIngestJob() {
   });
 
   let created = 0;
+  let skippedXSources = 0;
+  let xWorkPaused = Boolean(await shouldSkipXWork());
 
   for (const source of sources) {
     let items: Array<{ title: string; rawText: string; metadata: Record<string, unknown> }> = [];
 
-    if (source.kind === "URL") {
-      items = await ingestUrlSource(source.uri);
-    } else if (source.kind === "RSS") {
-      items = await ingestRssSource(source.uri);
-    } else if (source.kind === "X_POST") {
-      items = await ingestXPostSource(source.uri);
-    } else if (source.kind === "X_ACCOUNT") {
-      const username = source.allowlistHandle ?? source.uri.split("/").filter(Boolean).pop() ?? source.uri;
-      items = await ingestXAccountSource(username.replace("@", ""));
+    if (xWorkPaused && isXSourceKind(source.kind)) {
+      skippedXSources += 1;
+      continue;
+    }
+
+    try {
+      if (source.kind === "URL") {
+        items = await ingestUrlSource(source.uri);
+      } else if (source.kind === "RSS") {
+        items = await ingestRssSource(source.uri);
+      } else if (source.kind === "X_POST") {
+        items = await ingestXPostSource(source.uri);
+        await markXIntegrationHealthy();
+      } else if (source.kind === "X_ACCOUNT") {
+        const username = source.allowlistHandle ?? source.uri.split("/").filter(Boolean).pop() ?? source.uri;
+        items = await ingestXAccountSource(username.replace("@", ""));
+        await markXIntegrationHealthy();
+      }
+    } catch (error) {
+      const billingRequired = await registerXFailure(error);
+
+      if (billingRequired && isXSourceKind(source.kind)) {
+        xWorkPaused = true;
+        skippedXSources += 1;
+        continue;
+      }
+
+      throw error;
     }
 
     for (const item of items) {
@@ -93,7 +223,7 @@ export async function runSourceIngestJob() {
     }
   }
 
-  return { created };
+  return { created, skippedXSources };
 }
 
 export async function runWeeklyBatchJob() {
@@ -286,10 +416,17 @@ export async function runDraftQaJob(draftId?: string) {
 }
 
 export async function runPublishPostJob() {
-  const tokens = await getValidXAccessToken();
+  if (await shouldSkipXWork()) {
+    return { published: 0, skipped: X_BILLING_BLOCKED_SKIP };
+  }
+
+  const tokens = await getOperationalXTokens();
 
   if (!tokens?.accessToken) {
-    return { published: 0, skipped: "x-not-connected" };
+    return {
+      published: 0,
+      skipped: (await shouldSkipXWork()) ? X_BILLING_BLOCKED_SKIP : "x-not-connected"
+    };
   }
 
   const dueDrafts = await prisma.draft.findMany({
@@ -301,18 +438,67 @@ export async function runPublishPostJob() {
         }
       }
     },
-    include: {
-      scheduleSlot: true
+    select: {
+      id: true
     }
   });
 
   let published = 0;
 
-  for (const draft of dueDrafts) {
-    const response = await createPost({
-      accessToken: tokens.accessToken,
-      text: draft.text
+  for (const dueDraft of dueDrafts) {
+    const claim = await prisma.draft.updateMany({
+      where: {
+        id: dueDraft.id,
+        status: "SCHEDULED"
+      },
+      data: {
+        status: "PUBLISHING"
+      }
     });
+
+    if (claim.count === 0) {
+      continue;
+    }
+
+    const draft = await prisma.draft.findUnique({
+      where: { id: dueDraft.id },
+      include: {
+        scheduleSlot: true
+      }
+    });
+
+    if (!draft) {
+      continue;
+    }
+
+    let response;
+
+    try {
+      response = await createPost({
+        accessToken: tokens.accessToken,
+        text: draft.text
+      });
+      await markXIntegrationHealthy();
+    } catch (error) {
+      const billingRequired = await registerXFailure(error);
+
+      await prisma.draft.updateMany({
+        where: {
+          id: draft.id,
+          status: "PUBLISHING"
+        },
+        data: {
+          status: "SCHEDULED"
+        }
+      });
+
+      if (billingRequired) {
+        return { published, skipped: X_BILLING_BLOCKED_SKIP };
+      }
+
+      throw error;
+    }
+
     const xPostId = String((response.data.data as { id?: string } | undefined)?.id ?? "");
 
     await prisma.$transaction(async (tx: any) => {
@@ -350,11 +536,18 @@ export async function runPublishPostJob() {
 }
 
 export async function runMentionPollJob() {
-  const tokens = await getValidXAccessToken();
+  if (await shouldSkipXWork()) {
+    return { created: 0, skipped: X_BILLING_BLOCKED_SKIP };
+  }
+
+  const tokens = await getOperationalXTokens();
   const env = getEnv();
 
-  if (!tokens?.accessToken && !env.X_BEARER_TOKEN) {
-    return { created: 0, skipped: "x-not-connected" };
+  if (!tokens?.accessToken) {
+    return {
+      created: 0,
+      skipped: (await shouldSkipXWork()) ? X_BILLING_BLOCKED_SKIP : "x-not-connected"
+    };
   }
 
   const ownerId = tokens?.userId ?? env.X_OWNER_USER_ID;
@@ -364,11 +557,24 @@ export async function runMentionPollJob() {
   }
 
   const sinceId = await readMentionCursor();
-  const response = await getMentions({
-    accessToken: tokens.accessToken,
-    userId: ownerId,
-    sinceId: sinceId ?? undefined
-  });
+  let response;
+
+  try {
+    response = await getMentions({
+      accessToken: tokens.accessToken,
+      userId: ownerId,
+      sinceId: sinceId ?? undefined
+    });
+    await markXIntegrationHealthy();
+  } catch (error) {
+    const billingRequired = await registerXFailure(error);
+
+    if (billingRequired) {
+      return { created: 0, skipped: X_BILLING_BLOCKED_SKIP };
+    }
+
+    throw error;
+  }
 
   const payload = response.data;
   const mentions = (payload.data as Array<Record<string, unknown>> | undefined) ?? [];
@@ -386,7 +592,7 @@ export async function runMentionPollJob() {
     });
 
     if (existing) {
-      latestSinceId = xMentionId > (latestSinceId ?? "") ? xMentionId : latestSinceId;
+      latestSinceId = compareXIds(xMentionId, latestSinceId) > 0 ? xMentionId : latestSinceId;
       continue;
     }
 
@@ -396,7 +602,7 @@ export async function runMentionPollJob() {
       data: {
         xMentionId,
         conversationId: mention.conversation_id ? String(mention.conversation_id) : null,
-        sourcePostId: mention.referenced_tweets ? stringify(mention.referenced_tweets) : null,
+        sourcePostId: extractReferencedTweetId(mention.referenced_tweets) ?? null,
         authorId,
         authorUsername: usersById.get(authorId)?.username ?? authorId,
         text,
@@ -430,7 +636,7 @@ export async function runMentionPollJob() {
       });
     }
 
-    latestSinceId = xMentionId > (latestSinceId ?? "") ? xMentionId : latestSinceId;
+    latestSinceId = compareXIds(xMentionId, latestSinceId) > 0 ? xMentionId : latestSinceId;
     created += 1;
   }
 
@@ -440,6 +646,24 @@ export async function runMentionPollJob() {
 }
 
 export async function runReplyDraftJob(mentionId?: string) {
+  const env = getEnv();
+  const xPauseState = await shouldSkipXWork();
+  let contextAuthToken = env.X_BEARER_TOKEN || null;
+  let allowXContextLookups = !xPauseState;
+
+  if (allowXContextLookups) {
+    const tokens = await getOperationalXTokens();
+    const billingBlocked = await shouldSkipXWork();
+
+    if (billingBlocked) {
+      contextAuthToken = null;
+      allowXContextLookups = false;
+    } else {
+      contextAuthToken = tokens?.accessToken ?? env.X_BEARER_TOKEN ?? null;
+      allowXContextLookups = Boolean(contextAuthToken);
+    }
+  }
+
   const mentions = mentionId
     ? await prisma.mention.findMany({ where: { id: mentionId } })
     : await prisma.mention.findMany({
@@ -469,9 +693,36 @@ export async function runReplyDraftJob(mentionId?: string) {
       continue;
     }
 
+    let conversationContext = buildConversationContext({
+      conversationId: mention.conversationId
+    });
+    const sourcePostId = parseStoredSourcePostId(mention.sourcePostId);
+
+    if (allowXContextLookups && contextAuthToken && sourcePostId) {
+      try {
+        const response = await getPost({
+          authToken: contextAuthToken,
+          tweetId: sourcePostId
+        });
+        await markXIntegrationHealthy();
+        const post = response.data.data as { text?: string } | undefined;
+
+        conversationContext = buildConversationContext({
+          conversationId: mention.conversationId,
+          referencedPostText: post?.text ?? null
+        });
+      } catch (error) {
+        const billingRequired = await registerXFailure(error);
+
+        if (billingRequired) {
+          allowXContextLookups = false;
+        }
+      }
+    }
+
     const classification = await classifyMention({
       mentionText: mention.text,
-      conversationContext: mention.conversationId ?? "No extra context"
+      conversationContext
     });
 
     if (!classification.shouldRespond || classification.requiresEscalation) {
@@ -495,7 +746,7 @@ export async function runReplyDraftJob(mentionId?: string) {
     const suggestion = await draftReply({
       mentionText: mention.text,
       classification: stringify(classification),
-      conversationContext: mention.conversationId ?? "No extra context",
+      conversationContext,
       supportingEvidence: supportingEvidence.flatMap((item: (typeof supportingEvidence)[number]) => item.keyFacts).slice(0, 5)
     });
 
@@ -530,7 +781,17 @@ export async function runReplyDraftJob(mentionId?: string) {
 
 export async function runMetricsSyncJob() {
   const env = getEnv();
-  const authToken = (await getValidXAccessToken())?.accessToken ?? env.X_BEARER_TOKEN;
+
+  if (await shouldSkipXWork()) {
+    return { synced: 0, skipped: X_BILLING_BLOCKED_SKIP };
+  }
+
+  const tokens = await getOperationalXTokens();
+  if (!tokens?.accessToken && (await shouldSkipXWork())) {
+    return { synced: 0, skipped: X_BILLING_BLOCKED_SKIP };
+  }
+
+  const authToken = tokens?.accessToken ?? env.X_BEARER_TOKEN;
 
   if (!authToken) {
     return { synced: 0, skipped: "x-not-connected" };
@@ -547,10 +808,24 @@ export async function runMetricsSyncJob() {
   let synced = 0;
 
   for (const post of publishedPosts) {
-    const response = await getPost({
-      authToken,
-      tweetId: post.xPostId
-    });
+    let response;
+
+    try {
+      response = await getPost({
+        authToken,
+        tweetId: post.xPostId
+      });
+      await markXIntegrationHealthy();
+    } catch (error) {
+      const billingRequired = await registerXFailure(error);
+
+      if (billingRequired) {
+        return { synced, skipped: X_BILLING_BLOCKED_SKIP };
+      }
+
+      throw error;
+    }
+
     const data = response.data.data as { public_metrics?: Record<string, number> } | undefined;
     const metrics = data?.public_metrics ?? {};
     const ageHours = (Date.now() - post.postedAt.getTime()) / 3_600_000;

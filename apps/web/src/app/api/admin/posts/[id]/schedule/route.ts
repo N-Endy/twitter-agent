@@ -26,15 +26,27 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: "Draft not found." }, { status: 404 });
   }
 
-  if (draft.status !== "APPROVED" && draft.status !== "SCHEDULED") {
+  if (draft.status !== "APPROVED") {
     return NextResponse.json({ error: "Draft must be approved before scheduling." }, { status: 409 });
+  }
+
+  if (draft.scheduleSlotId) {
+    return NextResponse.json({ error: "This draft is already scheduled." }, { status: 409 });
   }
 
   await ensureUpcomingScheduleSlots();
 
   const slot =
     (body.slotId
-      ? await prisma.scheduleSlot.findUnique({ where: { id: body.slotId } })
+      ? await prisma.scheduleSlot.findFirst({
+          where: {
+            id: body.slotId,
+            status: "OPEN",
+            slotAt: {
+              gt: new Date()
+            }
+          }
+        })
       : await prisma.scheduleSlot.findFirst({
           where: {
             status: "OPEN",
@@ -50,12 +62,19 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   }
 
   const updated = await prisma.$transaction(async (tx) => {
-    await tx.scheduleSlot.update({
-      where: { id: slot.id },
+    const reserved = await tx.scheduleSlot.updateMany({
+      where: {
+        id: slot.id,
+        status: "OPEN"
+      },
       data: {
         status: "RESERVED"
       }
     });
+
+    if (reserved.count === 0) {
+      throw new Error("slot-unavailable");
+    }
 
     return tx.draft.update({
       where: { id },
@@ -67,7 +86,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         scheduleSlot: true
       }
     });
+  }).catch((error: unknown) => {
+    if (error instanceof Error && error.message === "slot-unavailable") {
+      return null;
+    }
+
+    throw error;
   });
+
+  if (!updated) {
+    return NextResponse.json({ error: "That schedule slot was just claimed. Please choose another one." }, { status: 409 });
+  }
 
   await createAuditLog({
     actor: session.user.email ?? "owner",

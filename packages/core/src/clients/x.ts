@@ -1,4 +1,4 @@
-import { Client, OAuth2, generateCodeChallenge, generateCodeVerifier } from "@xdevplatform/xdk";
+import { OAuth2, generateCodeChallenge, generateCodeVerifier } from "@xdevplatform/xdk";
 
 import { getEnv } from "../env";
 
@@ -12,18 +12,71 @@ type XTokens = {
 
 const X_API_BASE = "https://api.x.com";
 
-export function getXBearerClient() {
+export class XApiError extends Error {
+  status: number;
+  bodyText: string;
+  bodyJson: Record<string, unknown> | null;
+  rateLimitRemaining: number | null;
+  rateLimitReset: number | null;
+  billingRequired: boolean;
+
+  constructor(params: {
+    status: number;
+    bodyText: string;
+    bodyJson: Record<string, unknown> | null;
+    rateLimitRemaining: number | null;
+    rateLimitReset: number | null;
+  }) {
+    super(`X API request failed: ${params.status} ${params.bodyText}`.trim());
+    this.name = "XApiError";
+    this.status = params.status;
+    this.bodyText = params.bodyText;
+    this.bodyJson = params.bodyJson;
+    this.rateLimitRemaining = params.rateLimitRemaining;
+    this.rateLimitReset = params.rateLimitReset;
+    this.billingRequired = params.status === 402;
+  }
+}
+
+export function isXApiError(error: unknown): error is XApiError {
+  return error instanceof XApiError;
+}
+
+async function buildXApiError(response: Response) {
+  const bodyText = await response.text();
+  let bodyJson: Record<string, unknown> | null = null;
+
+  try {
+    bodyJson = bodyText ? (JSON.parse(bodyText) as Record<string, unknown>) : null;
+  } catch {
+    bodyJson = null;
+  }
+
+  const preferredMessage =
+    (typeof bodyJson?.detail === "string" && bodyJson.detail) ||
+    (typeof bodyJson?.message === "string" && bodyJson.message) ||
+    (typeof bodyJson?.title === "string" && bodyJson.title) ||
+    bodyText ||
+    response.statusText ||
+    "Request failed.";
+
+  return new XApiError({
+    status: response.status,
+    bodyText: preferredMessage,
+    bodyJson,
+    rateLimitRemaining: Number(response.headers.get("x-rate-limit-remaining")) || null,
+    rateLimitReset: Number(response.headers.get("x-rate-limit-reset")) || null
+  });
+}
+
+function getBearerTokenOrThrow() {
   const { X_BEARER_TOKEN } = getEnv();
 
   if (!X_BEARER_TOKEN) {
     throw new Error("X_BEARER_TOKEN is required for X read operations.");
   }
 
-  return new Client({ bearerToken: X_BEARER_TOKEN });
-}
-
-export function getXUserClient(accessToken: string) {
-  return new Client({ accessToken });
+  return X_BEARER_TOKEN;
 }
 
 export async function createPkceFlow() {
@@ -101,7 +154,7 @@ export async function refreshAccessToken(refreshToken: string) {
   });
 
   if (!response.ok) {
-    throw new Error(`Unable to refresh X token: ${response.status} ${await response.text()}`);
+    throw await buildXApiError(response);
   }
 
   return (await response.json()) as XTokens;
@@ -132,7 +185,7 @@ async function xFetch(path: string, options: XFetchOptions, attempt = 0) {
   }
 
   if (!response.ok) {
-    throw new Error(`X API request failed: ${response.status} ${await response.text()}`);
+    throw await buildXApiError(response);
   }
 
   return {
@@ -164,9 +217,11 @@ export async function createPost(params: {
 }
 
 export async function getAuthenticatedUser(accessToken: string) {
-  const client = getXUserClient(accessToken);
-  const response = await client.users.getMe();
-  const data = response.data;
+  const response = await xFetch("/2/users/me?user.fields=username,name", {
+    authToken: accessToken,
+    method: "GET"
+  });
+  const data = response.data.data as { id?: string; username?: string; name?: string } | undefined;
 
   return {
     data: data
@@ -185,7 +240,7 @@ export async function getMentions(params: {
   sinceId?: string;
 }) {
   const query = new URLSearchParams({
-    "tweet.fields": "created_at,conversation_id,author_id",
+    "tweet.fields": "created_at,conversation_id,author_id,referenced_tweets",
     expansions: "author_id",
     "user.fields": "username,name",
     max_results: "20"
@@ -202,8 +257,11 @@ export async function getMentions(params: {
 }
 
 export async function getUserByUsername(username: string) {
-  const response = await getXBearerClient().users.getByUsername(username);
-  const data = response.data;
+  const response = await xFetch(`/2/users/by/username/${encodeURIComponent(username)}?user.fields=username,name`, {
+    authToken: getBearerTokenOrThrow(),
+    method: "GET"
+  });
+  const data = response.data.data as { id?: string; username?: string; name?: string } | undefined;
 
   return {
     data: data
@@ -242,6 +300,39 @@ export async function getPost(params: { authToken: string; tweetId: string }) {
     authToken: params.authToken,
     method: "GET"
   });
+}
+
+export function compareXIds(left?: string | null, right?: string | null) {
+  if (!left && !right) {
+    return 0;
+  }
+
+  if (!left) {
+    return -1;
+  }
+
+  if (!right) {
+    return 1;
+  }
+
+  const leftId = BigInt(left);
+  const rightId = BigInt(right);
+
+  if (leftId === rightId) {
+    return 0;
+  }
+
+  return leftId > rightId ? 1 : -1;
+}
+
+export function pickLatestXId(...ids: Array<string | null | undefined>) {
+  return ids.reduce<string | null>((latest, candidate) => {
+    if (!candidate) {
+      return latest;
+    }
+
+    return compareXIds(candidate, latest) > 0 ? candidate : latest;
+  }, null);
 }
 
 export function extractTweetIdFromUrl(url: string) {

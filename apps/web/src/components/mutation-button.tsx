@@ -7,23 +7,33 @@ export function MutationButton({
   url,
   label,
   body,
-  confirmText
+  confirmText,
+  tone = "success"
 }: {
   url: string;
   label: string;
   body?: Record<string, unknown>;
   confirmText?: string;
+  tone?: "success" | "warning" | "danger" | "neutral";
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const toneClass =
+    tone === "warning"
+      ? "border-amber-300/20 bg-amber-300/10 text-amber-100 hover:bg-amber-300/20"
+      : tone === "danger"
+        ? "border-rose-300/20 bg-rose-300/10 text-rose-100 hover:bg-rose-300/20"
+        : tone === "neutral"
+          ? "border-white/10 bg-white/5 text-slate-100 hover:bg-white/10"
+          : "border-emerald-300/20 bg-emerald-300/10 text-emerald-100 hover:bg-emerald-300/20";
 
   return (
     <div className="space-y-2">
       <button
         type="button"
         disabled={isPending}
-        className="inline-flex rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-2 text-xs font-medium text-emerald-100 transition hover:bg-emerald-300/20 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`inline-flex w-full justify-center rounded-full border px-3 py-2 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto ${toneClass}`}
         onClick={() => {
           if (confirmText && !window.confirm(confirmText)) {
             return;
