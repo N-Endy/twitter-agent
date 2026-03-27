@@ -13,9 +13,9 @@ export default async function OverviewPage() {
           actions: (
             <a
               href="/api/auth/x/start"
-              className="inline-flex justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/20"
+              className="inline-flex justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
             >
-              Connect X account
+              Connect account
             </a>
           )
         }

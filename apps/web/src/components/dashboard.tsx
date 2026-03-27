@@ -29,31 +29,31 @@ export function AppShell({
   ];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(73,125,255,0.18),_transparent_38%),linear-gradient(180deg,_#09111f_0%,_#07101b_100%)] text-slate-100">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(188,253,73,0.08),_transparent_45%),linear-gradient(180deg,_#030712_0%,_#020617_100%)] text-slate-100">
       <div className="mx-auto flex w-full max-w-7xl gap-6 px-4 py-4 sm:px-6 sm:py-6 lg:gap-8 lg:px-10 lg:py-8">
-        <aside className="sidebar-scroll hidden w-72 shrink-0 self-start rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur lg:sticky lg:top-6 lg:flex lg:max-h-[calc(100vh-3rem)] lg:flex-col lg:overflow-y-auto">
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/80">Twitter Agent MVP</p>
-          <h2 className="mt-3 text-2xl font-semibold text-white">Operator Console</h2>
-          <p className="mt-3 text-sm leading-6 text-slate-300">
-            AI-assisted publishing, mentions triage, prompt control, and audit-safe workflows.
+        <aside className="sidebar-scroll hidden w-72 shrink-0 self-start border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md lg:sticky lg:top-6 lg:flex lg:max-h-[calc(100vh-3rem)] lg:flex-col lg:overflow-y-auto">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
+            <p className="text-[10px] uppercase tracking-[0.4em] text-[var(--accent)] opacity-80">System Operator</p>
+          </div>
+          <h2 className="mt-4 text-xl font-bold tracking-tight text-white">OPERATOR_CONSOLE</h2>
+          <p className="mt-3 text-xs leading-5 text-slate-400">
+            High-precision content pipeline, mention triage, and prompt version control.
           </p>
 
-          <div className="mt-6 flex-1 space-y-6">
-            <div className="rounded-[22px] border border-white/10 bg-slate-950/35 p-4">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-cyan-200/70">Workflow</p>
-              <div className="mt-3 space-y-2 text-sm text-slate-300">
+          <div className="mt-8 flex-1 space-y-8">
+            <div className="border border-white/5 bg-white/[0.01] p-4">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Pipeline Stages</p>
+              <div className="mt-4 space-y-3 text-xs font-medium text-slate-300">
                 {["Sources", "Ideas", "Drafts", "Published", "Mentions", "Replies"].map((step, index) => (
                   <div key={step} className="flex items-center gap-3">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-slate-200">
-                      {index + 1}
+                    <span className="flex h-5 w-5 items-center justify-center border border-white/10 bg-white/5 text-[9px] text-slate-400">
+                      0{index + 1}
                     </span>
-                    <span>{step}</span>
+                    <span className="tracking-wide uppercase">{step}</span>
                   </div>
                 ))}
               </div>
-              <p className="mt-4 text-xs leading-5 text-slate-400">
-                The operator flow is linear: shape inputs first, then approve what moves forward.
-              </p>
             </div>
 
             <DashboardNav items={navItems} variant="desktop" />
@@ -61,37 +61,34 @@ export function AppShell({
         </aside>
 
         <main className="min-w-0 flex-1">
-          <div className="mb-4 rounded-[24px] border border-white/10 bg-white/[0.04] p-4 shadow-xl backdrop-blur lg:hidden">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-cyan-200/75">Twitter Agent MVP</p>
+          <div className="mb-6 border border-[var(--accent)]/20 bg-[var(--accent)]/5 p-4 lg:hidden">
+            <p className="text-[10px] uppercase tracking-[0.4em] text-[var(--accent)]">System Operator</p>
             <div className="mt-3 flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-white">Operator Console</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Jump between queues and keep the workflow moving from your phone.
+                <h2 className="text-lg font-bold text-white tracking-tight">OPERATOR_CONSOLE</h2>
+                <p className="mt-1 text-xs text-slate-400">
+                  Mobile terminal active.
                 </p>
               </div>
-              <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
-                Mobile
-              </span>
             </div>
             <div className="mt-4">
               <DashboardNav items={navItems} variant="mobile" />
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-white/10 bg-slate-950/55 p-4 shadow-2xl backdrop-blur sm:rounded-[30px] sm:p-6">
-            <div className="flex flex-col gap-5 border-b border-white/10 pb-5 sm:pb-6 md:flex-row md:items-end md:justify-between">
+          <div className="border border-white/10 bg-slate-950/40 p-4 shadow-2xl backdrop-blur-sm sm:p-8">
+            <div className="flex flex-col gap-6 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/80">Internal Dashboard</p>
-                <h1 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">{title}</h1>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-[var(--accent)] font-semibold">Nexus Terminal v1.0</p>
+                <h1 className="mt-4 text-3xl font-black uppercase tracking-tighter text-white sm:text-5xl">{title}</h1>
                 {subtitle ? (
-                  <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">{subtitle}</p>
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">{subtitle}</p>
                 ) : null}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {["Research intake", "Idea shaping", "Human approval", "Safe posting"].map((item) => (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Research", "Ideation", "Approval", "Safety"].map((item) => (
                     <span
                       key={item}
-                      className="inline-flex rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-slate-300"
+                      className="inline-flex border border-white/10 bg-white/[0.03] px-2 py-1 text-[9px] uppercase tracking-[0.25em] text-slate-500 font-bold"
                     >
                       {item}
                     </span>
@@ -101,7 +98,7 @@ export function AppShell({
               {actions ? <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">{actions}</div> : null}
             </div>
 
-            <div className="mt-6 space-y-6">{children}</div>
+            <div className="mt-8 space-y-8">{children}</div>
           </div>
         </main>
       </div>
@@ -119,18 +116,18 @@ export function MetricGrid({
       {items.map((item) => (
         <article
           key={item.label}
-          className="rounded-[20px] border border-white/10 bg-white/[0.04] p-4 shadow-lg sm:rounded-[24px] sm:p-5"
+          className="border border-white/10 bg-white/[0.02] p-5 shadow-inner"
         >
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{item.label}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">{item.label}</p>
           <p
             className={[
-              "mt-4 text-2xl font-semibold sm:text-3xl",
+              "mt-5 text-4xl font-black tracking-tight sm:text-5xl",
               item.tone === "good"
-                ? "text-emerald-300"
+                ? "text-[var(--accent)]"
                 : item.tone === "warning"
-                  ? "text-amber-300"
+                  ? "text-amber-400"
                   : item.tone === "bad"
-                    ? "text-rose-300"
+                    ? "text-rose-500"
                   : "text-white"
             ].join(" ")}
           >
@@ -156,16 +153,16 @@ export function Panel({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-[20px] border border-white/10 bg-white/[0.04] p-4 shadow-lg sm:rounded-[24px] sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <section className="border border-white/10 bg-white/[0.02] p-5 sm:p-6 shadow-xl">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          {kicker ? <p className="text-xs uppercase tracking-[0.25em] text-cyan-200/70">{kicker}</p> : null}
-          <h2 className="mt-2 text-xl font-semibold text-white">{title}</h2>
-          {description ? <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">{description}</p> : null}
+          {kicker ? <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--accent)] opacity-70">{kicker}</p> : null}
+          <h2 className="mt-2 text-xl font-bold uppercase tracking-tight text-white">{title}</h2>
+          {description ? <p className="mt-2 max-w-2xl text-xs leading-6 text-slate-400">{description}</p> : null}
         </div>
         {actions ? <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">{actions}</div> : null}
       </div>
-      <div className="mt-4">{children}</div>
+      <div className="mt-6">{children}</div>
     </section>
   );
 }
@@ -180,25 +177,25 @@ export function SummaryStrip({
       {items.map((item) => (
         <article
           key={item.label}
-          className="rounded-[18px] border border-white/10 bg-slate-950/35 p-4 shadow-lg"
+          className="border border-white/5 bg-white/[0.01] p-4"
         >
           <div className="flex items-start justify-between gap-3">
-            <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400">{item.label}</p>
+            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500">{item.label}</p>
             <span
               className={[
-                "inline-flex h-2.5 w-2.5 rounded-full",
+                "inline-flex h-1.5 w-1.5",
                 item.tone === "good"
-                  ? "bg-emerald-300"
+                  ? "bg-[var(--accent)]"
                   : item.tone === "warning"
-                    ? "bg-amber-300"
+                    ? "bg-amber-400"
                     : item.tone === "bad"
-                      ? "bg-rose-300"
-                      : "bg-cyan-300"
+                      ? "bg-rose-500"
+                      : "bg-slate-600"
               ].join(" ")}
             />
           </div>
-          <p className="mt-4 text-2xl font-semibold text-white">{item.value}</p>
-          {item.helper ? <p className="mt-2 text-sm leading-6 text-slate-400">{item.helper}</p> : null}
+          <p className="mt-4 text-3xl font-bold tracking-tight text-white">{item.value}</p>
+          {item.helper ? <p className="mt-2 text-[10px] leading-5 text-slate-500 uppercase tracking-wide">{item.helper}</p> : null}
         </article>
       ))}
     </section>
@@ -226,13 +223,16 @@ export function InfoNotice({
           : "border-cyan-300/20 bg-cyan-300/10";
 
   return (
-    <section className={`rounded-[20px] border p-4 shadow-lg ${toneClass}`}>
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+    <section className={`border p-5 shadow-2xl ${toneClass}`}>
+      <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-sm font-semibold text-white">{title}</p>
-          <div className="mt-2 text-sm leading-6 text-slate-100/85">{children}</div>
+          <div className="flex items-center gap-2">
+            <div className={`h-1.5 w-1.5 ${tone === 'bad' ? 'bg-rose-500' : tone === 'warning' ? 'bg-amber-400' : tone === 'good' ? 'bg-[var(--accent)]' : 'bg-slate-400'}`} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">{title}</p>
+          </div>
+          <div className="mt-3 text-sm leading-7 text-slate-300">{children}</div>
         </div>
-        {actions ? <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">{actions}</div> : null}
+        {actions ? <div className="flex flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap">{actions}</div> : null}
       </div>
     </section>
   );
@@ -248,10 +248,10 @@ export function EmptyState({
   actions?: ReactNode;
 }) {
   return (
-    <div className="rounded-[22px] border border-dashed border-white/15 bg-slate-950/30 p-6 text-center">
-      <p className="text-lg font-semibold text-white">{title}</p>
-      <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-400">{body}</p>
-      {actions ? <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">{actions}</div> : null}
+    <div className="border border-dashed border-white/10 bg-white/[0.01] p-8 text-center">
+      <p className="text-sm font-bold uppercase tracking-[0.2em] text-white">{title}</p>
+      <p className="mx-auto mt-4 max-w-lg text-xs leading-6 text-slate-500 uppercase tracking-wide">{body}</p>
+      {actions ? <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">{actions}</div> : null}
     </div>
   );
 }
@@ -267,7 +267,7 @@ export function StatusPill({ tone = "neutral", children }: { tone?: "neutral" | 
           : "border-white/10 bg-white/10 text-slate-200";
 
   return (
-    <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${toneClass}`}>
+    <span className={`inline-flex border px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.15em] ${toneClass}`}>
       {children}
     </span>
   );
@@ -330,7 +330,7 @@ export function GhostLink({ href, children }: { href: Route; children: ReactNode
   return (
     <Link
       href={href}
-      className="inline-flex justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/20"
+      className="inline-flex justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/50"
     >
       {children}
     </Link>

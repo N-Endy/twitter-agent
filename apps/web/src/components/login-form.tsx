@@ -36,32 +36,32 @@ export function LoginForm() {
       }}
     >
       <label className="block">
-        <span className="text-sm text-slate-300">Email</span>
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Operator Email</p>
         <input
-          className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-cyan-300/40"
+          className="mt-2 w-full border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition-all placeholder:text-slate-600 focus:border-[var(--accent)]/50 focus:bg-white/[0.08]"
           name="email"
           type="email"
-          placeholder="owner@example.com"
+          placeholder="operator@nexus.local"
           required
         />
       </label>
       <label className="block">
-        <span className="text-sm text-slate-300">Password</span>
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Security Key</p>
         <input
-          className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-cyan-300/40"
+          className="mt-2 w-full border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition-all placeholder:text-slate-600 focus:border-[var(--accent)]/50 focus:bg-white/[0.08]"
           name="password"
           type="password"
           placeholder="••••••••"
           required
         />
       </label>
-      {error ? <p className="text-sm text-rose-300">{error}</p> : null}
+      {error ? <p className="text-xs font-bold uppercase tracking-wide text-rose-500">{error}</p> : null}
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-2xl bg-cyan-300 px-4 py-3 font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 py-4 text-[11px] font-black uppercase tracking-[0.3em] text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20 hover:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {isLoading ? "Signing in..." : "Enter dashboard"}
+        {isLoading ? "Authenticating..." : "Establish Connection"}
       </button>
     </form>
   );

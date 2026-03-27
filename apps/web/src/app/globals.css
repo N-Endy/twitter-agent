@@ -2,6 +2,11 @@
 
 :root {
   color-scheme: dark;
+  --background: #020617;
+  --accent: #bcfd49;
+  --accent-muted: rgba(188, 253, 73, 0.15);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(188, 253, 73, 0.25);
 }
 
 html {
@@ -11,13 +16,14 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: #07101b;
-  color: #e5eefc;
+  background: var(--background);
+  color: #f8fafc;
   font-family:
     "Söhne",
     "Avenir Next",
     "Segoe UI",
     sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -37,13 +43,14 @@ select {
 }
 
 ::selection {
-  background: rgba(103, 232, 249, 0.35);
+  background: var(--accent-muted);
+  color: var(--accent);
 }
 
 .dashboard-table-wrap {
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
 }
 
 .dashboard-table {
@@ -58,45 +65,64 @@ select {
 
 .dashboard-table tbody tr {
   transition:
-    background-color 160ms ease,
-    transform 160ms ease;
+    background-color 120ms ease;
 }
 
 .dashboard-table tbody tr:nth-child(odd) {
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(255, 255, 255, 0.012);
 }
 
 .dashboard-table tbody tr:hover {
-  background: rgba(103, 232, 249, 0.05);
+  background: var(--accent-muted);
 }
 
 .sidebar-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(103, 232, 249, 0.35) rgba(255, 255, 255, 0.04);
+  scrollbar-color: var(--accent-muted) rgba(255, 255, 255, 0.02);
 }
 
 .sidebar-scroll::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 .sidebar-scroll::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 999px;
+  background: transparent;
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgba(103, 232, 249, 0.3);
-  border-radius: 999px;
-  border: 2px solid rgba(7, 16, 27, 0.5);
+  background: var(--accent-muted);
+  border-radius: 0;
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(103, 232, 249, 0.45);
+  background: var(--border-accent);
 }
+
+/* Technical HUD elements */
+.hud-border {
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.hud-border::before,
+.hud-border::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--accent);
+  opacity: 0.5;
+}
+
+.hud-corner-tl { top: -1px; left: -1px; border-top: 1px solid; border-left: 1px solid; }
+.hud-corner-tr { top: -1px; right: -1px; border-top: 1px solid; border-right: 1px solid; }
+.hud-corner-bl { bottom: -1px; left: -1px; border-bottom: 1px solid; border-left: 1px solid; }
+.hud-corner-br { bottom: -1px; right: -1px; border-bottom: 1px solid; border-right: 1px solid; }
 
 @media (max-width: 767px) {
   .dashboard-table-wrap {
     overflow: visible;
+    border: none;
   }
 
   .dashboard-table,
@@ -112,32 +138,31 @@ select {
   }
 
   .dashboard-table tbody {
-    background: rgba(2, 6, 23, 0.18);
+    background: transparent;
   }
 
   .dashboard-table tr {
-    padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
-    background: rgba(2, 6, 23, 0.42);
-  }
-
-  .dashboard-table tr:first-child {
-    border-top: 0;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 1rem;
   }
 
   .dashboard-cell {
-    padding: 0.55rem 0 !important;
+    padding: 0.75rem 0 !important;
   }
 
   .dashboard-cell::before {
     content: attr(data-label);
     display: block;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
     font-size: 0.65rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     line-height: 1rem;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.95);
+    color: var(--accent);
+    opacity: 0.8;
   }
 }
