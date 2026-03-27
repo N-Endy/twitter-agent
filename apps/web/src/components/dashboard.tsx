@@ -31,31 +31,33 @@ export function AppShell({
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(73,125,255,0.18),_transparent_38%),linear-gradient(180deg,_#09111f_0%,_#07101b_100%)] text-slate-100">
       <div className="mx-auto flex w-full max-w-7xl gap-6 px-4 py-4 sm:px-6 sm:py-6 lg:gap-8 lg:px-10 lg:py-8">
-        <aside className="hidden w-72 shrink-0 self-start rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur lg:sticky lg:top-6 lg:block">
+        <aside className="sidebar-scroll hidden w-72 shrink-0 self-start rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur lg:sticky lg:top-6 lg:flex lg:max-h-[calc(100vh-3rem)] lg:flex-col lg:overflow-y-auto">
           <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/80">Twitter Agent MVP</p>
           <h2 className="mt-3 text-2xl font-semibold text-white">Operator Console</h2>
           <p className="mt-3 text-sm leading-6 text-slate-300">
             AI-assisted publishing, mentions triage, prompt control, and audit-safe workflows.
           </p>
 
-          <div className="mt-6 rounded-[22px] border border-white/10 bg-slate-950/35 p-4">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-cyan-200/70">Workflow</p>
-            <div className="mt-3 space-y-2 text-sm text-slate-300">
-              {["Sources", "Ideas", "Drafts", "Published", "Mentions", "Replies"].map((step, index) => (
-                <div key={step} className="flex items-center gap-3">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-slate-200">
-                    {index + 1}
-                  </span>
-                  <span>{step}</span>
-                </div>
-              ))}
+          <div className="mt-6 flex-1 space-y-6">
+            <div className="rounded-[22px] border border-white/10 bg-slate-950/35 p-4">
+              <p className="text-[11px] uppercase tracking-[0.28em] text-cyan-200/70">Workflow</p>
+              <div className="mt-3 space-y-2 text-sm text-slate-300">
+                {["Sources", "Ideas", "Drafts", "Published", "Mentions", "Replies"].map((step, index) => (
+                  <div key={step} className="flex items-center gap-3">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-slate-200">
+                      {index + 1}
+                    </span>
+                    <span>{step}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-xs leading-5 text-slate-400">
+                The operator flow is linear: shape inputs first, then approve what moves forward.
+              </p>
             </div>
-            <p className="mt-4 text-xs leading-5 text-slate-400">
-              The operator flow is linear: shape inputs first, then approve what moves forward.
-            </p>
-          </div>
 
-          <DashboardNav items={navItems} variant="desktop" />
+            <DashboardNav items={navItems} variant="desktop" />
+          </div>
         </aside>
 
         <main className="min-w-0 flex-1">

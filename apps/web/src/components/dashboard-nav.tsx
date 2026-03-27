@@ -32,7 +32,7 @@ export function DashboardNav({
 
   if (variant === "mobile") {
     return (
-      <nav className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {items.map(({ href, label }) => {
           const isActive = pathname === href;
 
@@ -40,7 +40,7 @@ export function DashboardNav({
             <Link
               key={href}
               href={href}
-              className={`inline-flex shrink-0 rounded-full border px-4 py-2 text-sm transition ${linkTone(isActive, "mobile")}`}
+              className={`inline-flex min-h-11 items-center justify-center rounded-2xl border px-4 py-2 text-center text-sm transition ${linkTone(isActive, "mobile")}`}
             >
               {label}
             </Link>

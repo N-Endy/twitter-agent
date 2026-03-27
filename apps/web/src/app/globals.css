@@ -52,6 +52,10 @@ select {
   border-collapse: collapse;
 }
 
+.dashboard-cell {
+  overflow-wrap: anywhere;
+}
+
 .dashboard-table tbody tr {
   transition:
     background-color 160ms ease,
@@ -64,6 +68,30 @@ select {
 
 .dashboard-table tbody tr:hover {
   background: rgba(103, 232, 249, 0.05);
+}
+
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(103, 232, 249, 0.35) rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(103, 232, 249, 0.3);
+  border-radius: 999px;
+  border: 2px solid rgba(7, 16, 27, 0.5);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(103, 232, 249, 0.45);
 }
 
 @media (max-width: 767px) {
