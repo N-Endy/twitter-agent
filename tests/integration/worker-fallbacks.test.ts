@@ -11,10 +11,11 @@ import {
 
 describe("worker fallback AI flows", () => {
   beforeEach(() => {
+    delete process.env.GROQ_API_KEY;
     delete process.env.OPENAI_API_KEY;
   });
 
-  it("produces structured fallback research and ideas without OpenAI", async () => {
+  it("produces structured fallback research and ideas without an external LLM provider", async () => {
     const research = await extractResearch(
       "Building the first version taught us that queues, retries, and explicit approval states reduce chaos.",
       "Notes",

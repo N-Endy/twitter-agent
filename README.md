@@ -6,7 +6,7 @@ Internal single-account X/Twitter agent for AI-assisted content drafting, approv
 
 - `apps/web`: Next.js admin dashboard and authenticated internal API routes.
 - `apps/worker`: BullMQ worker process for pipeline jobs.
-- `packages/core`: shared schemas, prompts, moderation rules, queue names, X/OpenAI clients, and system-state helpers.
+- `packages/core`: shared schemas, prompts, moderation rules, queue names, X/Groq clients, and system-state helpers.
 - `prisma`: database schema and seed data.
 
 ## Local setup
@@ -46,9 +46,9 @@ Internal single-account X/Twitter agent for AI-assisted content drafting, approv
   - `ADMIN_EMAIL`
   - `ADMIN_PASSWORD` or `ADMIN_PASSWORD_HASH`
 - AI:
-  - `OPENAI_API_KEY`
-  - `OPENAI_FAST_MODEL`
-  - `OPENAI_QUALITY_MODEL`
+  - `GROQ_API_KEY`
+  - `GROQ_FAST_MODEL`
+  - `GROQ_QUALITY_MODEL`
 - X:
   - `X_CLIENT_ID`
   - `X_CLIENT_SECRET`
@@ -132,4 +132,5 @@ The billing block is stored in `system_state` and is automatically retried after
 
 - Replies are never fully autonomous in this MVP. The system drafts suggestions, but a human must explicitly send them.
 - X inputs are restricted to curated post URLs or allowlisted accounts. Open-ended keyword hunting is intentionally excluded.
-- The OpenAI integration is built around the Responses API and strict schema validation.
+- The Groq integration uses Groq's OpenAI-compatible API with strict JSON schema mode for typed outputs.
+- Recommended defaults for this repo are `openai/gpt-oss-20b` for fast classification/drafting work and `openai/gpt-oss-120b` for higher-quality ideation/writing.
