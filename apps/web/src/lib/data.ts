@@ -1,9 +1,14 @@
 import { formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
+import { requireSession } from "@/lib/guards";
 import { getEnv, getPrismaClient, isXIntegrationPaused, readSystemState, readXIntegrationState, readXTokens } from "@twitter-agent/core";
 
 const prisma = getPrismaClient();
+
+async function requireDashboardAccess() {
+  await requireSession();
+}
 
 function getXStatusSummary(params: {
   tokens: Awaited<ReturnType<typeof readXTokens>>;
@@ -36,6 +41,8 @@ function getXStatusSummary(params: {
 }
 
 export async function getDashboardMetrics() {
+  await requireDashboardAccess();
+
   const [sources, drafts, published, mentions, prompts, incidents, xTokens, xIntegration] = await Promise.all([
     prisma.sourceItem.count({ where: { isActive: true } }),
     prisma.draft.count({
@@ -79,6 +86,8 @@ export async function getDashboardMetrics() {
 }
 
 export async function getOverviewFeed() {
+  await requireDashboardAccess();
+
   const [recentDrafts, recentMentions, nextSlots, activePrompts, lastCursor, xTokens, xIntegration] = await Promise.all([
     prisma.draft.findMany({
       orderBy: { updatedAt: "desc" },
@@ -121,6 +130,8 @@ export async function getOverviewFeed() {
 }
 
 export async function getSourcesPageData() {
+  await requireDashboardAccess();
+
   return prisma.sourceItem.findMany({
     orderBy: { updatedAt: "desc" },
     include: {
@@ -135,6 +146,8 @@ export async function getSourcesPageData() {
 }
 
 export async function getIdeasPageData() {
+  await requireDashboardAccess();
+
   return prisma.contentIdea.findMany({
     orderBy: { createdAt: "desc" },
     take: 50,
@@ -149,6 +162,8 @@ export async function getIdeasPageData() {
 }
 
 export async function getDraftsPageData() {
+  await requireDashboardAccess();
+
   const [drafts, availableSlots] = await Promise.all([
     prisma.draft.findMany({
       orderBy: { updatedAt: "desc" },
@@ -185,6 +200,8 @@ export async function getDraftsPageData() {
 }
 
 export async function getScheduledPageData() {
+  await requireDashboardAccess();
+
   return prisma.scheduleSlot.findMany({
     orderBy: { slotAt: "asc" },
     take: 30,
@@ -199,6 +216,8 @@ export async function getScheduledPageData() {
 }
 
 export async function getPublishedPageData() {
+  await requireDashboardAccess();
+
   return prisma.publishedPost.findMany({
     orderBy: { postedAt: "desc" },
     take: 30,
@@ -214,6 +233,8 @@ export async function getPublishedPageData() {
 }
 
 export async function getMentionsPageData() {
+  await requireDashboardAccess();
+
   return prisma.mention.findMany({
     orderBy: { receivedAt: "desc" },
     take: 50,
@@ -231,6 +252,8 @@ export async function getMentionsPageData() {
 }
 
 export async function getRepliesPageData() {
+  await requireDashboardAccess();
+
   return prisma.replySuggestion.findMany({
     orderBy: { updatedAt: "desc" },
     take: 50,
@@ -244,6 +267,8 @@ export async function getRepliesPageData() {
 }
 
 export async function getIncidentsPageData() {
+  await requireDashboardAccess();
+
   return prisma.moderationEvent.findMany({
     where: {
       decision: {
@@ -256,6 +281,8 @@ export async function getIncidentsPageData() {
 }
 
 export async function getPromptsPageData() {
+  await requireDashboardAccess();
+
   return prisma.promptVersion.findMany({
     orderBy: [{ kind: "asc" }, { version: "desc" }]
   });

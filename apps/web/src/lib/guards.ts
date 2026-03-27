@@ -1,21 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 import { getServerAuthSession } from "@/auth";
 import { getEnv } from "@twitter-agent/core";
 
-export async function requireSession() {
-  const session = await getServerAuthSession();
+const readSession = cache(async () => getServerAuthSession());
+
+export const requireSession = cache(async () => {
+  const session = await readSession();
 
   if (!session?.user) {
     redirect("/login");
   }
 
   return session;
-}
+});
 
 export async function requireApiSession() {
-  const session = await getServerAuthSession();
+  const session = await readSession();
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
