@@ -116,16 +116,23 @@ export function MetricGrid({
 export function Panel({
   title,
   kicker,
+  actions,
   children
 }: {
   title: string;
   kicker?: string;
+  actions?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <section className="rounded-[20px] border border-white/10 bg-white/[0.04] p-4 shadow-lg sm:rounded-[24px] sm:p-5">
-      {kicker ? <p className="text-xs uppercase tracking-[0.25em] text-cyan-200/70">{kicker}</p> : null}
-      <h2 className="mt-2 text-xl font-semibold text-white">{title}</h2>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          {kicker ? <p className="text-xs uppercase tracking-[0.25em] text-cyan-200/70">{kicker}</p> : null}
+          <h2 className="mt-2 text-xl font-semibold text-white">{title}</h2>
+        </div>
+        {actions ? <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">{actions}</div> : null}
+      </div>
       <div className="mt-4">{children}</div>
     </section>
   );

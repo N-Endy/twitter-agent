@@ -1,11 +1,16 @@
 import { Panel, StatusPill, Table, TableCell } from "@/components/dashboard";
+import { JobTriggerButton } from "@/components/job-trigger-button";
 import { formatRelative, getIdeasPageData } from "@/lib/data";
 
 export default async function IdeasPage() {
   const ideas = await getIdeasPageData();
 
   return (
-    <Panel title="Content ideas" kicker="Ideation backlog">
+    <Panel
+      title="Content ideas"
+      kicker="Ideation backlog"
+      actions={<JobTriggerButton job="weekly-batch" label="Run weekly batch" />}
+    >
       <Table headers={["Idea", "Source", "Tags", "Drafts", "Created", "State"]}>
         {ideas.map((idea) => (
           <tr key={idea.id}>

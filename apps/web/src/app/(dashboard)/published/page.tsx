@@ -1,11 +1,16 @@
 import { Panel, StatusPill, Table, TableCell } from "@/components/dashboard";
+import { JobTriggerButton } from "@/components/job-trigger-button";
 import { formatDashboardDate, getPublishedPageData } from "@/lib/data";
 
 export default async function PublishedPage() {
   const posts = await getPublishedPageData();
 
   return (
-    <Panel title="Published posts" kicker="Performance snapshots">
+    <Panel
+      title="Published posts"
+      kicker="Performance snapshots"
+      actions={<JobTriggerButton job="metrics-sync" label="Sync metrics now" />}
+    >
       <Table headers={["Posted", "Text", "Metrics", "Window snapshots", "Origin"]}>
         {posts.map((post) => (
           <tr key={post.id}>

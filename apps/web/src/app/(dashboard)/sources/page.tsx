@@ -1,5 +1,6 @@
 import { Panel, StatusPill, Table, TableCell } from "@/components/dashboard";
 import { AddSourceForm } from "@/components/add-source-form";
+import { JobTriggerButton } from "@/components/job-trigger-button";
 import { SourceRowActions } from "@/components/source-row-actions";
 import { formatDashboardDate, getSourcesPageData } from "@/lib/data";
 
@@ -7,7 +8,11 @@ export default async function SourcesPage() {
   const sources = await getSourcesPageData();
 
   return (
-    <Panel title="Research sources" kicker="Curated intake">
+    <Panel
+      title="Research sources"
+      kicker="Curated intake"
+      actions={<JobTriggerButton job="source-ingest" label="Run ingest now" />}
+    >
       <div className="mb-5">
         <AddSourceForm />
       </div>

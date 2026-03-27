@@ -1,13 +1,24 @@
 import { MutationButton } from "@/components/mutation-button";
 import { Panel, StatusPill, Table, TableCell } from "@/components/dashboard";
+import { JobTriggerButton } from "@/components/job-trigger-button";
 import { ScheduleDraftControls } from "@/components/schedule-draft-controls";
-import { formatRelative, getDraftsPageData } from "@/lib/data";
+import { formatDashboardDate, formatRelative, getDraftsPageData } from "@/lib/data";
 
 export default async function DraftsPage() {
   const { drafts, availableSlots } = await getDraftsPageData();
 
   return (
-    <Panel title="Draft queue" kicker="Human approval required">
+    <Panel
+      title="Draft queue"
+      kicker="Human approval required"
+      actions={
+        <>
+          <JobTriggerButton job="weekly-batch" label="Run batch" />
+          <JobTriggerButton job="draft-qa" label="Run QA backlog" />
+          <JobTriggerButton job="publish-post" label="Run publish" />
+        </>
+      }
+    >
       <Table headers={["Draft", "Scores", "Review", "Schedule", "Updated", "Actions"]}>
         {drafts.map((draft) => {
           const latestReview = draft.reviews[0];
@@ -43,7 +54,16 @@ export default async function DraftsPage() {
               </TableCell>
               <TableCell label="Updated">{formatRelative(draft.updatedAt)}</TableCell>
               <TableCell label="Actions">
-                <div className="flex flex-wrap gap-2">
+                <div className="space-y-2">
+                  <div className="flex flex-wrap gap-2">
+                    {draft.status === "PENDING_QA" ? (
+                      <JobTriggerButton
+                        job="draft-qa"
+                        label="Run QA"
+                        body={{ draftId: draft.id }}
+                        tone="neutral"
+                      />
+                    ) : null}
                   {draft.status === "NEEDS_REVIEW" ? (
                     <MutationButton url={`/api/admin/posts/${draft.id}/approve`} label="Approve" />
                   ) : null}
@@ -61,6 +81,24 @@ export default async function DraftsPage() {
                   >
                     {draft.status}
                   </StatusPill>
+                  </div>
+                  <p className="text-xs leading-5 text-slate-400">
+                    {draft.status === "PENDING_QA"
+                      ? "Waiting for the draft-QA worker. Use Run QA if the queue looks stuck."
+                      : draft.status === "NEEDS_REVIEW"
+                        ? "Ready for human approval."
+                        : draft.status === "APPROVED" && !draft.scheduleSlot
+                          ? "Approved and waiting for a schedule slot."
+                          : draft.status === "SCHEDULED" && draft.scheduleSlot
+                            ? `Scheduled for ${formatDashboardDate(draft.scheduleSlot.slotAt)}.`
+                            : draft.status === "PUBLISHING"
+                              ? "Currently being posted to X."
+                              : draft.status === "PUBLISHED"
+                                ? "Already published."
+                                : draft.status === "REJECTED"
+                                  ? draft.qualitySummary || latestReview?.notes || "Rejected during QA or moderation."
+                                  : "No manual action available right now."}
+                  </p>
                 </div>
               </TableCell>
             </tr>

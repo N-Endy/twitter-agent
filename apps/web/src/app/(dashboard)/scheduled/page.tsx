@@ -1,11 +1,16 @@
 import { Panel, StatusPill, Table, TableCell } from "@/components/dashboard";
+import { JobTriggerButton } from "@/components/job-trigger-button";
 import { formatDashboardDate, getScheduledPageData } from "@/lib/data";
 
 export default async function ScheduledPage() {
   const slots = await getScheduledPageData();
 
   return (
-    <Panel title="Scheduled posts" kicker="Posting calendar">
+    <Panel
+      title="Scheduled posts"
+      kicker="Posting calendar"
+      actions={<JobTriggerButton job="publish-post" label="Run publish check" />}
+    >
       <Table headers={["Slot", "Draft", "Pillar", "Experimental", "Status"]}>
         {slots.map((slot) => (
           <tr key={slot.id}>
