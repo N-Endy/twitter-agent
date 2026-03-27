@@ -64,6 +64,10 @@ export function AddSourceForm() {
       className="space-y-4 rounded-[20px] border border-white/10 bg-white/[0.04] p-4 sm:p-5"
     >
       <h3 className="text-lg font-semibold text-white">Add a new source</h3>
+      <p className="text-sm leading-6 text-slate-300">
+        Sources shape the voice of the system. Use the notes field to describe the themes, tone, and audience you want
+        this source to influence.
+      </p>
 
       {error && (
         <p className="rounded-lg border border-rose-300/20 bg-rose-300/10 px-4 py-2 text-sm text-rose-200">
@@ -105,15 +109,23 @@ export function AddSourceForm() {
           placeholder="https://example.com/feed.xml or @username"
           className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
         />
+        <p className="mt-2 text-xs leading-5 text-slate-400">
+          Use a full URL for articles, feeds, or single X posts. For X accounts, paste the profile URL and add notes so
+          the model understands why this source matters.
+        </p>
       </div>
 
       <div>
         <label className="mb-1 block text-xs uppercase tracking-wider text-slate-400">Notes (optional)</label>
         <input
           name="notes"
-          placeholder="Any notes about this source"
+          placeholder="Example: feminine energy, relationships, calm tone, audience is women in their 20s and 30s"
           className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
         />
+        <p className="mt-2 text-xs leading-5 text-slate-400">
+          This is the highest-leverage field in the form. Good notes make the generated ideas feel more like the source
+          and less like generic internet content.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3 pt-2 sm:flex-row">

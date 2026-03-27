@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 
-export function SignOutButton({ email }: { email?: string | null }) {
+export function SignOutButton() {
   return (
     <button
       type="button"
@@ -11,7 +11,7 @@ export function SignOutButton({ email }: { email?: string | null }) {
         void signOut({ callbackUrl: "/login" });
       }}
     >
-      Sign out {email ? `(${email})` : ""}
+      Sign out
     </button>
   );
 }

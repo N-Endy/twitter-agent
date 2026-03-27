@@ -33,6 +33,7 @@ export function MutationButton({
       <button
         type="button"
         disabled={isPending}
+        aria-busy={isPending}
         className={`inline-flex w-full justify-center rounded-full border px-3 py-2 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto ${toneClass}`}
         onClick={() => {
           if (confirmText && !window.confirm(confirmText)) {
@@ -62,7 +63,7 @@ export function MutationButton({
       >
         {isPending ? "Working..." : label}
       </button>
-      {error ? <p className="text-xs text-rose-300">{error}</p> : null}
+      {error ? <p className="text-xs text-rose-300" role="alert">{error}</p> : null}
     </div>
   );
 }
