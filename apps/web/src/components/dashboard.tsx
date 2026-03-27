@@ -215,12 +215,12 @@ export function InfoNotice({
 }) {
   const toneClass =
     tone === "good"
-      ? "border-emerald-300/20 bg-emerald-300/10"
+      ? "border-[var(--accent)]/20 bg-[var(--accent)]/10 text-[var(--accent)]"
       : tone === "warning"
-        ? "border-amber-300/20 bg-amber-300/10"
+        ? "border-amber-400/20 bg-amber-400/10 text-amber-300"
         : tone === "bad"
-          ? "border-rose-300/20 bg-rose-300/10"
-          : "border-cyan-300/20 bg-cyan-300/10";
+          ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
+          : "border-white/10 bg-white/5 text-slate-300";
 
   return (
     <section className={`border p-5 shadow-2xl ${toneClass}`}>
@@ -228,9 +228,9 @@ export function InfoNotice({
         <div>
           <div className="flex items-center gap-2">
             <div className={`h-1.5 w-1.5 ${tone === 'bad' ? 'bg-rose-500' : tone === 'warning' ? 'bg-amber-400' : tone === 'good' ? 'bg-[var(--accent)]' : 'bg-slate-400'}`} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white">{title}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white underline decoration-[var(--accent)]/30 underline-offset-4">{title}</p>
           </div>
-          <div className="mt-3 text-sm leading-7 text-slate-300">{children}</div>
+          <div className="mt-4 text-xs leading-7 text-slate-400 uppercase tracking-wide">{children}</div>
         </div>
         {actions ? <div className="flex flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap">{actions}</div> : null}
       </div>
@@ -259,15 +259,15 @@ export function EmptyState({
 export function StatusPill({ tone = "neutral", children }: { tone?: "neutral" | "good" | "warning" | "bad"; children: ReactNode }) {
   const toneClass =
     tone === "good"
-      ? "border-emerald-300/20 bg-emerald-300/10 text-emerald-200"
+      ? "border-[var(--accent)]/30 bg-[var(--accent)]/20 text-[var(--accent)]"
       : tone === "warning"
-        ? "border-amber-300/20 bg-amber-300/10 text-amber-200"
+        ? "border-amber-400/30 bg-amber-400/20 text-amber-400"
         : tone === "bad"
-          ? "border-rose-300/20 bg-rose-300/10 text-rose-200"
-          : "border-white/10 bg-white/10 text-slate-200";
+          ? "border-rose-500/30 bg-rose-500/20 text-rose-500"
+          : "border-white/20 bg-white/10 text-slate-400";
 
   return (
-    <span className={`inline-flex border px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.15em] ${toneClass}`}>
+    <span className={`inline-flex shrink-0 whitespace-nowrap border px-2 py-1 text-[9px] font-black uppercase tracking-[0.2em] shadow-sm ${toneClass}`}>
       {children}
     </span>
   );
@@ -277,19 +277,23 @@ export function Table({
   headers,
   children
 }: {
-  headers: string[];
+  headers: Array<string | { label: string; className?: string }>;
   children: ReactNode;
 }) {
   return (
-    <div className="dashboard-table-wrap">
-      <table className="dashboard-table min-w-full divide-y divide-white/10 text-left text-sm">
-        <thead className="bg-white/[0.04] text-slate-300">
+    <div className="dashboard-table-wrap overflow-x-auto">
+      <table className="dashboard-table min-w-[800px] w-full divide-y divide-white/10 text-left text-sm table-fixed">
+        <thead className="bg-white/[0.04] text-slate-500 uppercase tracking-widest text-[9px] font-black">
           <tr>
-            {headers.map((header) => (
-              <th key={header} className="px-4 py-3 font-medium">
-                {header}
-              </th>
-            ))}
+            {headers.map((h, i) => {
+              const label = typeof h === "string" ? h : h.label;
+              const className = typeof h === "string" ? "" : h.className;
+              return (
+                <th key={label + i} className={`px-4 py-4 font-black ${className}`}>
+                  {label}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody className="divide-y divide-white/5 bg-slate-950/20">{children}</tbody>
@@ -300,13 +304,15 @@ export function Table({
 
 export function TableCell({
   children,
-  label
+  label,
+  className = ""
 }: {
   children: ReactNode;
   label: string;
+  className?: string;
 }) {
   return (
-    <td data-label={label} className="dashboard-cell px-4 py-3 align-top text-slate-200">
+    <td data-label={label} className={`dashboard-cell px-4 py-4 align-top text-slate-300 ${className}`}>
       {children}
     </td>
   );

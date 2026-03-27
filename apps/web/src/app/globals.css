@@ -48,19 +48,25 @@ select {
 }
 
 .dashboard-table-wrap {
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 0; /* Sharp corners */
 }
 
 .dashboard-table {
   width: 100%;
-  min-width: 100%;
+  min-width: 800px; /* Force minimum width for horizontal scroll if needed */
   border-collapse: collapse;
 }
 
 .dashboard-cell {
-  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.tech-column {
+  width: 1%;
+  white-space: nowrap;
 }
 
 .dashboard-table tbody tr {

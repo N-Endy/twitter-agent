@@ -30,31 +30,39 @@ export default async function PublishedPage() {
             body="Once scheduled drafts go live, they will appear here with their origin hook and performance metrics."
           />
         ) : (
-          <Table headers={["Posted", "Text", "Metrics", "Window snapshots", "Origin"]}>
+          <Table headers={[
+            { label: "Posted", className: "tech-column" },
+            { label: "Text" },
+            { label: "Metrics", className: "tech-column" },
+            { label: "Window snapshots", className: "tech-column" },
+            { label: "Origin", className: "tech-column" }
+          ]}>
             {posts.map((post) => (
               <tr key={post.id}>
-                <TableCell label="Posted">{formatDashboardDate(post.postedAt)}</TableCell>
+                <TableCell label="Posted" className="tech-column text-xs font-mono">{formatDashboardDate(post.postedAt)}</TableCell>
                 <TableCell label="Text">
-                  <p className="text-white">{post.text}</p>
-                  <p className="mt-1 text-xs text-slate-400">xPostId: {post.xPostId}</p>
+                  <p className="text-white font-medium">{post.text}</p>
+                  <p className="mt-1 text-xs text-slate-500 font-mono">ID: {post.xPostId}</p>
                 </TableCell>
-                <TableCell label="Metrics">
+                <TableCell label="Metrics" className="tech-column">
                   {post.metrics.length > 0 ? (
-                    post.metrics.map((metric) => (
-                      <p key={metric.id} className="text-xs text-slate-300">
-                        {metric.window}: {metric.likes ?? 0} likes, {metric.replies ?? 0} replies
-                      </p>
-                    ))
+                    <div className="space-y-1">
+                      {post.metrics.map((metric) => (
+                        <p key={metric.id} className="text-[10px] uppercase tracking-wide text-slate-400">
+                          {metric.window}: <span className="text-[var(--accent)] font-bold">{metric.likes ?? 0}L</span> • {metric.replies ?? 0}R
+                        </p>
+                      ))}
+                    </div>
                   ) : (
-                    <span className="text-slate-400">Awaiting sync</span>
+                    <span className="text-slate-500 uppercase tracking-widest text-[9px]">Awaiting sync</span>
                   )}
                 </TableCell>
-                <TableCell label="Window snapshots">
+                <TableCell label="Window snapshots" className="tech-column">
                   <StatusPill tone={post.metricsSyncedAt ? "good" : "warning"}>
                     {post.metricsSyncedAt ? "Synced" : "Pending"}
                   </StatusPill>
                 </TableCell>
-                <TableCell label="Origin">{post.draft.idea.hook}</TableCell>
+                <TableCell label="Origin" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">{post.draft.idea.hook}</TableCell>
               </tr>
             ))}
           </Table>

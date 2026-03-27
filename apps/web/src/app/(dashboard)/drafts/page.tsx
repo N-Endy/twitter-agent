@@ -46,43 +46,51 @@ export default async function DraftsPage() {
             }
           />
         ) : (
-          <Table headers={["Draft", "Scores", "Review", "Schedule", "Updated", "Actions"]}>
+          <Table headers={[
+            { label: "Draft" },
+            { label: "Scores", className: "tech-column" },
+            { label: "Review", className: "tech-column" },
+            { label: "Schedule", className: "tech-column" },
+            { label: "Updated", className: "tech-column" },
+            { label: "Actions", className: "tech-column" }
+          ]}>
             {drafts.map((draft) => {
               const latestReview = draft.reviews[0];
 
               return (
                 <tr key={draft.id}>
                   <TableCell label="Draft">
-                    <p className="font-medium text-white">{draft.idea.hook}</p>
-                    <p className="mt-2 text-sm leading-6 text-slate-300">{draft.text}</p>
+                    <p className="font-bold text-white uppercase tracking-tight text-xs">{draft.idea.hook}</p>
+                    <p className="mt-2 text-xs leading-6 text-slate-400">{draft.text}</p>
                   </TableCell>
-                  <TableCell label="Scores">
-                    <p>Chars: {draft.characterCount}</p>
-                    <p className="mt-1 text-xs text-slate-400">Confidence: {draft.confidence ?? "n/a"}</p>
+                  <TableCell label="Scores" className="tech-column text-[10px] uppercase tracking-wider text-slate-500">
+                    <p>Chars: <span className="text-slate-300 font-bold">{draft.characterCount}</span></p>
+                    <p className="mt-1">Conf: <span className="text-[var(--accent)] font-bold">{draft.confidence ?? "n/a"}</span></p>
                   </TableCell>
-                  <TableCell label="Review">
+                  <TableCell label="Review" className="tech-column">
                     {latestReview ? (
-                      <>
-                        <p className="text-white">{latestReview.status}</p>
-                        <p className="mt-1 text-xs text-slate-400">
-                          Voice {latestReview.voiceScore} • Safety {latestReview.safetyScore}
+                      <div>
+                        <StatusPill tone={latestReview.status === "PASS" ? "good" : "bad"}>{latestReview.status}</StatusPill>
+                        <p className="mt-2 text-[9px] uppercase tracking-tighter text-slate-500 font-mono">
+                          V {latestReview.voiceScore} • S {latestReview.safetyScore}
                         </p>
-                      </>
+                      </div>
                     ) : (
-                      <span className="text-slate-400">No review yet</span>
+                      <span className="text-slate-500 uppercase tracking-widest text-[9px]">Pending</span>
                     )}
                   </TableCell>
-                  <TableCell label="Schedule">
+                  <TableCell label="Schedule" className="tech-column">
                     {draft.scheduleSlot ? (
                       <StatusPill tone="good">{draft.scheduleSlot.status}</StatusPill>
                     ) : (
-                      <StatusPill tone="warning">UNSCHEDULED</StatusPill>
+                      <StatusPill tone="warning">OPEN</StatusPill>
                     )}
                   </TableCell>
-                  <TableCell label="Updated">{formatRelative(draft.updatedAt)}</TableCell>
-                  <TableCell label="Actions">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap gap-2">
+                  <TableCell label="Updated" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">
+                    {formatRelative(draft.updatedAt)}
+                  </TableCell>
+                  <TableCell label="Actions" className="tech-column">
+                    <div className="flex flex-col gap-2">
                         {draft.status === "PENDING_QA" ? (
                           <JobTriggerButton
                             job="draft-qa"
@@ -108,24 +116,6 @@ export default async function DraftsPage() {
                         >
                           {draft.status}
                         </StatusPill>
-                      </div>
-                      <p className="text-xs leading-5 text-slate-400">
-                        {draft.status === "PENDING_QA"
-                          ? "Waiting for the draft-QA worker. Use Run QA if the queue looks stuck."
-                          : draft.status === "NEEDS_REVIEW"
-                            ? "Ready for human approval."
-                            : draft.status === "APPROVED" && !draft.scheduleSlot
-                              ? "Approved and waiting for a schedule slot."
-                              : draft.status === "SCHEDULED" && draft.scheduleSlot
-                                ? `Scheduled for ${formatDashboardDate(draft.scheduleSlot.slotAt)}.`
-                                : draft.status === "PUBLISHING"
-                                  ? "Currently being posted to X."
-                                  : draft.status === "PUBLISHED"
-                                    ? "Already published."
-                                    : draft.status === "REJECTED"
-                                      ? draft.qualitySummary || latestReview?.notes || "Rejected during QA or moderation."
-                                      : "No manual action available right now."}
-                      </p>
                     </div>
                   </TableCell>
                 </tr>

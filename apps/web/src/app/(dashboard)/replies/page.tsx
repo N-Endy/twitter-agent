@@ -35,19 +35,30 @@ export default async function RepliesPage() {
             actions={<JobTriggerButton job="reply-draft" label="Draft reply backlog" />}
           />
         ) : (
-          <Table headers={["Mention", "Suggested reply", "Confidence", "Latest action", "Updated", "Action"]}>
+          <Table headers={[
+            { label: "Mention" },
+            { label: "Suggested reply" },
+            { label: "Confidence", className: "tech-column" },
+            { label: "Latest action", className: "tech-column" },
+            { label: "Updated", className: "tech-column" },
+            { label: "Action", className: "tech-column" }
+          ]}>
             {suggestions.map((suggestion) => {
               const latestAction = suggestion.replyActions[0];
 
               return (
                 <tr key={suggestion.id}>
                   <TableCell label="Mention">
-                    <p className="font-medium text-white">@{suggestion.mention.authorUsername}</p>
-                    <p className="mt-1 text-sm text-slate-300">{suggestion.mention.text}</p>
+                    <p className="font-bold text-white uppercase tracking-tight text-xs">@{suggestion.mention.authorUsername}</p>
+                    <p className="mt-2 text-xs leading-5 text-slate-400">{suggestion.mention.text}</p>
                   </TableCell>
-                  <TableCell label="Suggested reply">{suggestion.draftText}</TableCell>
-                  <TableCell label="Confidence">{suggestion.confidence.toFixed(2)}</TableCell>
-                  <TableCell label="Latest action">
+                  <TableCell label="Suggested reply" className="font-medium text-slate-200">
+                    {suggestion.draftText}
+                  </TableCell>
+                  <TableCell label="Confidence" className="tech-column font-mono text-xs">
+                    {suggestion.confidence.toFixed(2)}
+                  </TableCell>
+                  <TableCell label="Latest action" className="tech-column">
                     {latestAction ? (
                       <StatusPill
                         tone={
@@ -61,46 +72,42 @@ export default async function RepliesPage() {
                         {latestAction.actionType}
                       </StatusPill>
                     ) : (
-                      <StatusPill tone="warning">Pending</StatusPill>
+                      <StatusPill tone="warning">PENDING</StatusPill>
                     )}
                   </TableCell>
-                  <TableCell label="Updated">{formatRelative(suggestion.updatedAt)}</TableCell>
-                  <TableCell label="Action">
+                  <TableCell label="Updated" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">
+                    {formatRelative(suggestion.updatedAt)}
+                  </TableCell>
+                  <TableCell label="Action" className="tech-column">
                     {suggestion.mention.status !== "SENT" && suggestion.mention.status !== "SENDING" ? (
-                      <div className="space-y-2">
-                        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2">
                           <MutationButton
                             url={`/api/admin/replies/${suggestion.id}/send`}
                             label="Send reply"
                             confirmText="Send this reply to X now?"
                           />
-                          <MutationButton
-                            url={`/api/admin/replies/${suggestion.id}/decision`}
-                            label="Ignore"
-                            body={{ action: "IGNORE" }}
-                            tone="warning"
-                          />
-                          <MutationButton
-                            url={`/api/admin/replies/${suggestion.id}/decision`}
-                            label="Escalate"
-                            body={{ action: "ESCALATE" }}
-                            tone="danger"
-                          />
+                          <div className="grid grid-cols-2 gap-2">
+                            <MutationButton
+                              url={`/api/admin/replies/${suggestion.id}/decision`}
+                              label="Ignore"
+                              body={{ action: "IGNORE" }}
+                              tone="warning"
+                            />
+                            <MutationButton
+                              url={`/api/admin/replies/${suggestion.id}/decision`}
+                              label="Escalate"
+                              body={{ action: "ESCALATE" }}
+                              tone="danger"
+                            />
+                          </div>
                         </div>
-                        <p className="text-xs leading-5 text-slate-400">
-                          Choose one action: send to X, ignore it, or escalate for manual handling.
-                        </p>
                       </div>
                     ) : (
                       <div className="space-y-2">
                         <StatusPill tone={suggestion.mention.status === "SENT" ? "good" : "warning"}>
                           {suggestion.mention.status}
                         </StatusPill>
-                        <p className="text-xs leading-5 text-slate-400">
-                          {suggestion.mention.status === "SENT"
-                            ? "This suggestion has already been sent to X."
-                            : "This suggestion is currently being sent to X."}
-                        </p>
                       </div>
                     )}
                   </TableCell>

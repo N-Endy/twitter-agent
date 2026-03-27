@@ -29,19 +29,25 @@ export default async function IncidentsPage() {
             body="Blocked and escalated moderation events will appear here once the safety layer has something to report."
           />
         ) : (
-          <Table headers={["When", "Target", "Decision", "Risk", "Reasons"]}>
+          <Table headers={[
+            { label: "When", className: "tech-column" },
+            { label: "Target", className: "tech-column" },
+            { label: "Decision", className: "tech-column" },
+            { label: "Risk", className: "tech-column" },
+            { label: "Reasons" }
+          ]}>
             {incidents.map((incident) => (
               <tr key={incident.id}>
-                <TableCell label="When">{formatDashboardDate(incident.createdAt)}</TableCell>
-                <TableCell label="Target">
-                  <p className="text-white">{incident.targetType}</p>
-                  <p className="mt-1 text-xs text-slate-400">{incident.targetId}</p>
+                <TableCell label="When" className="tech-column text-xs font-mono">{formatDashboardDate(incident.createdAt)}</TableCell>
+                <TableCell label="Target" className="tech-column">
+                  <p className="text-white font-bold text-[10px] uppercase tracking-tight">{incident.targetType}</p>
+                  <p className="mt-1 text-[9px] text-slate-500 font-mono tracking-tighter">{incident.targetId}</p>
                 </TableCell>
-                <TableCell label="Decision">
+                <TableCell label="Decision" className="tech-column">
                   <StatusPill tone={incident.decision === "ESCALATE" ? "warning" : "bad"}>{incident.decision}</StatusPill>
                 </TableCell>
-                <TableCell label="Risk">{incident.riskLevel}</TableCell>
-                <TableCell label="Reasons">{incident.reasons.join(", ")}</TableCell>
+                <TableCell label="Risk" className="tech-column text-xs uppercase font-black tracking-widest">{incident.riskLevel}</TableCell>
+                <TableCell label="Reasons" className="text-xs text-slate-400 uppercase tracking-wide leading-5">{incident.reasons.join(", ")}</TableCell>
               </tr>
             ))}
           </Table>

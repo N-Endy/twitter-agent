@@ -31,23 +31,29 @@ export default async function ScheduledPage() {
             body="Once upcoming slots are available, they will appear here with their draft assignment and publishing state."
           />
         ) : (
-          <Table headers={["Slot", "Draft", "Pillar", "Experimental", "Status"]}>
+          <Table headers={[
+            { label: "Slot", className: "tech-column" },
+            { label: "Draft" },
+            { label: "Pillar", className: "tech-column" },
+            { label: "Experimental", className: "tech-column" },
+            { label: "Status", className: "tech-column" }
+          ]}>
             {slots.map((slot) => (
               <tr key={slot.id}>
-                <TableCell label="Slot">{formatDashboardDate(slot.slotAt)}</TableCell>
+                <TableCell label="Slot" className="tech-column text-xs font-mono">{formatDashboardDate(slot.slotAt)}</TableCell>
                 <TableCell label="Draft">
                   {slot.draft ? (
                     <>
-                      <p className="text-white">{slot.draft.text}</p>
-                      <p className="mt-1 text-xs text-slate-400">{slot.draft.idea.hook}</p>
+                      <p className="text-white font-medium">{slot.draft.text}</p>
+                      <p className="mt-1 text-xs text-slate-500">{slot.draft.idea.hook}</p>
                     </>
                   ) : (
-                    <span className="text-slate-400">Open slot</span>
+                    <span className="text-slate-500 uppercase tracking-widest text-[10px]">Open slot</span>
                   )}
                 </TableCell>
-                <TableCell label="Pillar">{slot.draft?.idea.pillar ?? "—"}</TableCell>
-                <TableCell label="Experimental">{slot.isExperimental ? "Yes" : "No"}</TableCell>
-                <TableCell label="Status">
+                <TableCell label="Pillar" className="tech-column text-xs">{slot.draft?.idea.pillar ?? "—"}</TableCell>
+                <TableCell label="Experimental" className="tech-column text-xs uppercase tracking-widest">{slot.isExperimental ? "Yes" : "No"}</TableCell>
+                <TableCell label="Status" className="tech-column">
                   <StatusPill tone={slot.status === "POSTED" ? "good" : slot.status === "OPEN" ? "warning" : "neutral"}>
                     {slot.status}
                   </StatusPill>

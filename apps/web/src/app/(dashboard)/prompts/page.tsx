@@ -34,26 +34,35 @@ export default async function PromptsPage() {
             body="Prompt versions will appear here once they are seeded or created in the system."
           />
         ) : (
-          <Table headers={["Kind", "Version", "Name", "Status", "Activated", "Action"]}>
+          <Table headers={[
+            { label: "Kind", className: "tech-column" },
+            { label: "Version", className: "tech-column" },
+            { label: "Name" },
+            { label: "Status", className: "tech-column" },
+            { label: "Activated", className: "tech-column" },
+            { label: "Action", className: "tech-column" }
+          ]}>
             {prompts.map((prompt) => (
               <tr key={prompt.id}>
-                <TableCell label="Kind">{prompt.kind}</TableCell>
-                <TableCell label="Version">v{prompt.version}</TableCell>
-                <TableCell label="Name">{prompt.name}</TableCell>
-                <TableCell label="Status">
+                <TableCell label="Kind" className="tech-column text-[10px] uppercase tracking-widest text-slate-500 font-bold">{prompt.kind}</TableCell>
+                <TableCell label="Version" className="tech-column text-xs font-mono">v{prompt.version}</TableCell>
+                <TableCell label="Name" className="font-medium text-white">{prompt.name}</TableCell>
+                <TableCell label="Status" className="tech-column">
                   <StatusPill tone={prompt.isActive ? "good" : "warning"}>
                     {prompt.isActive ? "ACTIVE" : "INACTIVE"}
                   </StatusPill>
                 </TableCell>
-                <TableCell label="Activated">{formatDashboardDate(prompt.activatedAt)}</TableCell>
-                <TableCell label="Action">
+                <TableCell label="Activated" className="tech-column text-xs font-mono">{formatDashboardDate(prompt.activatedAt)}</TableCell>
+                <TableCell label="Action" className="tech-column">
                   {!prompt.isActive ? (
                     <MutationButton
                       url={`/api/admin/prompts/${prompt.id}/activate`}
                       label="Activate"
                       confirmText="Make this the active prompt version?"
                     />
-                  ) : null}
+                  ) : (
+                    <span className="text-[9px] uppercase tracking-widest text-[var(--accent)] font-black">Live</span>
+                  )}
                 </TableCell>
               </tr>
             ))}

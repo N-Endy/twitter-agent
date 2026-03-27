@@ -12,13 +12,13 @@ type NavItem = {
 function linkTone(isActive: boolean, variant: "desktop" | "mobile") {
   if (variant === "mobile") {
     return isActive
-      ? "border-cyan-200/50 bg-cyan-300/20 text-white shadow-lg shadow-cyan-950/30"
+      ? "border-[var(--accent)]/40 bg-[var(--accent)]/15 text-white shadow-lg shadow-black/40"
       : "border-white/10 bg-white/[0.04] text-slate-200";
   }
 
   return isActive
-    ? "border-cyan-300/30 bg-cyan-300/10 text-white"
-    : "border-transparent text-slate-200 hover:border-cyan-300/30 hover:bg-cyan-300/10 hover:text-white";
+    ? "border-[var(--accent)]/30 bg-[var(--accent)]/10 text-white"
+    : "border-transparent text-slate-400 hover:border-white/10 hover:bg-white/[0.04] hover:text-white";
 }
 
 export function DashboardNav({
@@ -40,7 +40,7 @@ export function DashboardNav({
             <Link
               key={href}
               href={href}
-              className={`inline-flex min-h-11 items-center justify-center rounded-2xl border px-4 py-2 text-center text-sm transition ${linkTone(isActive, "mobile")}`}
+              className={`inline-flex min-h-11 items-center justify-center border px-4 py-2 text-center text-[10px] font-bold uppercase tracking-widest transition-all ${linkTone(isActive, "mobile")}`}
             >
               {label}
             </Link>
@@ -59,7 +59,7 @@ export function DashboardNav({
           <Link
             key={href}
             href={href}
-            className={`block rounded-2xl border px-4 py-3 text-sm transition ${linkTone(isActive, "desktop")}`}
+            className={`block border px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] transition-all ${linkTone(isActive, "desktop")}`}
           >
             {label}
           </Link>
