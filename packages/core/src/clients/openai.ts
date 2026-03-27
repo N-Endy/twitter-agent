@@ -128,6 +128,13 @@ export function isOpenAIRateLimitError(error: unknown) {
   return getOpenAIErrorStatus(error) === 429;
 }
 
+export function isOpenAISchemaValidationError(error: unknown) {
+  const code = getOpenAIErrorCode(error);
+  const message = getOpenAIErrorMessage(error).toLowerCase();
+
+  return code === "json_validate_failed" || message.includes("does not match the expected schema");
+}
+
 export async function runStructuredPrompt<T extends ZodTypeAny>(params: {
   model: string;
   schema: T;

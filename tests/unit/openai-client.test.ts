@@ -4,7 +4,8 @@ import {
   getOpenAIErrorMessage,
   getOpenAIErrorStatus,
   isOpenAIQuotaError,
-  isOpenAIRateLimitError
+  isOpenAIRateLimitError,
+  isOpenAISchemaValidationError
 } from "../../packages/core/src/clients/openai.ts";
 
 describe("provider error helpers", () => {
@@ -34,5 +35,19 @@ describe("provider error helpers", () => {
     expect(isOpenAIQuotaError(error)).toBe(false);
     expect(isOpenAIRateLimitError(error)).toBe(true);
     expect(getOpenAIErrorMessage(error)).toBe("Rate limit reached.");
+  });
+
+  it("detects schema validation errors from structured output requests", () => {
+    const error = {
+      status: 400,
+      message: "Generated JSON does not match the expected schema.",
+      code: "json_validate_failed",
+      error: {
+        message: "Generated JSON does not match the expected schema.",
+        code: "json_validate_failed"
+      }
+    };
+
+    expect(isOpenAISchemaValidationError(error)).toBe(true);
   });
 });

@@ -8,15 +8,19 @@ vi.mock("@twitter-agent/core", async (importOriginal) => {
     getOpenAIErrorMessage: actual.getOpenAIErrorMessage,
     isOpenAIQuotaError: actual.isOpenAIQuotaError,
     isOpenAIRateLimitError: actual.isOpenAIRateLimitError,
-    isOpenAISchemaValidationError: actual.isOpenAISchemaValidationError ?? (() => false),
+    isOpenAISchemaValidationError:
+      actual.isOpenAISchemaValidationError ??
+      ((error: unknown) =>
+        typeof actual.getOpenAIErrorMessage === "function" &&
+        actual.getOpenAIErrorMessage(error).toLowerCase().includes("does not match the expected schema")),
     runStructuredPrompt: vi.fn(async () => {
-      const error = new Error("You exceeded your current quota, please check your plan and billing details.");
+      const error = new Error("Generated JSON does not match the expected schema.");
       Object.assign(error, {
-        status: 429,
-        code: "insufficient_quota",
+        status: 400,
+        code: "json_validate_failed",
         error: {
-          message: "You exceeded your current quota, please check your plan and billing details.",
-          code: "insufficient_quota"
+          message: "Generated JSON does not match the expected schema.",
+          code: "json_validate_failed"
         }
       });
       throw error;
@@ -24,7 +28,7 @@ vi.mock("@twitter-agent/core", async (importOriginal) => {
   };
 });
 
-describe("worker provider quota fallback", () => {
+describe("worker provider schema fallback", () => {
   beforeEach(() => {
     vi.resetModules();
     process.env.GROQ_API_KEY = "gsk_test";
@@ -50,29 +54,17 @@ describe("worker provider quota fallback", () => {
     vi.restoreAllMocks();
   });
 
-  it("falls back and pauses repeated Groq-backed LLM calls after an insufficient quota error", async () => {
+  it("falls back during source-style structured extraction when Groq rejects the generated schema output", async () => {
     const ai = await import("../../apps/worker/src/lib/ai");
-    const core = await import("@twitter-agent/core");
-    const structuredPrompt = vi.mocked(core.runStructuredPrompt);
+    const result = await ai.extractResearch(
+      "The speaker wishes to feel emotions without dragging yesterday into today.",
+      "Reflection",
+      "URL"
+    );
 
-    ai.resetAIProviderFallbackStateForTests();
-
-    const first = await ai.draftReply({
-      mentionText: "How would you structure the queue for this?",
-      classification: JSON.stringify({ category: "QUESTION" }),
-      conversationContext: "A builder asked about queues.",
-      supportingEvidence: ["Start simple, then add idempotency and retries."]
-    });
-
-    const second = await ai.draftReply({
-      mentionText: "What would you do next?",
-      classification: JSON.stringify({ category: "QUESTION" }),
-      conversationContext: "A builder asked about queues.",
-      supportingEvidence: ["Use one durable queue and clear ownership boundaries."]
-    });
-
-    expect(first.suggestedReply).toContain("Appreciate you.");
-    expect(second.suggestedReply).toContain("Appreciate you.");
-    expect(structuredPrompt).toHaveBeenCalledTimes(1);
+    expect(result.quoteCandidates.length).toBeGreaterThan(0);
+    expect(result.hookIdeas.length).toBeGreaterThan(0);
+    expect(result.pillarCandidates.length).toBeGreaterThan(0);
+    expect(result.safetyFlags).toEqual([]);
   });
 });

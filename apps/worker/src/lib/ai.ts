@@ -9,6 +9,7 @@ import {
   researchExtractionSchema,
   isOpenAIQuotaError,
   isOpenAIRateLimitError,
+  isOpenAISchemaValidationError,
   runStructuredPrompt,
   tweetDraftOutputSchema,
   getEnv
@@ -74,6 +75,11 @@ async function runWithProviderFallback<T>(params: {
 
     if (isOpenAIRateLimitError(error)) {
       console.warn(`[ai] ${params.label} falling back after Groq rate limit: ${reason}`);
+      return params.fallback();
+    }
+
+    if (isOpenAISchemaValidationError(error)) {
+      console.warn(`[ai] ${params.label} falling back after Groq schema validation error: ${reason}`);
       return params.fallback();
     }
 
