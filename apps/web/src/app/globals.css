@@ -50,22 +50,23 @@ select {
 .dashboard-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--border);
-  border-radius: 0; /* Sharp corners */
+  border-radius: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dashboard-table {
   width: 100%;
-  min-width: 800px; /* Force minimum width for horizontal scroll if needed */
   border-collapse: collapse;
 }
 
 .dashboard-cell {
   word-wrap: break-word;
-  overflow-wrap: break-word;
+  padding: 1rem 1rem !important;
 }
 
 .tech-column {
-  width: 1%;
+  width: auto;
+  min-width: 140px;
   white-space: nowrap;
 }
 

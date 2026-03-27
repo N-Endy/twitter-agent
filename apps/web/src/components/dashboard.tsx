@@ -281,8 +281,8 @@ export function Table({
   children: ReactNode;
 }) {
   return (
-    <div className="dashboard-table-wrap overflow-x-auto">
-      <table className="dashboard-table min-w-[800px] w-full divide-y divide-white/10 text-left text-sm table-fixed">
+    <div className="dashboard-table-wrap">
+      <table className="dashboard-table min-w-[1000px] w-full divide-y divide-white/10 text-left text-sm">
         <thead className="bg-white/[0.04] text-slate-500 uppercase tracking-widest text-[9px] font-black">
           <tr>
             {headers.map((h, i) => {

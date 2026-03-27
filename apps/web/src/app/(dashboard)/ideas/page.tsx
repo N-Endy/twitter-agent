@@ -31,21 +31,32 @@ export default async function IdeasPage() {
             actions={<JobTriggerButton job="weekly-batch" label="Run weekly batch" />}
           />
         ) : (
-          <Table headers={["Idea", "Source", "Tags", "Drafts", "Created", "State"]}>
+          <Table headers={[
+            { label: "Idea" },
+            { label: "Source", className: "tech-column" },
+            { label: "Tags", className: "tech-column" },
+            { label: "Drafts", className: "tech-column" },
+            { label: "Created", className: "tech-column" },
+            { label: "State", className: "tech-column" }
+          ]}>
             {ideas.map((idea) => (
               <tr key={idea.id}>
                 <TableCell label="Idea">
-                  <p className="font-medium text-white">{idea.hook}</p>
-                  <p className="mt-1 text-xs text-slate-400">{idea.angle}</p>
+                  <p className="font-bold text-white uppercase tracking-tight text-xs">{idea.hook}</p>
+                  <p className="mt-2 text-xs leading-5 text-slate-400">{idea.angle}</p>
                 </TableCell>
-                <TableCell label="Source">
-                  <p>{idea.sourceItem.title}</p>
-                  <p className="mt-1 text-xs text-slate-400">{idea.pillar}</p>
+                <TableCell label="Source" className="tech-column">
+                  <p className="font-bold text-white uppercase tracking-tight text-[10px]">{idea.sourceItem.title}</p>
+                  <p className="mt-1 text-[9px] text-slate-500 font-mono tracking-tighter uppercase">{idea.pillar}</p>
                 </TableCell>
-                <TableCell label="Tags">{idea.tags.join(", ") || "No tags"}</TableCell>
-                <TableCell label="Drafts">{idea.drafts.length}</TableCell>
-                <TableCell label="Created">{formatRelative(idea.createdAt)}</TableCell>
-                <TableCell label="State">
+                <TableCell label="Tags" className="tech-column text-[10px] uppercase tracking-wide text-slate-500 max-w-[140px] truncate">
+                  {idea.tags.join(", ") || "No tags"}
+                </TableCell>
+                <TableCell label="Drafts" className="tech-column text-xs font-mono">{idea.drafts.length}</TableCell>
+                <TableCell label="Created" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">
+                  {formatRelative(idea.createdAt)}
+                </TableCell>
+                <TableCell label="State" className="tech-column">
                   <StatusPill tone={idea.status === "ACTIVE" ? "good" : "warning"}>{idea.status}</StatusPill>
                 </TableCell>
               </tr>

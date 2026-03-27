@@ -57,22 +57,32 @@ export default async function SourcesPage() {
             body="Add at least one strong source before running ingest. Good source notes make the rest of the pipeline much easier to steer."
           />
         ) : (
-          <Table headers={["Source", "Kind", "Snapshots", "Ideas", "Last updated", "State", "Actions"]}>
+          <Table headers={[
+            { label: "Source" },
+            { label: "Kind", className: "tech-column" },
+            { label: "Snapshots", className: "tech-column" },
+            { label: "Ideas", className: "tech-column" },
+            { label: "Last updated", className: "tech-column" },
+            { label: "State", className: "tech-column" },
+            { label: "Actions", className: "tech-column" }
+          ]}>
             {sources.map((source) => (
               <tr key={source.id}>
                 <TableCell label="Source">
-                  <p className="font-medium text-white">{source.title}</p>
-                  <p className="mt-1 text-xs text-slate-400">{source.uri}</p>
-                  {source.notes ? <p className="mt-2 text-xs leading-5 text-slate-300">{source.notes}</p> : null}
+                  <p className="font-bold text-white uppercase tracking-tight text-xs">{source.title}</p>
+                  <p className="mt-1 text-[9px] text-slate-500 font-mono tracking-tighter">{source.uri}</p>
+                  {source.notes ? <p className="mt-3 text-xs leading-6 text-slate-400 border-l border-white/10 pl-3">{source.notes}</p> : null}
                 </TableCell>
-                <TableCell label="Kind">{source.kind}</TableCell>
-                <TableCell label="Snapshots">{source._count.researchSnapshots}</TableCell>
-                <TableCell label="Ideas">{source._count.contentIdeas}</TableCell>
-                <TableCell label="Last updated">{formatDashboardDate(source.updatedAt)}</TableCell>
-                <TableCell label="State">
+                <TableCell label="Kind" className="tech-column text-[10px] uppercase tracking-widest text-slate-500 font-bold">{source.kind}</TableCell>
+                <TableCell label="Snapshots" className="tech-column text-xs font-mono">{source._count.researchSnapshots}</TableCell>
+                <TableCell label="Ideas" className="tech-column text-xs font-mono">{source._count.contentIdeas}</TableCell>
+                <TableCell label="Last updated" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">
+                  {formatDashboardDate(source.updatedAt)}
+                </TableCell>
+                <TableCell label="State" className="tech-column">
                   <StatusPill tone={source.isActive ? "good" : "warning"}>{source.isActive ? "ACTIVE" : "PAUSED"}</StatusPill>
                 </TableCell>
-                <TableCell label="Actions">
+                <TableCell label="Actions" className="tech-column">
                   <SourceRowActions
                     source={{
                       id: source.id,
