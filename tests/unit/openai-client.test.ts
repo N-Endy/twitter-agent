@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   getOpenAIErrorMessage,
   getOpenAIErrorStatus,
+  getProviderRequestPlan,
   isOpenAIQuotaError,
   isOpenAIRateLimitError,
   isOpenAISchemaValidationError,
@@ -64,5 +65,38 @@ describe("provider error helpers", () => {
     };
 
     expect(isOpenAIToolUseError(error)).toBe(true);
+  });
+
+  it("prefers OpenAI first and Groq second when both providers are configured", () => {
+    const plan = getProviderRequestPlan(
+      {
+        openaiModel: "gpt-5-mini",
+        groqModel: "openai/gpt-oss-20b"
+      },
+      {
+        OPENAI_API_KEY: "sk-test",
+        GROQ_API_KEY: "gsk-test"
+      } as never
+    );
+
+    expect(plan).toEqual([
+      { provider: "openai", model: "gpt-5-mini" },
+      { provider: "groq", model: "openai/gpt-oss-20b" }
+    ]);
+  });
+
+  it("uses Groq alone when OpenAI is not configured", () => {
+    const plan = getProviderRequestPlan(
+      {
+        openaiModel: "gpt-5-mini",
+        groqModel: "openai/gpt-oss-20b"
+      },
+      {
+        OPENAI_API_KEY: undefined,
+        GROQ_API_KEY: "gsk-test"
+      } as never
+    );
+
+    expect(plan).toEqual([{ provider: "groq", model: "openai/gpt-oss-20b" }]);
   });
 });

@@ -5,8 +5,12 @@ import { getEnv } from "../env";
 
 const GROQ_BASE_URL = "https://api.groq.com/openai/v1";
 
-let cachedClient: OpenAI | null = null;
-let cachedApiKey: string | null = null;
+export type AIProvider = "openai" | "groq";
+
+type ProviderRequestPlan = Array<{ provider: AIProvider; model: string }>;
+
+const cachedClients: Partial<Record<AIProvider, OpenAI>> = {};
+const cachedApiKeys: Partial<Record<AIProvider, string>> = {};
 
 function readErrorProperty(error: unknown, key: string) {
   if (!error || typeof error !== "object" || !(key in error)) {
@@ -26,14 +30,9 @@ function readNestedOpenAIError(error: unknown) {
   return nested && typeof nested === "object" ? (nested as Record<string, unknown>) : null;
 }
 
-function getProviderApiKey() {
+function getProviderApiKey(provider: AIProvider) {
   const env = getEnv();
-  return env.GROQ_API_KEY ?? env.OPENAI_API_KEY ?? null;
-}
-
-function getFastModel() {
-  const env = getEnv();
-  return env.GROQ_FAST_MODEL ?? env.OPENAI_FAST_MODEL ?? "openai/gpt-oss-20b";
+  return provider === "openai" ? env.OPENAI_API_KEY ?? null : env.GROQ_API_KEY ?? null;
 }
 
 function getResponseText(content: unknown) {
@@ -72,25 +71,54 @@ function buildJsonSchema(schema: ZodTypeAny) {
   return "$schema" in jsonSchema ? (({ $schema: _unused, ...rest }) => rest)(jsonSchema) : jsonSchema;
 }
 
-export function getGroqClient() {
-  const apiKey = getProviderApiKey();
+function getProviderClient(provider: AIProvider) {
+  const apiKey = getProviderApiKey(provider);
 
   if (!apiKey) {
-    throw new Error("GROQ_API_KEY is required for AI features.");
+    throw new Error(`${provider === "openai" ? "OPENAI_API_KEY" : "GROQ_API_KEY"} is required for AI features.`);
   }
 
-  if (!cachedClient || cachedApiKey !== apiKey) {
-    cachedClient = new OpenAI({
-      apiKey,
-      baseURL: GROQ_BASE_URL
-    });
-    cachedApiKey = apiKey;
+  if (!cachedClients[provider] || cachedApiKeys[provider] !== apiKey) {
+    cachedClients[provider] = new OpenAI(
+      provider === "groq"
+        ? {
+            apiKey,
+            baseURL: GROQ_BASE_URL
+          }
+        : {
+            apiKey
+          }
+    );
+    cachedApiKeys[provider] = apiKey;
   }
 
-  return cachedClient;
+  return cachedClients[provider] as OpenAI;
 }
 
-export const getOpenAIClient = getGroqClient;
+export function getOpenAIClient() {
+  return getProviderClient("openai");
+}
+
+export function getGroqClient() {
+  return getProviderClient("groq");
+}
+
+export function getProviderRequestPlan(params: {
+  openaiModel: string;
+  groqModel?: string;
+}, env = getEnv()) {
+  const plan: ProviderRequestPlan = [];
+
+  if (env.OPENAI_API_KEY) {
+    plan.push({ provider: "openai", model: params.openaiModel });
+  }
+
+  if (env.GROQ_API_KEY) {
+    plan.push({ provider: "groq", model: params.groqModel ?? params.openaiModel });
+  }
+
+  return plan;
+}
 
 export function getOpenAIErrorStatus(error: unknown) {
   const status = readErrorProperty(error, "status");
@@ -142,58 +170,102 @@ export function isOpenAIToolUseError(error: unknown) {
   return code === "tool_use_failed" || message.includes("model called a tool");
 }
 
+async function withProviderFallback<T>(plan: ProviderRequestPlan, run: (step: ProviderRequestPlan[number]) => Promise<T>) {
+  if (plan.length === 0) {
+    throw new Error("OPENAI_API_KEY or GROQ_API_KEY is required for AI features.");
+  }
+
+  let lastError: unknown;
+
+  for (let index = 0; index < plan.length; index += 1) {
+    const step = plan[index]!;
+
+    try {
+      return await run(step);
+    } catch (error) {
+      lastError = error;
+
+      if (index < plan.length - 1) {
+        console.warn(
+          `[ai-provider] ${step.provider} failed, trying next provider: ${getOpenAIErrorMessage(error)}`
+        );
+        continue;
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("LLM provider request failed.");
+}
+
 export async function runStructuredPrompt<T extends ZodTypeAny>(params: {
   model: string;
+  fallbackModel?: string;
   schema: T;
   schemaName: string;
   systemPrompt: string;
   userPrompt: string;
 }) {
-  const response = await getGroqClient().chat.completions.create({
-    model: params.model,
-    messages: [
-      { role: "system", content: params.systemPrompt },
-      { role: "user", content: params.userPrompt }
-    ],
-    response_format: {
-      type: "json_schema",
-      json_schema: {
-        name: params.schemaName,
-        strict: true,
-        schema: buildJsonSchema(params.schema)
-      }
-    }
+  const plan = getProviderRequestPlan({
+    openaiModel: params.model,
+    groqModel: params.fallbackModel
   });
 
-  const content = getResponseText(response.choices[0]?.message?.content);
+  return withProviderFallback(plan, async (step) => {
+    const response = await getProviderClient(step.provider).chat.completions.create({
+      model: step.model,
+      messages: [
+        { role: "system", content: params.systemPrompt },
+        { role: "user", content: params.userPrompt }
+      ],
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: params.schemaName,
+          strict: true,
+          schema: buildJsonSchema(params.schema)
+        }
+      }
+    });
 
-  if (!content) {
-    throw new Error("Groq response did not contain structured output content.");
-  }
+    const content = getResponseText(response.choices[0]?.message?.content);
 
-  return params.schema.parse(JSON.parse(content));
+    if (!content) {
+      throw new Error(`${step.provider} response did not contain structured output content.`);
+    }
+
+    return params.schema.parse(JSON.parse(content));
+  });
 }
 
 export async function classifyText(params: {
   systemPrompt: string;
   userPrompt: string;
   model?: string;
+  fallbackModel?: string;
 }) {
-  const response = await getGroqClient().chat.completions.create({
-    model: params.model ?? getFastModel(),
-    messages: [
-      { role: "system", content: params.systemPrompt },
-      { role: "user", content: params.userPrompt }
-    ]
+  const env = getEnv();
+  const plan = getProviderRequestPlan({
+    openaiModel: params.model ?? env.OPENAI_FAST_MODEL,
+    groqModel: params.fallbackModel ?? env.GROQ_FAST_MODEL
   });
 
-  const outputText = getResponseText(response.choices[0]?.message?.content);
+  return withProviderFallback(plan, async (step) => {
+    const response = await getProviderClient(step.provider).chat.completions.create({
+      model: step.model,
+      messages: [
+        { role: "system", content: params.systemPrompt },
+        { role: "user", content: params.userPrompt }
+      ]
+    });
 
-  if (!outputText) {
-    throw new Error("Groq response did not include text output.");
-  }
+    const outputText = getResponseText(response.choices[0]?.message?.content);
 
-  return outputText;
+    if (!outputText) {
+      throw new Error(`${step.provider} response did not include text output.`);
+    }
+
+    return outputText;
+  });
 }
 
 export function parseJsonOutput<T extends ZodTypeAny>(schema: T, raw: string) {

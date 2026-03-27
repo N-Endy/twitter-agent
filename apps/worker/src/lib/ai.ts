@@ -184,22 +184,22 @@ async function runWithProviderFallback<T>(params: {
 
     if (isOpenAIQuotaError(error)) {
       pauseAIProvider();
-      console.warn(`[ai] ${params.label} falling back after Groq quota error: ${reason}`);
+      console.warn(`[ai] ${params.label} falling back after AI provider quota error: ${reason}`);
       return params.fallback();
     }
 
     if (isOpenAIRateLimitError(error)) {
-      console.warn(`[ai] ${params.label} falling back after Groq rate limit: ${reason}`);
+      console.warn(`[ai] ${params.label} falling back after AI provider rate limit: ${reason}`);
       return params.fallback();
     }
 
     if (isOpenAISchemaValidationError(error)) {
-      console.warn(`[ai] ${params.label} falling back after Groq schema validation error: ${reason}`);
+      console.warn(`[ai] ${params.label} falling back after AI provider schema validation error: ${reason}`);
       return params.fallback();
     }
 
     if (isOpenAIToolUseError(error)) {
-      console.warn(`[ai] ${params.label} falling back after Groq tool-use error: ${reason}`);
+      console.warn(`[ai] ${params.label} falling back after AI provider tool-use error: ${reason}`);
       return params.fallback();
     }
 
@@ -337,7 +337,8 @@ export async function extractResearch(rawText: string, title: string, sourceType
     fallback: () => buildFallbackResearch(rawText, title, sourceType, sourceGuidance),
     execute: () =>
       runStructuredPrompt({
-        model: getEnv().GROQ_FAST_MODEL,
+        model: getEnv().OPENAI_FAST_MODEL,
+        fallbackModel: getEnv().GROQ_FAST_MODEL,
         schema: researchExtractionSchema,
         schemaName: prompt.schemaName,
         systemPrompt: prompt.systemPrompt,
@@ -374,7 +375,8 @@ export async function generateIdeas(params: {
       }),
     execute: () =>
       runStructuredPrompt({
-        model: getEnv().GROQ_QUALITY_MODEL,
+        model: getEnv().OPENAI_QUALITY_MODEL,
+        fallbackModel: getEnv().GROQ_QUALITY_MODEL,
         schema: contentIdeaBatchSchema,
         schemaName: prompt.schemaName,
         systemPrompt: prompt.systemPrompt,
@@ -412,7 +414,8 @@ export async function writeDraft(params: {
       }),
     execute: () =>
       runStructuredPrompt({
-        model: getEnv().GROQ_QUALITY_MODEL,
+        model: getEnv().OPENAI_QUALITY_MODEL,
+        fallbackModel: getEnv().GROQ_QUALITY_MODEL,
         schema: tweetDraftOutputSchema,
         schemaName: prompt.schemaName,
         systemPrompt: prompt.systemPrompt,
@@ -444,7 +447,8 @@ export async function reviewDraft(params: {
       }),
     execute: () =>
       runStructuredPrompt({
-        model: getEnv().GROQ_FAST_MODEL,
+        model: getEnv().OPENAI_FAST_MODEL,
+        fallbackModel: getEnv().GROQ_FAST_MODEL,
         schema: draftReviewOutputSchema,
         schemaName: prompt.schemaName,
         systemPrompt: prompt.systemPrompt,
@@ -467,7 +471,8 @@ export async function classifyMention(params: {
     fallback: () => buildFallbackClassification(params.mentionText),
     execute: () =>
       runStructuredPrompt({
-        model: getEnv().GROQ_FAST_MODEL,
+        model: getEnv().OPENAI_FAST_MODEL,
+        fallbackModel: getEnv().GROQ_FAST_MODEL,
         schema: replyClassificationOutputSchema,
         schemaName: prompt.schemaName,
         systemPrompt: prompt.systemPrompt,
@@ -491,7 +496,8 @@ export async function draftReply(params: {
     fallback: () => buildFallbackReply(params.supportingEvidence),
     execute: () =>
       runStructuredPrompt({
-        model: getEnv().GROQ_FAST_MODEL,
+        model: getEnv().OPENAI_FAST_MODEL,
+        fallbackModel: getEnv().GROQ_FAST_MODEL,
         schema: replyDraftOutputSchema,
         schemaName: prompt.schemaName,
         systemPrompt: prompt.systemPrompt,
