@@ -36,8 +36,6 @@ import {
 } from "./ai";
 
 const prisma = getPrismaClient();
-const voiceRules =
-  "Voice: sharp, practical, technical, credible, useful, plain English, no empty hype, no lazy motivation, no spammy calls to action.";
 const X_BILLING_BLOCKED_SKIP = "x-billing-blocked";
 
 function stringify(value: unknown) {
@@ -146,6 +144,76 @@ function buildConversationContext(params: { conversationId: string | null; refer
   return parts.join("\n") || "No extra context";
 }
 
+function uniqueLines(values: Array<string | null | undefined>) {
+  const seen = new Set<string>();
+  const lines: string[] = [];
+
+  for (const value of values) {
+    const normalized = value?.replace(/\s+/g, " ").trim();
+
+    if (!normalized) {
+      continue;
+    }
+
+    const key = normalized.toLowerCase();
+
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    lines.push(normalized);
+  }
+
+  return lines;
+}
+
+function buildSourceGuidance(
+  source: {
+    title: string;
+    kind: string;
+    notes?: string | null;
+    allowlistHandle?: string | null;
+    uri?: string;
+  },
+  snapshot?: {
+    title?: string;
+    pillarCandidates?: string[];
+    hookIdeas?: string[];
+  }
+) {
+  return uniqueLines([
+    `Source: ${source.title}`,
+    source.allowlistHandle ? `Handle: @${source.allowlistHandle.replace(/^@/, "")}` : null,
+    `Type: ${source.kind}`,
+    source.notes ? `Notes: ${source.notes}` : null,
+    snapshot?.title ? `Current material: ${snapshot.title}` : null,
+    snapshot?.pillarCandidates?.length ? `Themes: ${snapshot.pillarCandidates.slice(0, 4).join(", ")}` : null,
+    snapshot?.hookIdeas?.length ? `Natural angles: ${snapshot.hookIdeas.slice(0, 3).join(" | ")}` : null,
+    "Stay inside this source's actual world. Do not drift into generic tech, AI, or builder content unless the source itself is about that."
+  ]).join("\n");
+}
+
+function buildVoiceRules(
+  source: {
+    title: string;
+    notes?: string | null;
+    allowlistHandle?: string | null;
+  },
+  snapshot?: {
+    pillarCandidates?: string[];
+  }
+) {
+  return uniqueLines([
+    "Voice: source-led, clear, human, specific, plain English, no empty hype, no spammy calls to action.",
+    `Match the lane of ${source.title}.`,
+    source.allowlistHandle ? `Preserve the tone signaled by @${source.allowlistHandle.replace(/^@/, "")}.` : null,
+    source.notes ? `Operator notes: ${source.notes}` : null,
+    snapshot?.pillarCandidates?.length ? `Likely themes: ${snapshot.pillarCandidates.slice(0, 4).join(", ")}` : null,
+    "Reject any draft that sounds like generic internet advice or technical-builder content when the source does not support it."
+  ]).join(" ");
+}
+
 export async function runSourceIngestJob() {
   const sources = await prisma.sourceItem.findMany({
     where: { isActive: true },
@@ -202,7 +270,14 @@ export async function runSourceIngestJob() {
         continue;
       }
 
-      const extracted = await extractResearch(item.rawText, item.title, source.kind);
+      const extracted = await extractResearch(
+        item.rawText,
+        item.title,
+        source.kind,
+        buildSourceGuidance(source, {
+          title: item.title
+        })
+      );
 
       await prisma.researchSnapshot.create({
         data: {
@@ -266,7 +341,11 @@ export async function runWeeklyBatchJob() {
       summary: snapshot.summary,
       keyFacts: snapshot.keyFacts,
       recentWinners,
-      recentLosers
+      recentLosers,
+      sourceName: snapshot.sourceItem.title,
+      sourceGuidance: buildSourceGuidance(snapshot.sourceItem, snapshot),
+      sourceHooks: snapshot.hookIdeas,
+      sourcePillars: snapshot.pillarCandidates
     });
 
     for (const ideaOutput of batch.ideas.slice(0, 7)) {
@@ -295,7 +374,8 @@ export async function runWeeklyBatchJob() {
         angle: ideaOutput.angle,
         audience: ideaOutput.audience,
         supportingEvidence: ideaOutput.supportingEvidence,
-        voiceNotes: voiceRules
+        voiceNotes: buildVoiceRules(snapshot.sourceItem, snapshot),
+        sourceGuidance: buildSourceGuidance(snapshot.sourceItem, snapshot)
       });
 
       const draft = await prisma.draft.create({
@@ -333,11 +413,11 @@ export async function runDraftQaJob(draftId?: string) {
   const drafts = draftId
     ? await prisma.draft.findMany({
         where: { id: draftId },
-        include: { idea: true }
+        include: { idea: { include: { sourceItem: true, snapshot: true } } }
       })
     : await prisma.draft.findMany({
         where: { status: "PENDING_QA" },
-        include: { idea: true },
+        include: { idea: { include: { sourceItem: true, snapshot: true } } },
         take: 25
       });
 
@@ -347,7 +427,7 @@ export async function runDraftQaJob(draftId?: string) {
     const review = await reviewDraft({
       draftText: draft.text,
       supportingEvidence: draft.evidenceUsed,
-      voiceRules
+      voiceRules: buildVoiceRules(draft.idea.sourceItem, draft.idea.snapshot ?? undefined)
     });
     const moderation = moderateDraft({
       text: review.rewrite || draft.text,

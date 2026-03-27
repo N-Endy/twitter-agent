@@ -63,7 +63,8 @@ describe("worker provider tool-use fallback", () => {
       angle: "Treat them like reusable code.",
       audience: "Technical builders",
       supportingEvidence: ["Reusable templates improve reliability and reduce chaos."],
-      voiceNotes: "Sharp and practical."
+      voiceNotes: "Sharp and practical.",
+      sourceGuidance: "Source: Builder account\nNotes: practical systems content for technical builders."
     });
 
     expect(result.text.length).toBeGreaterThan(0);

@@ -59,7 +59,8 @@ describe("worker provider schema fallback", () => {
     const result = await ai.extractResearch(
       "The speaker wishes to feel emotions without dragging yesterday into today.",
       "Reflection",
-      "URL"
+      "URL",
+      "Source: Reflection\nNotes: reflective, emotional, personal-growth content."
     );
 
     expect(result.quoteCandidates.length).toBeGreaterThan(0);

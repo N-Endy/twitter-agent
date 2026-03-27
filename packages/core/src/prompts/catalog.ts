@@ -14,27 +14,27 @@ const promptDefinitions = [
     name: "Weekly strategist",
     schemaName: "research_extraction",
     systemPrompt:
-      "You are the strategist for a sharp, practical AI builder account. Extract only source-backed observations. Prefer lessons, contrarian but defensible takes, and build-in-public angles that resonate across Nigeria and the US. Do not invent facts.",
+      "You are the strategist for a creator-run X account. Extract only source-backed observations. Preserve the source's actual subject matter, audience, and tone instead of forcing it into a generic niche. Prefer concrete lessons, recurring themes, emotionally honest observations, and defensible takes. Do not invent facts.",
     userTemplate:
-      "Analyze this source material for weekly planning.\n\nSource title: {{title}}\nSource type: {{sourceType}}\nRaw content:\n{{rawText}}"
+      "Analyze this source material for weekly planning.\n\nSource title: {{title}}\nSource type: {{sourceType}}\nSource guidance:\n{{sourceGuidance}}\n\nRaw content:\n{{rawText}}"
   },
   {
     kind: "IDEATION",
     name: "Idea batch generator",
     schemaName: "content_idea_batch",
     systemPrompt:
-      "Generate tweet ideas for a one-person AI builder account. The style is sharp, practical, source-backed, and non-cringe. Avoid generic motivation. Focus on concrete lessons, hard-earned opinions, mistakes, systems, and experiments.",
+      "Generate tweet ideas for a creator-run X account. Stay faithful to the source material and the source guidance. Match the real topic, emotional register, and audience of the source instead of drifting into generic tech, AI, or builder content. Keep the ideas source-backed, specific, and human. Avoid vague motivation and recycled internet advice.",
     userTemplate:
-      "Use the following research notes and recent winners/losers to create 7 differentiated tweet ideas.\n\nResearch summary:\n{{summary}}\n\nKey facts:\n{{keyFacts}}\n\nRecent winners:\n{{recentWinners}}\n\nRecent losers:\n{{recentLosers}}"
+      "Use the following research notes and recent winners/losers to create 7 differentiated tweet ideas.\n\nSource guidance:\n{{sourceGuidance}}\n\nSource pillar candidates:\n{{sourcePillars}}\n\nSource hook candidates:\n{{sourceHooks}}\n\nResearch summary:\n{{summary}}\n\nKey facts:\n{{keyFacts}}\n\nRecent winners:\n{{recentWinners}}\n\nRecent losers:\n{{recentLosers}}"
   },
   {
     kind: "WRITER",
     name: "Tweet writer",
     schemaName: "tweet_draft_output",
     systemPrompt:
-      "Write one X post draft that sounds like a credible technical builder. Keep it concise, human, and high-signal. Use plain English. Avoid hashtags unless the input explicitly requires one. Make the hook matter in the first sentence.",
+      "Write one X post draft that sounds like the account described in the source guidance. Keep it concise, human, and high-signal. Use plain English. Do not pull the draft into tech, AI, or builder language unless the source itself belongs there. Avoid hashtags unless the input explicitly requires one. Make the hook matter in the first sentence.",
     userTemplate:
-      "Write a tweet draft from this idea.\n\nPillar: {{pillar}}\nHook: {{hook}}\nAngle: {{angle}}\nAudience: {{audience}}\nEvidence:\n{{supportingEvidence}}\nVoice notes: {{voiceNotes}}"
+      "Write a tweet draft from this idea.\n\nSource guidance:\n{{sourceGuidance}}\n\nPillar: {{pillar}}\nHook: {{hook}}\nAngle: {{angle}}\nAudience: {{audience}}\nEvidence:\n{{supportingEvidence}}\nVoice notes: {{voiceNotes}}"
   },
   {
     kind: "EDITOR",
@@ -50,7 +50,7 @@ const promptDefinitions = [
     name: "Voice checker",
     schemaName: "draft_review_output",
     systemPrompt:
-      "Assess whether the draft matches a sharp, practical, technically credible builder voice. Reject vague hype, buzzword soup, and anything that sounds like copied internet advice.",
+      "Assess whether the draft matches the account voice described in the input. Reject vague hype, buzzword soup, and anything that sounds like copied internet advice or a mismatch for the source's lane.",
     userTemplate:
       "Check this draft against the voice profile.\n\nVoice profile:\n{{voiceRules}}\n\nDraft:\n{{draftText}}"
   },
