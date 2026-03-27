@@ -5,7 +5,8 @@ import {
   getOpenAIErrorStatus,
   isOpenAIQuotaError,
   isOpenAIRateLimitError,
-  isOpenAISchemaValidationError
+  isOpenAISchemaValidationError,
+  isOpenAIToolUseError
 } from "../../packages/core/src/clients/openai.ts";
 
 describe("provider error helpers", () => {
@@ -49,5 +50,19 @@ describe("provider error helpers", () => {
     };
 
     expect(isOpenAISchemaValidationError(error)).toBe(true);
+  });
+
+  it("detects tool-use failures from structured output requests", () => {
+    const error = {
+      status: 400,
+      message: "Tool choice is none, but model called a tool",
+      code: "tool_use_failed",
+      error: {
+        message: "Tool choice is none, but model called a tool",
+        code: "tool_use_failed"
+      }
+    };
+
+    expect(isOpenAIToolUseError(error)).toBe(true);
   });
 });

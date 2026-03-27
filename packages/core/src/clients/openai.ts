@@ -135,6 +135,13 @@ export function isOpenAISchemaValidationError(error: unknown) {
   return code === "json_validate_failed" || message.includes("does not match the expected schema");
 }
 
+export function isOpenAIToolUseError(error: unknown) {
+  const code = getOpenAIErrorCode(error);
+  const message = getOpenAIErrorMessage(error).toLowerCase();
+
+  return code === "tool_use_failed" || message.includes("model called a tool");
+}
+
 export async function runStructuredPrompt<T extends ZodTypeAny>(params: {
   model: string;
   schema: T;

@@ -10,6 +10,7 @@ import {
   isOpenAIQuotaError,
   isOpenAIRateLimitError,
   isOpenAISchemaValidationError,
+  isOpenAIToolUseError,
   runStructuredPrompt,
   tweetDraftOutputSchema,
   getEnv
@@ -80,6 +81,11 @@ async function runWithProviderFallback<T>(params: {
 
     if (isOpenAISchemaValidationError(error)) {
       console.warn(`[ai] ${params.label} falling back after Groq schema validation error: ${reason}`);
+      return params.fallback();
+    }
+
+    if (isOpenAIToolUseError(error)) {
+      console.warn(`[ai] ${params.label} falling back after Groq tool-use error: ${reason}`);
       return params.fallback();
     }
 
