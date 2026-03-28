@@ -87,3 +87,37 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   return NextResponse.json({ error: "Unsupported source action." }, { status: 400 });
 }
+
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await requireApiSession();
+
+  if (session instanceof NextResponse) {
+    return session;
+  }
+
+  const { id } = await params;
+  const source = await prisma.sourceItem.findUnique({
+    where: { id }
+  });
+
+  if (!source) {
+    return NextResponse.json({ error: "Source not found." }, { status: 404 });
+  }
+
+  await prisma.sourceItem.delete({
+    where: { id }
+  });
+
+  await createAuditLog({
+    actor: session.user.email ?? "owner",
+    action: "source.deleted",
+    entityType: "sourceItem",
+    entityId: source.id,
+    details: {
+      deletedTitle: source.title,
+      deletedUri: source.uri
+    }
+  });
+
+  return NextResponse.json({ ok: true, deleted: true });
+}

@@ -69,6 +69,29 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
         >
           {isEditing ? "CANCEL EDIT" : "EDIT"}
         </button>
+
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={() => {
+            if (window.confirm("Are you sure you want to permanently delete this source?")) {
+              startTransition(async () => {
+                setError(null);
+                const response = await fetch(`/api/admin/sources/${source.id}`, {
+                  method: "DELETE"
+                });
+                if (!response.ok) {
+                  setError("Unable to delete this source.");
+                  return;
+                }
+                router.refresh();
+              });
+            }
+          }}
+          className="inline-flex w-full justify-center border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-[10px] uppercase tracking-widest font-bold text-rose-500 transition-all hover:bg-rose-500/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        >
+          {isPending ? "WORKING..." : "DELETE"}
+        </button>
       </div>
 
       {isEditing ? (

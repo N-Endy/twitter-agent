@@ -86,6 +86,7 @@ export default async function RepliesPage() {
                             url={`/api/admin/replies/${suggestion.id}/send`}
                             label="Send reply"
                             confirmText="Send this reply to X now?"
+                            fullWidth
                           />
                           <div className="grid grid-cols-2 gap-2">
                             <MutationButton
@@ -93,12 +94,14 @@ export default async function RepliesPage() {
                               label="Ignore"
                               body={{ action: "IGNORE" }}
                               tone="warning"
+                              fullWidth
                             />
                             <MutationButton
                               url={`/api/admin/replies/${suggestion.id}/decision`}
                               label="Escalate"
                               body={{ action: "ESCALATE" }}
                               tone="danger"
+                              fullWidth
                             />
                           </div>
                         </div>
