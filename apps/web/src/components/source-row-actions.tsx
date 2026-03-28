@@ -53,9 +53,9 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
           type="button"
           disabled={isPending}
           onClick={() => send({ action: "toggle" })}
-          className="inline-flex w-full justify-center rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-2 text-xs font-medium text-amber-100 transition hover:bg-amber-300/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          className="inline-flex w-full justify-center border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-[10px] uppercase tracking-widest font-bold text-amber-300 transition-all hover:bg-amber-300/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
-          {isPending ? "Working..." : source.isActive ? "Pause" : "Resume"}
+          {isPending ? "WORKING..." : source.isActive ? "PAUSE" : "RESUME"}
         </button>
 
         <button
@@ -65,20 +65,20 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
             setError(null);
             setIsEditing((current) => !current);
           }}
-          className="inline-flex w-full justify-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          className="inline-flex w-full justify-center border border-white/10 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-widest font-bold text-slate-300 transition-all hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
-          {isEditing ? "Cancel edit" : "Edit"}
+          {isEditing ? "CANCEL EDIT" : "EDIT"}
         </button>
       </div>
 
       {isEditing ? (
-        <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-950/30 p-3">
+        <div className="space-y-3 border border-[var(--accent)]/30 bg-[var(--accent)]/5 p-4 shadow-xl">
           <div>
             <label className="mb-1 block text-[11px] uppercase tracking-[0.18em] text-slate-400">Title</label>
             <input
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
+              className="w-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30"
             />
           </div>
 
@@ -88,7 +88,7 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
               rows={3}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
+              className="w-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30"
             />
           </div>
 
@@ -96,9 +96,9 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
             type="button"
             disabled={isPending}
             onClick={() => send({ action: "edit", title, notes })}
-            className="inline-flex w-full justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-xs font-medium text-cyan-100 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            className="inline-flex w-full justify-center border border-[var(--accent)]/50 bg-[var(--accent)]/20 px-4 py-2 text-[10px] uppercase tracking-widest font-bold text-[var(--accent)] transition-all hover:bg-[var(--accent)]/30 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
-            {isPending ? "Saving..." : "Save changes"}
+            {isPending ? "SAVING..." : "SAVE CHANGES"}
           </button>
         </div>
       ) : null}

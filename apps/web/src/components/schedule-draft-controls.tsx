@@ -54,9 +54,9 @@ export function ScheduleDraftControls({
           type="button"
           disabled={isPending}
           onClick={() => submit(undefined, "Assign this draft to the next open slot?")}
-          className="inline-flex w-full justify-center rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-2 text-xs font-medium text-emerald-100 transition hover:bg-emerald-300/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          className="inline-flex w-full justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] uppercase tracking-widest font-bold text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
-          {isPending ? "Working..." : "Schedule next"}
+          {isPending ? "WORKING..." : "SCHEDULE NEXT"}
         </button>
 
         {slots.length > 0 ? (
@@ -65,7 +65,7 @@ export function ScheduleDraftControls({
               value={selectedSlotId}
               disabled={isPending}
               onChange={(event) => setSelectedSlotId(event.target.value)}
-              className="min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-white outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20 sm:min-w-[220px]"
+              className="min-w-0 flex-1 border border-white/10 bg-white/5 px-4 py-2 text-xs text-white outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20 sm:min-w-[220px]"
             >
               {slots.map((slot) => (
                 <option key={slot.id} value={slot.id} className="bg-slate-950">
@@ -78,9 +78,9 @@ export function ScheduleDraftControls({
               type="button"
               disabled={isPending || !selectedSlotId}
               onClick={() => submit({ slotId: selectedSlotId }, "Assign this draft to the selected slot?")}
-              className="inline-flex w-full justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-xs font-medium text-cyan-100 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              className="inline-flex w-full justify-center border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-300 transition-all hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
-              {isPending ? "Working..." : "Schedule selected"}
+              {isPending ? "WORKING..." : "SCHEDULE SELECTED"}
             </button>
           </>
         ) : null}

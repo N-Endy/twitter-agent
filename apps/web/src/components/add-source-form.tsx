@@ -51,9 +51,9 @@ export function AddSourceForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-5 py-2.5 text-sm font-medium text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/20 sm:w-auto"
+        className="inline-flex w-full items-center justify-center gap-2 border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/20 sm:w-auto"
       >
-        <span className="text-lg leading-none">+</span> Add source
+        <span className="text-lg leading-none">+</span> ADD SOURCE
       </button>
     );
   }
@@ -61,7 +61,7 @@ export function AddSourceForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-[20px] border border-white/10 bg-white/[0.04] p-4 sm:p-5"
+      className="space-y-6 border border-white/10 bg-white/[0.02] p-6 shadow-xl"
     >
       <h3 className="text-lg font-semibold text-white">Add a new source</h3>
       <p className="text-sm leading-6 text-slate-300">
@@ -82,7 +82,7 @@ export function AddSourceForm() {
             name="title"
             required
             placeholder="e.g. TechCrunch AI"
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
+            className="w-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20"
           />
         </div>
         <div>
@@ -90,7 +90,7 @@ export function AddSourceForm() {
           <select
             name="kind"
             required
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
+            className="w-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20"
           >
             {SOURCE_KINDS.map((k) => (
               <option key={k.value} value={k.value} className="bg-slate-900">
@@ -107,7 +107,7 @@ export function AddSourceForm() {
           name="uri"
           required
           placeholder="https://example.com/feed.xml or @username"
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
+          className="w-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20"
         />
         <p className="mt-2 text-xs leading-5 text-slate-400">
           Use a full URL for articles, feeds, or single X posts. For X accounts, paste the profile URL and add notes so
@@ -120,7 +120,7 @@ export function AddSourceForm() {
         <input
           name="notes"
           placeholder="Example: feminine energy, relationships, calm tone, audience is women in their 20s and 30s"
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-cyan-300/40 focus:ring-1 focus:ring-cyan-300/20"
+          className="w-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20"
         />
         <p className="mt-2 text-xs leading-5 text-slate-400">
           This is the highest-leverage field in the form. Good notes make the generated ideas feel more like the source
@@ -128,20 +128,20 @@ export function AddSourceForm() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+      <div className="flex flex-col gap-3 pt-4 sm:flex-row">
         <button
           type="submit"
           disabled={loading}
-          className="rounded-full border border-cyan-300/20 bg-cyan-400/20 px-6 py-2.5 text-sm font-medium text-cyan-100 transition hover:bg-cyan-400/30 disabled:opacity-50"
+          className="inline-flex justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20 disabled:opacity-50 sm:w-auto"
         >
-          {loading ? "Adding..." : "Add source"}
+          {loading ? "ADDING..." : "ADD SOURCE"}
         </button>
         <button
           type="button"
           onClick={() => { setOpen(false); setError(null); }}
-          className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm text-slate-300 transition hover:bg-white/10"
+          className="inline-flex justify-center border border-white/10 bg-white/5 px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-300 transition-all hover:bg-white/10 sm:w-auto"
         >
-          Cancel
+          CANCEL
         </button>
       </div>
     </form>
