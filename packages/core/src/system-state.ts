@@ -7,6 +7,7 @@ import { buildWeeklySlots, parseSlotWindows } from "./scheduling";
 
 const X_INTEGRATION_KEY = "xIntegration";
 const BRAND_VOICE_KEY = "brandVoiceProfile";
+const WEEKLY_BATCH_KEY = "weeklyBatchStatus";
 const X_BILLING_BLOCK_WINDOW_MS = 60 * 60 * 1000;
 
 export type StoredXTokens = {
@@ -29,6 +30,19 @@ export type XIntegrationState = {
 
 export type BrandVoiceProfile = {
   guide: string | null;
+};
+
+export type WeeklyBatchState = {
+  status: "RUNNING" | "SUCCEEDED" | "FAILED";
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  lastCompletedAt?: string | null;
+  lastTriggeredAt?: string | null;
+  triggeredBy?: string | null;
+  lastJobId?: string | null;
+  lastIdeasCreated?: number | null;
+  lastDraftsCreated?: number | null;
+  lastError?: string | null;
 };
 
 export async function saveSystemState(key: string, value: Record<string, unknown>) {
@@ -107,6 +121,75 @@ export async function saveBrandVoiceProfile(guide: string | null) {
 export async function readBrandVoiceProfile() {
   const state = await readSystemState<BrandVoiceProfile>(BRAND_VOICE_KEY);
   return state?.guide?.trim() ? state.guide.trim() : null;
+}
+
+export async function readWeeklyBatchState() {
+  return readSystemState<WeeklyBatchState>(WEEKLY_BATCH_KEY);
+}
+
+export async function markWeeklyBatchRunning(params?: {
+  jobId?: string | null;
+  triggeredAt?: string | null;
+  triggeredBy?: string | null;
+}) {
+  const current = await readWeeklyBatchState();
+  const now = new Date().toISOString();
+
+  await saveSystemState(WEEKLY_BATCH_KEY, {
+    status: "RUNNING",
+    startedAt: now,
+    finishedAt: null,
+    lastCompletedAt: current?.lastCompletedAt ?? current?.finishedAt ?? null,
+    lastTriggeredAt: params?.triggeredAt ?? now,
+    triggeredBy: params?.triggeredBy ?? current?.triggeredBy ?? null,
+    lastJobId: params?.jobId ?? null,
+    lastIdeasCreated: current?.lastIdeasCreated ?? null,
+    lastDraftsCreated: current?.lastDraftsCreated ?? null,
+    lastError: null
+  });
+}
+
+export async function markWeeklyBatchSucceeded(params: {
+  jobId?: string | null;
+  ideasCreated: number;
+  draftsCreated: number;
+}) {
+  const now = new Date().toISOString();
+  const current = await readWeeklyBatchState();
+
+  await saveSystemState(WEEKLY_BATCH_KEY, {
+    status: "SUCCEEDED",
+    startedAt: current?.startedAt ?? now,
+    finishedAt: now,
+    lastCompletedAt: now,
+    lastTriggeredAt: current?.lastTriggeredAt ?? current?.startedAt ?? now,
+    triggeredBy: current?.triggeredBy ?? null,
+    lastJobId: params.jobId ?? current?.lastJobId ?? null,
+    lastIdeasCreated: params.ideasCreated,
+    lastDraftsCreated: params.draftsCreated,
+    lastError: null
+  });
+}
+
+export async function markWeeklyBatchFailed(params: {
+  jobId?: string | null;
+  errorMessage: string;
+}) {
+  const now = new Date().toISOString();
+  const current = await readWeeklyBatchState();
+
+  await saveSystemState(WEEKLY_BATCH_KEY, {
+    status: "FAILED",
+    startedAt: current?.startedAt ?? current?.lastTriggeredAt ?? now,
+    finishedAt: now,
+    lastCompletedAt: now,
+    lastTriggeredAt: current?.lastTriggeredAt ?? current?.startedAt ?? now,
+    triggeredBy: current?.triggeredBy ?? null,
+    lastJobId: params.jobId ?? current?.lastJobId ?? null,
+    lastIdeasCreated: current?.lastIdeasCreated ?? null,
+    lastDraftsCreated: current?.lastDraftsCreated ?? null,
+    lastError: params.errorMessage
+  });
 }
 
 export async function markXIntegrationHealthy() {

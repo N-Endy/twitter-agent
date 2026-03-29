@@ -9,7 +9,8 @@ export function MutationButton({
   body,
   confirmText,
   tone = "success",
-  fullWidth = false
+  fullWidth = false,
+  disabled = false
 }: {
   url: string;
   label: string;
@@ -17,6 +18,7 @@ export function MutationButton({
   confirmText?: string;
   tone?: "success" | "warning" | "danger" | "neutral";
   fullWidth?: boolean;
+  disabled?: boolean;
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -34,10 +36,14 @@ export function MutationButton({
     <div className="space-y-2">
       <button
         type="button"
-        disabled={isPending}
-        aria-busy={isPending}
+        disabled={isPending || disabled}
+        aria-busy={isPending || disabled}
         className={`inline-flex w-full justify-center border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all disabled:cursor-not-allowed disabled:opacity-50 ${fullWidth ? "" : "sm:w-auto"} ${toneClass}`}
         onClick={() => {
+          if (disabled) {
+            return;
+          }
+
           if (confirmText && !window.confirm(confirmText)) {
             return;
           }

@@ -1,15 +1,16 @@
 import { MutationButton } from "@/components/mutation-button";
-import { EmptyState, Panel, StatusPill, SummaryStrip, Table, TableCell } from "@/components/dashboard";
+import { EmptyState, InfoNotice, Panel, StatusPill, SummaryStrip, Table, TableCell } from "@/components/dashboard";
 import { JobTriggerButton } from "@/components/job-trigger-button";
 import { ScheduleDraftControls } from "@/components/schedule-draft-controls";
 import { formatDashboardDate, formatRelative, getDraftsPageData } from "@/lib/data";
 
 export default async function DraftsPage() {
-  const { drafts, availableSlots } = await getDraftsPageData();
+  const { drafts, availableSlots, weeklyBatch } = await getDraftsPageData();
   const pendingQa = drafts.filter((draft) => draft.status === "PENDING_QA").length;
   const needsReview = drafts.filter((draft) => draft.status === "NEEDS_REVIEW").length;
   const approved = drafts.filter((draft) => draft.status === "APPROVED").length;
   const scheduled = drafts.filter((draft) => draft.status === "SCHEDULED" || draft.status === "PUBLISHING").length;
+  const weeklyBatchRunning = weeklyBatch?.status === "RUNNING";
 
   return (
     <Panel
@@ -18,30 +19,45 @@ export default async function DraftsPage() {
       description="Drafts are where the operator spends judgment. This page should tell you what is blocked in QA, what is ready for approval, and what is already committed to the calendar."
       actions={
         <>
-          <JobTriggerButton job="weekly-batch" label="Run batch" />
           <JobTriggerButton job="draft-qa" label="Run QA backlog" />
           <JobTriggerButton job="publish-post" label="Run publish" />
         </>
       }
     >
       <div className="space-y-5">
+        {weeklyBatchRunning ? (
+          <InfoNotice title="Weekly batch running" tone="warning">
+            New drafts may continue appearing while the current batch finishes writing and queuing QA work.
+            {weeklyBatch?.startedAt ? ` Started ${formatRelative(weeklyBatch.startedAt)}.` : ""}
+          </InfoNotice>
+        ) : null}
+
         <SummaryStrip
           items={[
             { label: "Pending QA", value: pendingQa, helper: "Drafts still waiting for the QA worker.", tone: pendingQa > 0 ? "warning" : "default" },
             { label: "Needs review", value: needsReview, helper: "Ready for human approval.", tone: needsReview > 0 ? "good" : "default" },
             { label: "Approved", value: approved, helper: "Approved drafts not yet scheduled.", tone: approved > 0 ? "good" : "default" },
-            { label: "Scheduled", value: scheduled, helper: "Already committed to a slot or publishing now.", tone: scheduled > 0 ? "default" : "warning" }
+            { label: "Scheduled", value: scheduled, helper: "Already committed to a slot or publishing now.", tone: scheduled > 0 ? "default" : "warning" },
+            {
+              label: "Batch status",
+              value: weeklyBatchRunning ? "Running" : weeklyBatch?.status === "FAILED" ? "Failed" : weeklyBatch?.status === "SUCCEEDED" ? "Ready" : "Idle",
+              helper: weeklyBatchRunning
+                ? "The current batch is still writing drafts."
+                : weeklyBatch?.finishedAt
+                  ? `Last finished ${formatRelative(weeklyBatch.finishedAt)}.`
+                  : "No completed batch state recorded yet.",
+              tone: weeklyBatchRunning ? "warning" : weeklyBatch?.status === "FAILED" ? "bad" : weeklyBatch?.status === "SUCCEEDED" ? "good" : "default"
+            }
           ]}
         />
 
         {drafts.length === 0 ? (
           <EmptyState
             title="No drafts yet"
-            body="Generate a new batch after source ingest. Once drafts exist, this page becomes your main approval queue."
+            body="Run source ingest, then start a weekly batch from the Ideas page. Once drafts exist, this page becomes your main approval queue."
             actions={
               <>
                 <JobTriggerButton job="source-ingest" label="Run ingest" />
-                <JobTriggerButton job="weekly-batch" label="Run batch" />
               </>
             }
           />

@@ -4,6 +4,7 @@ import { formatDashboardDate, formatRelative, getDashboardMetrics, getOverviewFe
 
 export default async function OverviewPage() {
   const [metrics, feed] = await Promise.all([getDashboardMetrics(), getOverviewFeed()]);
+  const weeklyBatchRunning = feed.weeklyBatch?.status === "RUNNING";
   const nextAction =
     metrics.xStatus.label === "Missing"
       ? {
@@ -37,11 +38,11 @@ export default async function OverviewPage() {
             ? {
                 title: "Your next move is to generate a fresh batch",
                 tone: "good" as const,
-                body: "Ingest the latest source material, then generate ideas and drafts so the approval queue has something to work with.",
+                body: "Ingest the latest source material, then open the Ideas page to run the next weekly batch.",
                 actions: (
                   <>
                     <JobTriggerButton job="source-ingest" label="Run ingest" />
-                    <JobTriggerButton job="weekly-batch" label="Run batch" />
+                    <GhostLink href="/ideas">Open ideas</GhostLink>
                   </>
                 )
               }
@@ -76,6 +77,13 @@ export default async function OverviewPage() {
         {nextAction.body}
       </InfoNotice>
 
+      {weeklyBatchRunning ? (
+        <InfoNotice title="Weekly batch running" tone="warning">
+          New ideas and drafts may continue appearing for a few minutes while the worker finishes this batch.
+          {feed.weeklyBatch?.startedAt ? ` Started ${formatRelative(feed.weeklyBatch.startedAt)}.` : ""}
+        </InfoNotice>
+      ) : null}
+
       <SummaryStrip
         items={[
           {
@@ -107,6 +115,16 @@ export default async function OverviewPage() {
             value: feed.brandVoiceGuide ? "Set" : "Missing",
             helper: feed.brandVoiceGuide ? "Account-wide voice is configured." : "No account-wide voice guide saved yet.",
             tone: feed.brandVoiceGuide ? "good" : "warning"
+          },
+          {
+            label: "Batch status",
+            value: weeklyBatchRunning ? "Running" : feed.weeklyBatch?.status === "FAILED" ? "Failed" : feed.weeklyBatch?.status === "SUCCEEDED" ? "Ready" : "Idle",
+            helper: weeklyBatchRunning
+              ? "The current weekly batch is still generating rows."
+              : feed.weeklyBatch?.finishedAt
+                ? `Last finished ${formatRelative(feed.weeklyBatch.finishedAt)}.`
+                : "No recent batch state recorded yet.",
+            tone: weeklyBatchRunning ? "warning" : feed.weeklyBatch?.status === "FAILED" ? "bad" : feed.weeklyBatch?.status === "SUCCEEDED" ? "good" : "default"
           }
         ]}
       />
@@ -116,11 +134,11 @@ export default async function OverviewPage() {
           {feed.recentDrafts.length === 0 ? (
             <EmptyState
               title="No drafts yet"
-              body="Run source ingest, then generate a weekly batch. Once drafts exist, this panel becomes your quickest QA snapshot."
+              body="Run source ingest, then start a weekly batch from the Ideas page. Once drafts exist, this panel becomes your quickest QA snapshot."
               actions={
                 <>
                   <JobTriggerButton job="source-ingest" label="Run ingest" />
-                  <JobTriggerButton job="weekly-batch" label="Run batch" />
+                  <GhostLink href="/ideas">Open ideas</GhostLink>
                 </>
               }
             />
@@ -189,7 +207,6 @@ export default async function OverviewPage() {
           actions={
             <>
               <JobTriggerButton job="source-ingest" label="Run ingest" />
-              <JobTriggerButton job="weekly-batch" label="Run batch" />
               <JobTriggerButton job="draft-qa" label="Run QA" />
             </>
           }

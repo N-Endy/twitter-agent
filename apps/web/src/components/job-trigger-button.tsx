@@ -5,13 +5,15 @@ export function JobTriggerButton({
   label,
   body,
   confirmText,
-  tone = "neutral"
+  tone = "neutral",
+  disabled = false
 }: {
   job: "source-ingest" | "weekly-batch" | "draft-qa" | "publish-post" | "mention-poll" | "reply-draft" | "metrics-sync" | "cleanup";
   label: string;
   body?: Record<string, unknown>;
   confirmText?: string;
   tone?: "success" | "warning" | "danger" | "neutral";
+  disabled?: boolean;
 }) {
   return (
     <MutationButton
@@ -20,6 +22,7 @@ export function JobTriggerButton({
       body={body}
       confirmText={confirmText}
       tone={tone}
+      disabled={disabled}
     />
   );
 }

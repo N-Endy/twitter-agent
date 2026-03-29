@@ -8,6 +8,7 @@ import {
   isXIntegrationPaused,
   readBrandVoiceProfile,
   readSystemState,
+  readWeeklyBatchState,
   readXIntegrationState,
   readXTokens
 } from "@twitter-agent/core";
@@ -96,7 +97,17 @@ export async function getDashboardMetrics() {
 export async function getOverviewFeed() {
   await requireDashboardAccess();
 
-  const [recentDrafts, recentMentions, nextSlots, activePrompts, lastCursor, xTokens, xIntegration, brandVoiceGuide] = await Promise.all([
+  const [
+    recentDrafts,
+    recentMentions,
+    nextSlots,
+    activePrompts,
+    lastCursor,
+    xTokens,
+    xIntegration,
+    brandVoiceGuide,
+    weeklyBatch
+  ] = await Promise.all([
     prisma.draft.findMany({
       orderBy: { updatedAt: "desc" },
       take: 6,
@@ -125,7 +136,8 @@ export async function getOverviewFeed() {
     readSystemState<{ value?: string | null }>("lastMentionSinceId"),
     readXTokens(),
     readXIntegrationState(),
-    readBrandVoiceProfile()
+    readBrandVoiceProfile(),
+    readWeeklyBatchState()
   ]);
 
   return {
@@ -135,7 +147,8 @@ export async function getOverviewFeed() {
     activePrompts,
     lastCursor: lastCursor?.value ?? null,
     xStatus: getXStatusSummary({ tokens: xTokens, integration: xIntegration }),
-    brandVoiceGuide
+    brandVoiceGuide,
+    weeklyBatch
   };
 }
 
@@ -158,23 +171,31 @@ export async function getSourcesPageData() {
 export async function getIdeasPageData() {
   await requireDashboardAccess();
 
-  return prisma.contentIdea.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 50,
-    include: {
-      sourceItem: true,
-      drafts: {
-        take: 3,
-        orderBy: { updatedAt: "desc" }
+  const [ideas, weeklyBatch] = await Promise.all([
+    prisma.contentIdea.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      include: {
+        sourceItem: true,
+        drafts: {
+          take: 3,
+          orderBy: { updatedAt: "desc" }
+        }
       }
-    }
-  });
+    }),
+    readWeeklyBatchState()
+  ]);
+
+  return {
+    ideas,
+    weeklyBatch
+  };
 }
 
 export async function getDraftsPageData() {
   await requireDashboardAccess();
 
-  const [drafts, availableSlots] = await Promise.all([
+  const [drafts, availableSlots, weeklyBatch] = await Promise.all([
     prisma.draft.findMany({
       orderBy: { updatedAt: "desc" },
       take: 50,
@@ -196,11 +217,13 @@ export async function getDraftsPageData() {
       },
       orderBy: { slotAt: "asc" },
       take: 12
-    })
+    }),
+    readWeeklyBatchState()
   ]);
 
   return {
     drafts,
+    weeklyBatch,
     availableSlots: availableSlots.map((slot) => ({
       id: slot.id,
       label: formatDashboardDate(slot.slotAt),
