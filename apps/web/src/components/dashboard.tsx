@@ -3,6 +3,7 @@ import Link from "next/link";
 import { type ReactNode } from "react";
 
 import { DashboardNav } from "./dashboard-nav";
+import { ScrollToTopButton } from "./scroll-to-top-button";
 
 export function AppShell({
   title,
@@ -102,6 +103,7 @@ export function AppShell({
           </div>
         </main>
       </div>
+      <ScrollToTopButton />
     </div>
   );
 }
