@@ -25,7 +25,7 @@ export function AppShell({
     { href: "/mentions", label: "Mentions" },
     { href: "/replies", label: "Replies" },
     { href: "/incidents", label: "Incidents" },
-    { href: "/prompts", label: "Prompt Versions" }
+    { href: "/prompts", label: "Voice & Prompts" }
   ];
 
   return (
@@ -38,7 +38,7 @@ export function AppShell({
           </div>
           <h2 className="mt-4 text-xl font-bold tracking-tight text-white">OPERATOR_CONSOLE</h2>
           <p className="mt-3 text-xs leading-5 text-slate-400">
-            High-precision content pipeline, mention triage, and prompt version control.
+            High-precision content pipeline, mention triage, account voice control, and prompt version management.
           </p>
 
           <div className="mt-8 flex-1 space-y-8">

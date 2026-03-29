@@ -6,6 +6,7 @@ import { decryptString, encryptString } from "./security";
 import { buildWeeklySlots, parseSlotWindows } from "./scheduling";
 
 const X_INTEGRATION_KEY = "xIntegration";
+const BRAND_VOICE_KEY = "brandVoiceProfile";
 const X_BILLING_BLOCK_WINDOW_MS = 60 * 60 * 1000;
 
 export type StoredXTokens = {
@@ -24,6 +25,10 @@ export type XIntegrationState = {
   lastSuccessAt?: string | null;
   lastStatusCode?: number | null;
   pauseUntil?: string | null;
+};
+
+export type BrandVoiceProfile = {
+  guide: string | null;
 };
 
 export async function saveSystemState(key: string, value: Record<string, unknown>) {
@@ -91,6 +96,17 @@ export async function getValidXAccessToken() {
 
 export async function readXIntegrationState() {
   return readSystemState<XIntegrationState>(X_INTEGRATION_KEY);
+}
+
+export async function saveBrandVoiceProfile(guide: string | null) {
+  await saveSystemState(BRAND_VOICE_KEY, {
+    guide
+  });
+}
+
+export async function readBrandVoiceProfile() {
+  const state = await readSystemState<BrandVoiceProfile>(BRAND_VOICE_KEY);
+  return state?.guide?.trim() ? state.guide.trim() : null;
 }
 
 export async function markXIntegrationHealthy() {

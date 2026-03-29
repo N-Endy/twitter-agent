@@ -101,6 +101,12 @@ export default async function OverviewPage() {
             value: feed.activePrompts.length,
             helper: "Active prompt definitions in the system.",
             tone: "default"
+          },
+          {
+            label: "Brand voice",
+            value: feed.brandVoiceGuide ? "Set" : "Missing",
+            helper: feed.brandVoiceGuide ? "Account-wide voice is configured." : "No account-wide voice guide saved yet.",
+            tone: feed.brandVoiceGuide ? "good" : "warning"
           }
         ]}
       />
@@ -270,11 +276,14 @@ export default async function OverviewPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-sm font-medium text-white">X integration</p>
                 <StatusPill tone={feed.xStatus.tone}>{feed.xStatus.label}</StatusPill>
+                <StatusPill tone={feed.brandVoiceGuide ? "good" : "warning"}>
+                  {feed.brandVoiceGuide ? "Brand voice set" : "Brand voice missing"}
+                </StatusPill>
               </div>
               <p className="mt-1 text-xs text-slate-400">{feed.xStatus.detail}</p>
               <p className="mt-2 text-xs text-slate-500">Mention cursor: {feed.lastCursor ?? "Not started yet"}</p>
             </div>
-            <GhostLink href="/prompts">Manage prompts</GhostLink>
+            <GhostLink href="/prompts">Manage prompts & voice</GhostLink>
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             <JobTriggerButton job="cleanup" label="Run cleanup" tone="neutral" />

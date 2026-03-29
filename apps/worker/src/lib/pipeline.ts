@@ -21,6 +21,7 @@ import {
   moderateMention,
   Prisma,
   queueNames,
+  readBrandVoiceProfile,
   readMentionCursor,
   readXIntegrationState,
   saveMentionCursor
@@ -176,6 +177,7 @@ function buildSourceGuidance(
     allowlistHandle?: string | null;
     uri?: string;
   },
+  accountVoiceGuide?: string | null,
   snapshot?: {
     title?: string;
     pillarCandidates?: string[];
@@ -187,6 +189,7 @@ function buildSourceGuidance(
     source.allowlistHandle ? `Handle: @${source.allowlistHandle.replace(/^@/, "")}` : null,
     `Type: ${source.kind}`,
     source.notes ? `Notes: ${source.notes}` : null,
+    accountVoiceGuide ? `Account voice guide: ${accountVoiceGuide}` : null,
     snapshot?.title ? `Current material: ${snapshot.title}` : null,
     snapshot?.pillarCandidates?.length ? `Themes: ${snapshot.pillarCandidates.slice(0, 4).join(", ")}` : null,
     snapshot?.hookIdeas?.length ? `Natural angles: ${snapshot.hookIdeas.slice(0, 3).join(" | ")}` : null,
@@ -200,12 +203,14 @@ function buildVoiceRules(
     notes?: string | null;
     allowlistHandle?: string | null;
   },
+  accountVoiceGuide?: string | null,
   snapshot?: {
     pillarCandidates?: string[];
   }
 ) {
   return uniqueLines([
     "Voice: source-led, clear, human, specific, plain English, no empty hype, no spammy calls to action.",
+    accountVoiceGuide ? `Master voice: ${accountVoiceGuide}` : null,
     `Match the lane of ${source.title}.`,
     source.allowlistHandle ? `Preserve the tone signaled by @${source.allowlistHandle.replace(/^@/, "")}.` : null,
     source.notes ? `Operator notes: ${source.notes}` : null,
@@ -215,6 +220,7 @@ function buildVoiceRules(
 }
 
 export async function runSourceIngestJob() {
+  const accountVoiceGuide = await readBrandVoiceProfile();
   const sources = await prisma.sourceItem.findMany({
     where: { isActive: true },
     orderBy: { updatedAt: "desc" }
@@ -274,7 +280,7 @@ export async function runSourceIngestJob() {
         item.rawText,
         item.title,
         source.kind,
-        buildSourceGuidance(source, {
+        buildSourceGuidance(source, accountVoiceGuide, {
           title: item.title
         })
       );
@@ -303,6 +309,8 @@ export async function runSourceIngestJob() {
 
 export async function runWeeklyBatchJob() {
   await ensureUpcomingScheduleSlots();
+
+  const accountVoiceGuide = await readBrandVoiceProfile();
 
   const snapshots = await prisma.researchSnapshot.findMany({
     orderBy: { createdAt: "desc" },
@@ -343,7 +351,7 @@ export async function runWeeklyBatchJob() {
       recentWinners,
       recentLosers,
       sourceName: snapshot.sourceItem.title,
-      sourceGuidance: buildSourceGuidance(snapshot.sourceItem, snapshot),
+      sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
       sourceHooks: snapshot.hookIdeas,
       sourcePillars: snapshot.pillarCandidates
     });
@@ -374,8 +382,8 @@ export async function runWeeklyBatchJob() {
         angle: ideaOutput.angle,
         audience: ideaOutput.audience,
         supportingEvidence: ideaOutput.supportingEvidence,
-        voiceNotes: buildVoiceRules(snapshot.sourceItem, snapshot),
-        sourceGuidance: buildSourceGuidance(snapshot.sourceItem, snapshot)
+        voiceNotes: buildVoiceRules(snapshot.sourceItem, accountVoiceGuide, snapshot),
+        sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot)
       });
 
       const draft = await prisma.draft.create({
@@ -410,6 +418,7 @@ export async function runWeeklyBatchJob() {
 }
 
 export async function runDraftQaJob(draftId?: string) {
+  const accountVoiceGuide = await readBrandVoiceProfile();
   const drafts = draftId
     ? await prisma.draft.findMany({
         where: { id: draftId },
@@ -427,7 +436,7 @@ export async function runDraftQaJob(draftId?: string) {
     const review = await reviewDraft({
       draftText: draft.text,
       supportingEvidence: draft.evidenceUsed,
-      voiceRules: buildVoiceRules(draft.idea.sourceItem, draft.idea.snapshot ?? undefined)
+      voiceRules: buildVoiceRules(draft.idea.sourceItem, accountVoiceGuide, draft.idea.snapshot ?? undefined)
     });
     const moderation = moderateDraft({
       text: review.rewrite || draft.text,

@@ -2,7 +2,15 @@ import { formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
 import { requireSession } from "@/lib/guards";
-import { getEnv, getPrismaClient, isXIntegrationPaused, readSystemState, readXIntegrationState, readXTokens } from "@twitter-agent/core";
+import {
+  getEnv,
+  getPrismaClient,
+  isXIntegrationPaused,
+  readBrandVoiceProfile,
+  readSystemState,
+  readXIntegrationState,
+  readXTokens
+} from "@twitter-agent/core";
 
 const prisma = getPrismaClient();
 
@@ -88,7 +96,7 @@ export async function getDashboardMetrics() {
 export async function getOverviewFeed() {
   await requireDashboardAccess();
 
-  const [recentDrafts, recentMentions, nextSlots, activePrompts, lastCursor, xTokens, xIntegration] = await Promise.all([
+  const [recentDrafts, recentMentions, nextSlots, activePrompts, lastCursor, xTokens, xIntegration, brandVoiceGuide] = await Promise.all([
     prisma.draft.findMany({
       orderBy: { updatedAt: "desc" },
       take: 6,
@@ -116,7 +124,8 @@ export async function getOverviewFeed() {
     }),
     readSystemState<{ value?: string | null }>("lastMentionSinceId"),
     readXTokens(),
-    readXIntegrationState()
+    readXIntegrationState(),
+    readBrandVoiceProfile()
   ]);
 
   return {
@@ -125,7 +134,8 @@ export async function getOverviewFeed() {
     nextSlots,
     activePrompts,
     lastCursor: lastCursor?.value ?? null,
-    xStatus: getXStatusSummary({ tokens: xTokens, integration: xIntegration })
+    xStatus: getXStatusSummary({ tokens: xTokens, integration: xIntegration }),
+    brandVoiceGuide
   };
 }
 
@@ -283,9 +293,17 @@ export async function getIncidentsPageData() {
 export async function getPromptsPageData() {
   await requireDashboardAccess();
 
-  return prisma.promptVersion.findMany({
-    orderBy: [{ kind: "asc" }, { version: "desc" }]
-  });
+  const [prompts, brandVoiceGuide] = await Promise.all([
+    prisma.promptVersion.findMany({
+      orderBy: [{ kind: "asc" }, { version: "desc" }]
+    }),
+    readBrandVoiceProfile()
+  ]);
+
+  return {
+    prompts,
+    brandVoiceGuide
+  };
 }
 
 export function formatDashboardDate(date: Date | string | null | undefined) {
