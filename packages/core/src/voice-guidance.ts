@@ -70,3 +70,43 @@ export function buildVoiceRules(
     "Reject any draft that sounds like generic internet advice or technical-builder content when the source does not support it."
   ]).join(" ");
 }
+
+export function buildStyleReferenceText(
+  references: Array<{
+    title: string;
+    notes?: string | null;
+    allowlistHandle?: string | null;
+    researchSnapshots?: Array<{
+      title: string;
+      summary: string;
+      quoteCandidates?: string[];
+      hookIdeas?: string[];
+    }>;
+  }>
+) {
+  const blocks = references
+    .map((reference, index) => {
+      const snapshot = reference.researchSnapshots?.[0];
+
+      return uniqueLines([
+        `Style reference ${index + 1}: ${reference.title}`,
+        reference.allowlistHandle ? `Handle: @${reference.allowlistHandle.replace(/^@/, "")}` : null,
+        reference.notes ? `Operator notes: ${reference.notes}` : null,
+        snapshot?.summary ? `Style summary: ${snapshot.summary}` : null,
+        snapshot?.quoteCandidates?.length
+          ? `Signature lines: ${snapshot.quoteCandidates.slice(0, 2).join(" | ")}`
+          : null,
+        snapshot?.hookIdeas?.length ? `Story mechanics: ${snapshot.hookIdeas.slice(0, 2).join(" | ")}` : null
+      ]).join("\n");
+    })
+    .filter(Boolean);
+
+  if (blocks.length === 0) {
+    return "No style-only references configured.";
+  }
+
+  return [
+    blocks.join("\n\n"),
+    "Use these references for rhythm, pacing, humor mechanics, storytelling texture, and cultural cadence only. Do not reuse their literal scenario, nouns, plot, or subject matter unless another topical source independently supports it."
+  ].join("\n\n");
+}

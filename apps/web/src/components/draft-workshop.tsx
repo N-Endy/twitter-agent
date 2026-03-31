@@ -239,6 +239,7 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
               id: workshop.draft.idea.sourceItem.id,
               title: workshop.draft.idea.sourceItem.title,
               kind: workshop.draft.idea.sourceItem.kind,
+              mode: workshop.draft.idea.sourceItem.mode,
               uri: workshop.draft.idea.sourceItem.uri,
               allowlistHandle: workshop.draft.idea.sourceItem.allowlistHandle,
               notes: workshop.draft.idea.sourceItem.notes,

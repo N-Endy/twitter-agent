@@ -10,6 +10,19 @@ const SOURCE_KINDS = [
   { value: "X_ACCOUNT", label: "X Account" }
 ];
 
+const SOURCE_MODES = [
+  {
+    value: "TOPIC_AND_STYLE",
+    label: "Topic + Style",
+    description: "Use this when the source should influence both what the app talks about and how it sounds."
+  },
+  {
+    value: "STYLE_ONLY",
+    label: "Style only",
+    description: "Use this when the source should teach cadence, humor, or storytelling mechanics without reusing the literal topic."
+  }
+];
+
 export function AddSourceForm() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -26,6 +39,7 @@ export function AddSourceForm() {
       title: form.get("title"),
       uri: form.get("uri"),
       kind: form.get("kind"),
+      mode: form.get("mode"),
       notes: form.get("notes") || undefined
     };
 
@@ -65,8 +79,8 @@ export function AddSourceForm() {
     >
       <h3 className="text-lg font-semibold text-white">Add a new source</h3>
       <p className="text-sm leading-6 text-slate-300">
-        Sources shape the voice of the system. Use the notes field to describe the themes, tone, and audience you want
-        this source to influence.
+        Sources can now do two jobs: shape topics and shape style, or shape style only. Use style-only mode for old
+        posts you love stylistically but do not want the app to keep paraphrasing.
       </p>
 
       {error && (
@@ -102,6 +116,28 @@ export function AddSourceForm() {
       </div>
 
       <div>
+        <label className="mb-1 block text-xs uppercase tracking-wider text-slate-400">Influence mode</label>
+        <select
+          name="mode"
+          defaultValue="TOPIC_AND_STYLE"
+          className="w-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20"
+        >
+          {SOURCE_MODES.map((mode) => (
+            <option key={mode.value} value={mode.value} className="bg-slate-900">
+              {mode.label}
+            </option>
+          ))}
+        </select>
+        <div className="mt-2 space-y-1 text-xs leading-5 text-slate-400">
+          {SOURCE_MODES.map((mode) => (
+            <p key={mode.value}>
+              <span className="font-bold text-slate-300">{mode.label}:</span> {mode.description}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      <div>
         <label className="mb-1 block text-xs uppercase tracking-wider text-slate-400">URI</label>
         <input
           name="uri"
@@ -123,8 +159,8 @@ export function AddSourceForm() {
           className="w-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-[var(--accent)]/40 focus:ring-1 focus:ring-[var(--accent)]/20"
         />
         <p className="mt-2 text-xs leading-5 text-slate-400">
-          This is the highest-leverage field in the form. Good notes make the generated ideas feel more like the source
-          and less like generic internet content.
+          This is the highest-leverage field in the form. For style-only sources, tell the system which writing
+          mechanics to borrow and which literal topics or scenarios it must not keep repeating.
         </p>
       </div>
 

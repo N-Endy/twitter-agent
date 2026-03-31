@@ -89,6 +89,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const SourceItemScalarFieldEnum = {
   id: 'id',
   kind: 'kind',
+  mode: 'mode',
   title: 'title',
   uri: 'uri',
   allowlistHandle: 'allowlistHandle',

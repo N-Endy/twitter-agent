@@ -9,6 +9,7 @@ export default async function SourcesPage() {
   const activeSources = sources.filter((source) => source.isActive).length;
   const sourcesWithNotes = sources.filter((source) => Boolean(source.notes?.trim())).length;
   const sourcesWithSnapshots = sources.filter((source) => source._count.researchSnapshots > 0).length;
+  const styleOnlySources = sources.filter((source) => source.mode === "STYLE_ONLY").length;
 
   return (
     <Panel
@@ -42,13 +43,20 @@ export default async function SourcesPage() {
               value: sourcesWithSnapshots,
               helper: "Sources that have produced at least one research snapshot.",
               tone: sourcesWithSnapshots > 0 ? "good" : "warning"
+            },
+            {
+              label: "Style-only",
+              value: styleOnlySources,
+              helper: "These teach writing style without steering weekly topics.",
+              tone: styleOnlySources > 0 ? "good" : "default"
             }
           ]}
         />
 
         <InfoNotice title="Operator tip">
-          If a source is meant to shift the account away from tech content, give it explicit notes about topic, tone,
-          audience, and emotional style. The model follows source guidance better than vague titles alone.
+          Use <strong>Topic + Style</strong> for recurring lanes you genuinely want the account to post about. Use
+          <strong> Style only</strong> for past posts or reference accounts whose rhythm, humor, or cadence you want to
+          borrow without repeating the literal topic.
         </InfoNotice>
 
         {sources.length === 0 ? (
@@ -60,6 +68,7 @@ export default async function SourcesPage() {
           <Table headers={[
             { label: "Source" },
             { label: "Kind", className: "tech-column" },
+            { label: "Mode", className: "tech-column" },
             { label: "Snapshots", className: "tech-column" },
             { label: "Ideas", className: "tech-column" },
             { label: "Last updated", className: "tech-column" },
@@ -74,6 +83,11 @@ export default async function SourcesPage() {
                   {source.notes ? <p className="mt-3 text-xs leading-6 text-slate-400 border-l border-white/10 pl-3">{source.notes}</p> : null}
                 </TableCell>
                 <TableCell label="Kind" className="tech-column text-[10px] uppercase tracking-widest text-slate-500 font-bold">{source.kind}</TableCell>
+                <TableCell label="Mode" className="tech-column">
+                  <StatusPill tone={source.mode === "STYLE_ONLY" ? "warning" : "good"}>
+                    {source.mode === "STYLE_ONLY" ? "STYLE ONLY" : "TOPIC + STYLE"}
+                  </StatusPill>
+                </TableCell>
                 <TableCell label="Snapshots" className="tech-column text-xs font-mono">{source._count.researchSnapshots}</TableCell>
                 <TableCell label="Ideas" className="tech-column text-xs font-mono">{source._count.contentIdeas}</TableCell>
                 <TableCell label="Last updated" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">
@@ -88,6 +102,7 @@ export default async function SourcesPage() {
                       id: source.id,
                       title: source.title,
                       notes: source.notes,
+                      mode: source.mode,
                       isActive: source.isActive
                     }}
                   />

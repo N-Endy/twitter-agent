@@ -13,6 +13,7 @@ type SourceActionBody =
   | {
       action?: "edit";
       title?: string;
+      mode?: "TOPIC_AND_STYLE" | "STYLE_ONLY";
       notes?: string | null;
     };
 
@@ -57,16 +58,22 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   if (body.action === "edit") {
     const title = String(body.title ?? "").trim();
+    const mode = body.mode ?? source.mode;
     const notes = typeof body.notes === "string" ? body.notes.trim() : "";
 
     if (!title) {
       return NextResponse.json({ error: "Title is required." }, { status: 400 });
     }
 
+    if (mode !== "TOPIC_AND_STYLE" && mode !== "STYLE_ONLY") {
+      return NextResponse.json({ error: "Mode is invalid." }, { status: 400 });
+    }
+
     const updated = await prisma.sourceItem.update({
       where: { id },
       data: {
         title,
+        mode,
         notes: notes || null
       }
     });
@@ -78,7 +85,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       entityId: source.id,
       details: {
         previousTitle: source.title,
-        nextTitle: updated.title
+        nextTitle: updated.title,
+        previousMode: source.mode,
+        nextMode: updated.mode
       }
     });
 

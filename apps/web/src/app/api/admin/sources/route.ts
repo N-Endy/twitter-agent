@@ -5,6 +5,8 @@ import { requireApiSession } from "@/lib/guards";
 import { createAuditLog } from "@/lib/operator";
 
 const prisma = getPrismaClient();
+const VALID_SOURCE_MODES = ["TOPIC_AND_STYLE", "STYLE_ONLY"] as const;
+type SourceMode = (typeof VALID_SOURCE_MODES)[number];
 
 export async function POST(request: Request) {
   const session = await requireApiSession();
@@ -14,7 +16,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { title, uri, kind, notes } = body;
+  const { title, uri, kind, mode, notes } = body;
 
   if (!title || !uri || !kind) {
     return NextResponse.json(
@@ -27,6 +29,18 @@ export async function POST(request: Request) {
   if (!validKinds.includes(kind)) {
     return NextResponse.json(
       { error: `kind must be one of: ${validKinds.join(", ")}` },
+      { status: 400 }
+    );
+  }
+
+  const normalizedMode: SourceMode =
+    typeof mode === "string" && VALID_SOURCE_MODES.includes(mode as SourceMode)
+      ? (mode as SourceMode)
+      : "TOPIC_AND_STYLE";
+
+  if (typeof mode === "string" && !VALID_SOURCE_MODES.includes(mode as SourceMode)) {
+    return NextResponse.json(
+      { error: `mode must be one of: ${VALID_SOURCE_MODES.join(", ")}` },
       { status: 400 }
     );
   }
@@ -44,6 +58,7 @@ export async function POST(request: Request) {
       title,
       uri,
       kind,
+      mode: normalizedMode,
       notes: notes || null
     }
   });
@@ -53,7 +68,7 @@ export async function POST(request: Request) {
     action: "source.created",
     entityType: "sourceItem",
     entityId: source.id,
-    details: { title, uri, kind }
+    details: { title, uri, kind, mode: normalizedMode }
   });
 
   return NextResponse.json({ ok: true, source }, { status: 201 });

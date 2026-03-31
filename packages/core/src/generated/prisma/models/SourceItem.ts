@@ -27,6 +27,7 @@ export type AggregateSourceItem = {
 export type SourceItemMinAggregateOutputType = {
   id: string | null
   kind: $Enums.SourceKind | null
+  mode: $Enums.SourceMode | null
   title: string | null
   uri: string | null
   allowlistHandle: string | null
@@ -39,6 +40,7 @@ export type SourceItemMinAggregateOutputType = {
 export type SourceItemMaxAggregateOutputType = {
   id: string | null
   kind: $Enums.SourceKind | null
+  mode: $Enums.SourceMode | null
   title: string | null
   uri: string | null
   allowlistHandle: string | null
@@ -51,6 +53,7 @@ export type SourceItemMaxAggregateOutputType = {
 export type SourceItemCountAggregateOutputType = {
   id: number
   kind: number
+  mode: number
   title: number
   uri: number
   allowlistHandle: number
@@ -65,6 +68,7 @@ export type SourceItemCountAggregateOutputType = {
 export type SourceItemMinAggregateInputType = {
   id?: true
   kind?: true
+  mode?: true
   title?: true
   uri?: true
   allowlistHandle?: true
@@ -77,6 +81,7 @@ export type SourceItemMinAggregateInputType = {
 export type SourceItemMaxAggregateInputType = {
   id?: true
   kind?: true
+  mode?: true
   title?: true
   uri?: true
   allowlistHandle?: true
@@ -89,6 +94,7 @@ export type SourceItemMaxAggregateInputType = {
 export type SourceItemCountAggregateInputType = {
   id?: true
   kind?: true
+  mode?: true
   title?: true
   uri?: true
   allowlistHandle?: true
@@ -174,6 +180,7 @@ export type SourceItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type SourceItemGroupByOutputType = {
   id: string
   kind: $Enums.SourceKind
+  mode: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle: string | null
@@ -207,6 +214,7 @@ export type SourceItemWhereInput = {
   NOT?: Prisma.SourceItemWhereInput | Prisma.SourceItemWhereInput[]
   id?: Prisma.StringFilter<"SourceItem"> | string
   kind?: Prisma.EnumSourceKindFilter<"SourceItem"> | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFilter<"SourceItem"> | $Enums.SourceMode
   title?: Prisma.StringFilter<"SourceItem"> | string
   uri?: Prisma.StringFilter<"SourceItem"> | string
   allowlistHandle?: Prisma.StringNullableFilter<"SourceItem"> | string | null
@@ -222,6 +230,7 @@ export type SourceItemWhereInput = {
 export type SourceItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   uri?: Prisma.SortOrder
   allowlistHandle?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -241,6 +250,7 @@ export type SourceItemWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SourceItemWhereInput[]
   NOT?: Prisma.SourceItemWhereInput | Prisma.SourceItemWhereInput[]
   kind?: Prisma.EnumSourceKindFilter<"SourceItem"> | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFilter<"SourceItem"> | $Enums.SourceMode
   title?: Prisma.StringFilter<"SourceItem"> | string
   allowlistHandle?: Prisma.StringNullableFilter<"SourceItem"> | string | null
   notes?: Prisma.StringNullableFilter<"SourceItem"> | string | null
@@ -255,6 +265,7 @@ export type SourceItemWhereUniqueInput = Prisma.AtLeast<{
 export type SourceItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   uri?: Prisma.SortOrder
   allowlistHandle?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -273,6 +284,7 @@ export type SourceItemScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SourceItemScalarWhereWithAggregatesInput | Prisma.SourceItemScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SourceItem"> | string
   kind?: Prisma.EnumSourceKindWithAggregatesFilter<"SourceItem"> | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeWithAggregatesFilter<"SourceItem"> | $Enums.SourceMode
   title?: Prisma.StringWithAggregatesFilter<"SourceItem"> | string
   uri?: Prisma.StringWithAggregatesFilter<"SourceItem"> | string
   allowlistHandle?: Prisma.StringNullableWithAggregatesFilter<"SourceItem"> | string | null
@@ -285,6 +297,7 @@ export type SourceItemScalarWhereWithAggregatesInput = {
 export type SourceItemCreateInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -300,6 +313,7 @@ export type SourceItemCreateInput = {
 export type SourceItemUncheckedCreateInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -315,6 +329,7 @@ export type SourceItemUncheckedCreateInput = {
 export type SourceItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -330,6 +345,7 @@ export type SourceItemUpdateInput = {
 export type SourceItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -345,6 +361,7 @@ export type SourceItemUncheckedUpdateInput = {
 export type SourceItemCreateManyInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -357,6 +374,7 @@ export type SourceItemCreateManyInput = {
 export type SourceItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -369,6 +387,7 @@ export type SourceItemUpdateManyMutationInput = {
 export type SourceItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -381,6 +400,7 @@ export type SourceItemUncheckedUpdateManyInput = {
 export type SourceItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   uri?: Prisma.SortOrder
   allowlistHandle?: Prisma.SortOrder
@@ -393,6 +413,7 @@ export type SourceItemCountOrderByAggregateInput = {
 export type SourceItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   uri?: Prisma.SortOrder
   allowlistHandle?: Prisma.SortOrder
@@ -405,6 +426,7 @@ export type SourceItemMaxOrderByAggregateInput = {
 export type SourceItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   kind?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   uri?: Prisma.SortOrder
   allowlistHandle?: Prisma.SortOrder
@@ -430,6 +452,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type EnumSourceKindFieldUpdateOperationsInput = {
   set?: $Enums.SourceKind
+}
+
+export type EnumSourceModeFieldUpdateOperationsInput = {
+  set?: $Enums.SourceMode
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
@@ -491,6 +517,7 @@ export type SourceItemUpdateOneWithoutVoiceExamplesNestedInput = {
 export type SourceItemCreateWithoutResearchSnapshotsInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -505,6 +532,7 @@ export type SourceItemCreateWithoutResearchSnapshotsInput = {
 export type SourceItemUncheckedCreateWithoutResearchSnapshotsInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -535,6 +563,7 @@ export type SourceItemUpdateToOneWithWhereWithoutResearchSnapshotsInput = {
 export type SourceItemUpdateWithoutResearchSnapshotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -549,6 +578,7 @@ export type SourceItemUpdateWithoutResearchSnapshotsInput = {
 export type SourceItemUncheckedUpdateWithoutResearchSnapshotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -563,6 +593,7 @@ export type SourceItemUncheckedUpdateWithoutResearchSnapshotsInput = {
 export type SourceItemCreateWithoutContentIdeasInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -577,6 +608,7 @@ export type SourceItemCreateWithoutContentIdeasInput = {
 export type SourceItemUncheckedCreateWithoutContentIdeasInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -607,6 +639,7 @@ export type SourceItemUpdateToOneWithWhereWithoutContentIdeasInput = {
 export type SourceItemUpdateWithoutContentIdeasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -621,6 +654,7 @@ export type SourceItemUpdateWithoutContentIdeasInput = {
 export type SourceItemUncheckedUpdateWithoutContentIdeasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -635,6 +669,7 @@ export type SourceItemUncheckedUpdateWithoutContentIdeasInput = {
 export type SourceItemCreateWithoutVoiceExamplesInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -649,6 +684,7 @@ export type SourceItemCreateWithoutVoiceExamplesInput = {
 export type SourceItemUncheckedCreateWithoutVoiceExamplesInput = {
   id?: string
   kind: $Enums.SourceKind
+  mode?: $Enums.SourceMode
   title: string
   uri: string
   allowlistHandle?: string | null
@@ -679,6 +715,7 @@ export type SourceItemUpdateToOneWithWhereWithoutVoiceExamplesInput = {
 export type SourceItemUpdateWithoutVoiceExamplesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -693,6 +730,7 @@ export type SourceItemUpdateWithoutVoiceExamplesInput = {
 export type SourceItemUncheckedUpdateWithoutVoiceExamplesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  mode?: Prisma.EnumSourceModeFieldUpdateOperationsInput | $Enums.SourceMode
   title?: Prisma.StringFieldUpdateOperationsInput | string
   uri?: Prisma.StringFieldUpdateOperationsInput | string
   allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -756,6 +794,7 @@ export type SourceItemCountOutputTypeCountVoiceExamplesArgs<ExtArgs extends runt
 export type SourceItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   kind?: boolean
+  mode?: boolean
   title?: boolean
   uri?: boolean
   allowlistHandle?: boolean
@@ -772,6 +811,7 @@ export type SourceItemSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type SourceItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   kind?: boolean
+  mode?: boolean
   title?: boolean
   uri?: boolean
   allowlistHandle?: boolean
@@ -784,6 +824,7 @@ export type SourceItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type SourceItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   kind?: boolean
+  mode?: boolean
   title?: boolean
   uri?: boolean
   allowlistHandle?: boolean
@@ -796,6 +837,7 @@ export type SourceItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type SourceItemSelectScalar = {
   id?: boolean
   kind?: boolean
+  mode?: boolean
   title?: boolean
   uri?: boolean
   allowlistHandle?: boolean
@@ -805,7 +847,7 @@ export type SourceItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SourceItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kind" | "title" | "uri" | "allowlistHandle" | "notes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["sourceItem"]>
+export type SourceItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "kind" | "mode" | "title" | "uri" | "allowlistHandle" | "notes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["sourceItem"]>
 export type SourceItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   researchSnapshots?: boolean | Prisma.SourceItem$researchSnapshotsArgs<ExtArgs>
   contentIdeas?: boolean | Prisma.SourceItem$contentIdeasArgs<ExtArgs>
@@ -825,6 +867,7 @@ export type $SourceItemPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     kind: $Enums.SourceKind
+    mode: $Enums.SourceMode
     title: string
     uri: string
     allowlistHandle: string | null
@@ -1260,6 +1303,7 @@ export interface Prisma__SourceItemClient<T, Null = never, ExtArgs extends runti
 export interface SourceItemFieldRefs {
   readonly id: Prisma.FieldRef<"SourceItem", 'String'>
   readonly kind: Prisma.FieldRef<"SourceItem", 'SourceKind'>
+  readonly mode: Prisma.FieldRef<"SourceItem", 'SourceMode'>
   readonly title: Prisma.FieldRef<"SourceItem", 'String'>
   readonly uri: Prisma.FieldRef<"SourceItem", 'String'>
   readonly allowlistHandle: Prisma.FieldRef<"SourceItem", 'String'>

@@ -19,6 +19,14 @@ export const SourceKind = {
 export type SourceKind = (typeof SourceKind)[keyof typeof SourceKind]
 
 
+export const SourceMode = {
+  TOPIC_AND_STYLE: 'TOPIC_AND_STYLE',
+  STYLE_ONLY: 'STYLE_ONLY'
+} as const
+
+export type SourceMode = (typeof SourceMode)[keyof typeof SourceMode]
+
+
 export const IdeaStatus = {
   ACTIVE: 'ACTIVE',
   ARCHIVED: 'ARCHIVED'

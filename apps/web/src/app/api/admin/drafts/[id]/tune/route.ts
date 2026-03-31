@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   buildSourceGuidance,
+  getStyleOnlyReferenceText,
   buildVoiceRules,
   getEnv,
   getPrismaClient,
@@ -16,6 +17,12 @@ import { requireApiSession } from "@/lib/guards";
 import { createAuditLog } from "@/lib/operator";
 
 const prisma = getPrismaClient();
+
+function mergeVoiceRulesWithStyleReferences(voiceRules: string, styleReferenceText: string) {
+  return styleReferenceText && styleReferenceText !== "No style-only references configured."
+    ? `${voiceRules}\n\nStyle-only references:\n${styleReferenceText}`
+    : voiceRules;
+}
 
 type DraftTuneBody = {
   text?: string;
@@ -68,6 +75,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     }
 
     const accountVoiceGuide = await readBrandVoiceProfile();
+    const styleReferenceText = await getStyleOnlyReferenceText();
     const prompt = promptCatalog.VOICE_TUNER;
     const voiceExamples = await getDraftVoiceExamplesPrompt({
       sourceItemId: draft.idea.sourceItem.id,
@@ -85,10 +93,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       systemPrompt: prompt.systemPrompt,
       userPrompt: renderPromptTemplate(prompt.userTemplate, {
         sourceGuidance: buildSourceGuidance(draft.idea.sourceItem, accountVoiceGuide, draft.idea.snapshot ?? undefined),
-        voiceNotes: buildVoiceRules(
-          draft.idea.sourceItem,
-          accountVoiceGuide,
-          draft.idea.snapshot ?? undefined
+        voiceNotes: mergeVoiceRulesWithStyleReferences(
+          buildVoiceRules(
+            draft.idea.sourceItem,
+            accountVoiceGuide,
+            draft.idea.snapshot ?? undefined
+          ),
+          styleReferenceText
         ),
         draftText: sourceRevision.text,
         humanRewrite: saved.revision.text,

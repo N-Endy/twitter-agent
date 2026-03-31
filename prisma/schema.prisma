@@ -14,6 +14,11 @@ enum SourceKind {
   X_ACCOUNT
 }
 
+enum SourceMode {
+  TOPIC_AND_STYLE
+  STYLE_ONLY
+}
+
 enum IdeaStatus {
   ACTIVE
   ARCHIVED
@@ -104,6 +109,7 @@ enum VoiceExampleStatus {
 model SourceItem {
   id             String             @id @default(cuid())
   kind           SourceKind
+  mode           SourceMode         @default(TOPIC_AND_STYLE)
   title          String
   uri            String             @unique
   allowlistHandle String?

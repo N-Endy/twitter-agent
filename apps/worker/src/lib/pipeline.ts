@@ -13,6 +13,7 @@ import {
   getPrismaClient,
   getQueue,
   getRelevantVoiceExamples,
+  getStyleOnlyReferenceText,
   getValidXAccessToken,
   ingestRssSource,
   ingestUrlSource,
@@ -106,6 +107,12 @@ async function shouldSkipXWork() {
 
 function isXSourceKind(kind: string) {
   return kind === "X_POST" || kind === "X_ACCOUNT";
+}
+
+function mergeVoiceRulesWithStyleReferences(voiceRules: string, styleReferenceText: string) {
+  return styleReferenceText && styleReferenceText !== "No style-only references configured."
+    ? `${voiceRules}\n\nStyle-only references:\n${styleReferenceText}`
+    : voiceRules;
 }
 
 function extractReferencedTweetId(value: unknown) {
@@ -259,8 +266,15 @@ export async function runWeeklyBatchJob() {
   await ensureUpcomingScheduleSlots();
 
   const accountVoiceGuide = await readBrandVoiceProfile();
+  const styleReferenceText = await getStyleOnlyReferenceText();
 
   const snapshots = await prisma.researchSnapshot.findMany({
+    where: {
+      sourceItem: {
+        isActive: true,
+        mode: "TOPIC_AND_STYLE"
+      }
+    },
     orderBy: { createdAt: "desc" },
     take: 8,
     include: {
@@ -330,7 +344,10 @@ export async function runWeeklyBatchJob() {
         angle: ideaOutput.angle,
         audience: ideaOutput.audience,
         supportingEvidence: ideaOutput.supportingEvidence,
-        voiceNotes: buildVoiceRules(snapshot.sourceItem, accountVoiceGuide, snapshot),
+        voiceNotes: mergeVoiceRulesWithStyleReferences(
+          buildVoiceRules(snapshot.sourceItem, accountVoiceGuide, snapshot),
+          styleReferenceText
+        ),
         sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
         voiceExamplesText: await getVoiceExamplePromptText({
           sourceItemId: snapshot.sourceItemId,
@@ -382,6 +399,7 @@ export async function runWeeklyBatchJob() {
 
 export async function runDraftQaJob(draftId?: string) {
   const accountVoiceGuide = await readBrandVoiceProfile();
+  const styleReferenceText = await getStyleOnlyReferenceText();
   const drafts = draftId
     ? await prisma.draft.findMany({
         where: { id: draftId },
@@ -405,7 +423,10 @@ export async function runDraftQaJob(draftId?: string) {
     const review = await reviewDraft({
       draftText: draft.text,
       supportingEvidence: draft.evidenceUsed,
-      voiceRules: buildVoiceRules(draft.idea.sourceItem, accountVoiceGuide, draft.idea.snapshot ?? undefined),
+      voiceRules: mergeVoiceRulesWithStyleReferences(
+        buildVoiceRules(draft.idea.sourceItem, accountVoiceGuide, draft.idea.snapshot ?? undefined),
+        styleReferenceText
+      ),
       voiceExamplesText
     });
     const moderation = moderateDraft({

@@ -8,6 +8,7 @@ type SourceRowActionsProps = {
     id: string;
     title: string;
     notes: string | null;
+    mode: "TOPIC_AND_STYLE" | "STYLE_ONLY";
     isActive: boolean;
   };
 };
@@ -16,6 +17,7 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(source.title);
+  const [mode, setMode] = useState(source.mode);
   const [notes, setNotes] = useState(source.notes ?? "");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -106,6 +108,22 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
           </div>
 
           <div>
+            <label className="mb-1 block text-[11px] uppercase tracking-[0.18em] text-slate-400">Influence mode</label>
+            <select
+              value={mode}
+              onChange={(event) => setMode(event.target.value as typeof source.mode)}
+              className="w-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/30"
+            >
+              <option value="TOPIC_AND_STYLE" className="bg-slate-950">
+                Topic + Style
+              </option>
+              <option value="STYLE_ONLY" className="bg-slate-950">
+                Style only
+              </option>
+            </select>
+          </div>
+
+          <div>
             <label className="mb-1 block text-[11px] uppercase tracking-[0.18em] text-slate-400">Notes</label>
             <textarea
               value={notes}
@@ -118,7 +136,7 @@ export function SourceRowActions({ source }: SourceRowActionsProps) {
           <button
             type="button"
             disabled={isPending}
-            onClick={() => send({ action: "edit", title, notes })}
+            onClick={() => send({ action: "edit", title, mode, notes })}
             className="inline-flex w-full justify-center border border-[var(--accent)]/50 bg-[var(--accent)]/20 px-4 py-2 text-[10px] uppercase tracking-widest font-bold text-[var(--accent)] transition-all hover:bg-[var(--accent)]/30 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             {isPending ? "SAVING..." : "SAVE CHANGES"}

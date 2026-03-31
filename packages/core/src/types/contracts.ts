@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const sourceKindSchema = z.enum(["URL", "RSS", "X_POST", "X_ACCOUNT"]);
+export const sourceModeSchema = z.enum(["TOPIC_AND_STYLE", "STYLE_ONLY"]);
 export const draftStatusSchema = z.enum([
   "PENDING_QA",
   "NEEDS_REVIEW",
@@ -38,6 +39,7 @@ export const riskLevelSchema = z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]);
 export const researchSourceSchema = z.object({
   id: z.string(),
   kind: sourceKindSchema,
+  mode: sourceModeSchema,
   title: z.string(),
   uri: z.string().url(),
   isActive: z.boolean(),
@@ -148,3 +150,4 @@ export type ReplySuggestion = z.infer<typeof replySuggestionSchema>;
 export type ModerationDecision = z.infer<typeof moderationEventSchema>;
 export type AuditEvent = z.infer<typeof auditEventSchema>;
 export type PromptKind = z.infer<typeof promptKindSchema>;
+export type SourceMode = z.infer<typeof sourceModeSchema>;

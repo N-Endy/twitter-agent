@@ -1720,6 +1720,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const SourceItemScalarFieldEnum = {
   id: 'id',
   kind: 'kind',
+  mode: 'mode',
   title: 'title',
   uri: 'uri',
   allowlistHandle: 'allowlistHandle',
@@ -2073,6 +2074,20 @@ export type EnumSourceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'SourceKind[]'
  */
 export type ListEnumSourceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SourceMode'
+ */
+export type EnumSourceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceMode'>
+    
+
+
+/**
+ * Reference to a field of type 'SourceMode[]'
+ */
+export type ListEnumSourceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceMode[]'>
     
 
 

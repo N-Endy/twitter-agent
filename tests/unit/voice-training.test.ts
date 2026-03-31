@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { buildStyleReferenceText } from "../../packages/core/src/voice-guidance.ts";
 import {
   formatVoiceExamplesForPrompt,
   getVoiceExampleScore,
@@ -68,5 +69,26 @@ describe("voice training helpers", () => {
         123
       ])
     ).toEqual(["too_polished", "weak_hook"]);
+  });
+
+  it("formats style-only references without reusing literal subject matter", () => {
+    const formatted = buildStyleReferenceText([
+      {
+        title: "Commando gone wrong",
+        notes: "Use for dramatic Nigerian storytelling and embarrassment humor, not the literal commando topic.",
+        researchSnapshots: [
+          {
+            title: "Church breeze disaster",
+            summary: "A self-mocking story with dramatic build-up, playful narration, and a funny final reveal.",
+            quoteCandidates: ["Freedom is beautiful until the wind reminds you why fences were invented."],
+            hookIdeas: ["Dramatic build-up", "Funny reveal"]
+          }
+        ]
+      }
+    ]);
+
+    expect(formatted).toContain("Style reference 1");
+    expect(formatted).toContain("dramatic Nigerian storytelling");
+    expect(formatted).toContain("Do not reuse their literal scenario");
   });
 });
