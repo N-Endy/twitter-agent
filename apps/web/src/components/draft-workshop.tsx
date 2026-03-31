@@ -49,6 +49,7 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
   );
   const [draftStatus, setDraftStatus] = useState<DraftWorkshopStatus>(workshop.draft.status);
   const [approvedAt, setApprovedAt] = useState<string | Date | null>(workshop.draft.approvedAt);
+  const [scheduleSlot, setScheduleSlot] = useState(workshop.draft.scheduleSlot);
   const [revisions, setRevisions] = useState(sortNewestFirst(workshop.draft.revisions));
   const [voiceExamples, setVoiceExamples] = useState(
     [...workshop.draft.voiceExamples].sort(
@@ -119,6 +120,21 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
       } finally {
         setActiveAction(null);
       }
+    });
+  }
+
+  function unscheduleDraft() {
+    runAction("unschedule", async () => {
+      const payload = await postJson<{
+        draft: { status: string; approvedAt: string | null; scheduleSlot: DraftWorkshopPayload["draft"]["scheduleSlot"] };
+      }>(`/api/admin/posts/${workshop.draft.id}/schedule`, {
+        action: "unschedule"
+      });
+
+      setDraftStatus(payload.draft.status as DraftWorkshopStatus);
+      setApprovedAt(payload.draft.approvedAt);
+      setScheduleSlot(payload.draft.scheduleSlot);
+      setNotice("Draft unscheduled. You can now edit and retrain it.");
     });
   }
 
@@ -330,9 +346,9 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
             </InfoNotice>
           ) : null}
 
-          {workshop.draft.scheduleSlot ? (
+          {scheduleSlot ? (
             <InfoNotice title="Scheduling note">
-              This draft already has a schedule slot: {formatStamp(workshop.draft.scheduleSlot.slotAt)}. If you want to change the text, unschedule it from the main Drafts page first.
+              This draft already has a schedule slot: {formatStamp(scheduleSlot.slotAt)}. Unschedule it before changing the text so the live queue stays safe.
             </InfoNotice>
           ) : null}
         </div>
@@ -513,6 +529,16 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
             ) : null}
 
             <div className="flex flex-col gap-2">
+              {draftStatus === "SCHEDULED" ? (
+                <button
+                  type="button"
+                  disabled={isPending}
+                  onClick={unscheduleDraft}
+                  className="inline-flex w-full justify-center border border-amber-300/30 bg-amber-400/10 px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.22em] text-amber-300 transition-all hover:bg-amber-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isPending && activeAction === "unschedule" ? "Unscheduling..." : "Unschedule to edit"}
+                </button>
+              ) : null}
               <button
                 type="button"
                 disabled={isPending || draftLocked}

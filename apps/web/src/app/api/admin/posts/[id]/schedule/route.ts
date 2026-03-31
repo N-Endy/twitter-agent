@@ -14,7 +14,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   }
 
   const { id } = await params;
-  const body = (await request.json().catch(() => ({}))) as { slotId?: string };
+  const body = (await request.json().catch(() => ({}))) as {
+    slotId?: string;
+    action?: "unschedule";
+  };
   const draft = await prisma.draft.findUnique({
     where: { id },
     include: {
@@ -24,6 +27,48 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   if (!draft) {
     return NextResponse.json({ error: "Draft not found." }, { status: 404 });
+  }
+
+  if (body.action === "unschedule") {
+    if (!draft.scheduleSlotId || draft.status !== "SCHEDULED") {
+      return NextResponse.json({ error: "Only scheduled drafts can be unscheduled." }, { status: 409 });
+    }
+
+    const updated = await prisma.$transaction(async (tx) => {
+      await tx.scheduleSlot.updateMany({
+        where: {
+          id: draft.scheduleSlotId as string,
+          status: "RESERVED"
+        },
+        data: {
+          status: "OPEN"
+        }
+      });
+
+      return tx.draft.update({
+        where: { id },
+        data: {
+          status: "APPROVED",
+          scheduleSlotId: null
+        },
+        include: {
+          scheduleSlot: true
+        }
+      });
+    });
+
+    await createAuditLog({
+      actor: session.user.email ?? "owner",
+      action: "draft.unscheduled",
+      entityType: "draft",
+      entityId: id,
+      details: {
+        slotId: draft.scheduleSlotId,
+        previousStatus: draft.status
+      }
+    });
+
+    return NextResponse.json({ ok: true, draft: updated });
   }
 
   if (draft.status !== "APPROVED") {

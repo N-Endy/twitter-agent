@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { EmptyState, InfoNotice, Panel, StatusPill, SummaryStrip, Table, TableCell } from "@/components/dashboard";
 import { JobTriggerButton } from "@/components/job-trigger-button";
+import { MutationButton } from "@/components/mutation-button";
 import { ScheduleDraftControls } from "@/components/schedule-draft-controls";
 import { formatDashboardDate, formatRelative, getDraftsPageData } from "@/lib/data";
 
@@ -125,6 +126,16 @@ export default async function DraftsPage() {
                         ) : null}
                         {draft.status === "APPROVED" && !draft.scheduleSlot ? (
                           <ScheduleDraftControls draftId={draft.id} slots={availableSlots} />
+                        ) : null}
+                        {draft.status === "SCHEDULED" ? (
+                          <MutationButton
+                            url={`/api/admin/posts/${draft.id}/schedule`}
+                            label="Unschedule"
+                            body={{ action: "unschedule" }}
+                            confirmText="Unschedule this draft so you can edit it again?"
+                            tone="warning"
+                            fullWidth
+                          />
                         ) : null}
                         <StatusPill
                           tone={
