@@ -88,7 +88,7 @@ export default async function RepliesPage() {
                             confirmText="Send this reply to X now?"
                             fullWidth
                           />
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="flex flex-col gap-2">
                             <MutationButton
                               url={`/api/admin/replies/${suggestion.id}/decision`}
                               label="Ignore"
