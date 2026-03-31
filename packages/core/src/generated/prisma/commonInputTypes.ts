@@ -304,6 +304,23 @@ export type EnumDraftStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumDraftStatusFilter<$PrismaModel>
 }
 
+export type EnumDraftRevisionKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftRevisionKind | Prisma.EnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftRevisionKindFilter<$PrismaModel> | $Enums.DraftRevisionKind
+}
+
+export type EnumDraftRevisionKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftRevisionKind | Prisma.EnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftRevisionKindWithAggregatesFilter<$PrismaModel> | $Enums.DraftRevisionKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDraftRevisionKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDraftRevisionKindFilter<$PrismaModel>
+}
+
 export type EnumReviewStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.ReviewStatus | Prisma.EnumReviewStatusFieldRefInput<$PrismaModel>
   in?: $Enums.ReviewStatus[] | Prisma.ListEnumReviewStatusFieldRefInput<$PrismaModel>
@@ -488,6 +505,23 @@ export type EnumPromptKindWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPromptKindFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPromptKindFilter<$PrismaModel>
+}
+
+export type EnumVoiceExampleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.VoiceExampleStatus | Prisma.EnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVoiceExampleStatusFilter<$PrismaModel> | $Enums.VoiceExampleStatus
+}
+
+export type EnumVoiceExampleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VoiceExampleStatus | Prisma.EnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVoiceExampleStatusWithAggregatesFilter<$PrismaModel> | $Enums.VoiceExampleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVoiceExampleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVoiceExampleStatusFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -766,6 +800,23 @@ export type NestedEnumDraftStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumDraftStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumDraftRevisionKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftRevisionKind | Prisma.EnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftRevisionKindFilter<$PrismaModel> | $Enums.DraftRevisionKind
+}
+
+export type NestedEnumDraftRevisionKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DraftRevisionKind | Prisma.EnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DraftRevisionKind[] | Prisma.ListEnumDraftRevisionKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDraftRevisionKindWithAggregatesFilter<$PrismaModel> | $Enums.DraftRevisionKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDraftRevisionKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDraftRevisionKindFilter<$PrismaModel>
+}
+
 export type NestedEnumReviewStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.ReviewStatus | Prisma.EnumReviewStatusFieldRefInput<$PrismaModel>
   in?: $Enums.ReviewStatus[] | Prisma.ListEnumReviewStatusFieldRefInput<$PrismaModel>
@@ -928,6 +979,23 @@ export type NestedEnumPromptKindWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPromptKindFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPromptKindFilter<$PrismaModel>
+}
+
+export type NestedEnumVoiceExampleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.VoiceExampleStatus | Prisma.EnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVoiceExampleStatusFilter<$PrismaModel> | $Enums.VoiceExampleStatus
+}
+
+export type NestedEnumVoiceExampleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VoiceExampleStatus | Prisma.EnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VoiceExampleStatus[] | Prisma.ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVoiceExampleStatusWithAggregatesFilter<$PrismaModel> | $Enums.VoiceExampleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVoiceExampleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVoiceExampleStatusFilter<$PrismaModel>
 }
 
 

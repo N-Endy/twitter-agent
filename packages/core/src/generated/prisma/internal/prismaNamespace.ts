@@ -388,6 +388,7 @@ export const ModelName = {
   ResearchSnapshot: 'ResearchSnapshot',
   ContentIdea: 'ContentIdea',
   Draft: 'Draft',
+  DraftRevision: 'DraftRevision',
   DraftReview: 'DraftReview',
   ScheduleSlot: 'ScheduleSlot',
   PublishedPost: 'PublishedPost',
@@ -398,7 +399,8 @@ export const ModelName = {
   ModerationEvent: 'ModerationEvent',
   AuditLog: 'AuditLog',
   PromptVersion: 'PromptVersion',
-  SystemState: 'SystemState'
+  SystemState: 'SystemState',
+  VoiceExample: 'VoiceExample'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "sourceItem" | "researchSnapshot" | "contentIdea" | "draft" | "draftReview" | "scheduleSlot" | "publishedPost" | "postMetric" | "mention" | "replySuggestion" | "replyAction" | "moderationEvent" | "auditLog" | "promptVersion" | "systemState"
+    modelProps: "sourceItem" | "researchSnapshot" | "contentIdea" | "draft" | "draftRevision" | "draftReview" | "scheduleSlot" | "publishedPost" | "postMetric" | "mention" | "replySuggestion" | "replyAction" | "moderationEvent" | "auditLog" | "promptVersion" | "systemState" | "voiceExample"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -711,6 +713,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DraftCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DraftCountAggregateOutputType> | number
+        }
+      }
+    }
+    DraftRevision: {
+      payload: Prisma.$DraftRevisionPayload<ExtArgs>
+      fields: Prisma.DraftRevisionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DraftRevisionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DraftRevisionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>
+        }
+        findFirst: {
+          args: Prisma.DraftRevisionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DraftRevisionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>
+        }
+        findMany: {
+          args: Prisma.DraftRevisionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>[]
+        }
+        create: {
+          args: Prisma.DraftRevisionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>
+        }
+        createMany: {
+          args: Prisma.DraftRevisionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DraftRevisionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>[]
+        }
+        delete: {
+          args: Prisma.DraftRevisionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>
+        }
+        update: {
+          args: Prisma.DraftRevisionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DraftRevisionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DraftRevisionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DraftRevisionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>[]
+        }
+        upsert: {
+          args: Prisma.DraftRevisionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftRevisionPayload>
+        }
+        aggregate: {
+          args: Prisma.DraftRevisionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDraftRevision>
+        }
+        groupBy: {
+          args: Prisma.DraftRevisionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DraftRevisionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DraftRevisionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DraftRevisionCountAggregateOutputType> | number
         }
       }
     }
@@ -1528,6 +1604,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    VoiceExample: {
+      payload: Prisma.$VoiceExamplePayload<ExtArgs>
+      fields: Prisma.VoiceExampleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VoiceExampleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VoiceExampleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>
+        }
+        findFirst: {
+          args: Prisma.VoiceExampleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VoiceExampleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>
+        }
+        findMany: {
+          args: Prisma.VoiceExampleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>[]
+        }
+        create: {
+          args: Prisma.VoiceExampleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>
+        }
+        createMany: {
+          args: Prisma.VoiceExampleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VoiceExampleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>[]
+        }
+        delete: {
+          args: Prisma.VoiceExampleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>
+        }
+        update: {
+          args: Prisma.VoiceExampleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>
+        }
+        deleteMany: {
+          args: Prisma.VoiceExampleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VoiceExampleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VoiceExampleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>[]
+        }
+        upsert: {
+          args: Prisma.VoiceExampleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VoiceExamplePayload>
+        }
+        aggregate: {
+          args: Prisma.VoiceExampleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVoiceExample>
+        }
+        groupBy: {
+          args: Prisma.VoiceExampleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VoiceExampleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VoiceExampleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VoiceExampleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1647,6 +1797,22 @@ export const DraftScalarFieldEnum = {
 } as const
 
 export type DraftScalarFieldEnum = (typeof DraftScalarFieldEnum)[keyof typeof DraftScalarFieldEnum]
+
+
+export const DraftRevisionScalarFieldEnum = {
+  id: 'id',
+  draftId: 'draftId',
+  kind: 'kind',
+  text: 'text',
+  rationale: 'rationale',
+  note: 'note',
+  feedbackTags: 'feedbackTags',
+  createdBy: 'createdBy',
+  basedOnRevisionId: 'basedOnRevisionId',
+  createdAt: 'createdAt'
+} as const
+
+export type DraftRevisionScalarFieldEnum = (typeof DraftRevisionScalarFieldEnum)[keyof typeof DraftRevisionScalarFieldEnum]
 
 
 export const DraftReviewScalarFieldEnum = {
@@ -1817,6 +1983,25 @@ export const SystemStateScalarFieldEnum = {
 export type SystemStateScalarFieldEnum = (typeof SystemStateScalarFieldEnum)[keyof typeof SystemStateScalarFieldEnum]
 
 
+export const VoiceExampleScalarFieldEnum = {
+  id: 'id',
+  draftId: 'draftId',
+  sourceItemId: 'sourceItemId',
+  pillarTag: 'pillarTag',
+  hookTag: 'hookTag',
+  sourceRevisionId: 'sourceRevisionId',
+  preferredRevisionId: 'preferredRevisionId',
+  status: 'status',
+  operatorNote: 'operatorNote',
+  feedbackTags: 'feedbackTags',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoiceExampleScalarFieldEnum = (typeof VoiceExampleScalarFieldEnum)[keyof typeof VoiceExampleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1983,6 +2168,20 @@ export type ListEnumDraftStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'DraftRevisionKind'
+ */
+export type EnumDraftRevisionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DraftRevisionKind'>
+    
+
+
+/**
+ * Reference to a field of type 'DraftRevisionKind[]'
+ */
+export type ListEnumDraftRevisionKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DraftRevisionKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'ReviewStatus'
  */
 export type EnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus'>
@@ -2077,6 +2276,20 @@ export type EnumPromptKindFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'PromptKind[]'
  */
 export type ListEnumPromptKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PromptKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'VoiceExampleStatus'
+ */
+export type EnumVoiceExampleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VoiceExampleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VoiceExampleStatus[]'
+ */
+export type ListEnumVoiceExampleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VoiceExampleStatus[]'>
     
 
 /**
@@ -2178,6 +2391,7 @@ export type GlobalOmitConfig = {
   researchSnapshot?: Prisma.ResearchSnapshotOmit
   contentIdea?: Prisma.ContentIdeaOmit
   draft?: Prisma.DraftOmit
+  draftRevision?: Prisma.DraftRevisionOmit
   draftReview?: Prisma.DraftReviewOmit
   scheduleSlot?: Prisma.ScheduleSlotOmit
   publishedPost?: Prisma.PublishedPostOmit
@@ -2189,6 +2403,7 @@ export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
   promptVersion?: Prisma.PromptVersionOmit
   systemState?: Prisma.SystemStateOmit
+  voiceExample?: Prisma.VoiceExampleOmit
 }
 
 /* Types for Logging */

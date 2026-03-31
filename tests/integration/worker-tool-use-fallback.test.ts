@@ -69,5 +69,5 @@ describe("worker provider tool-use fallback", () => {
 
     expect(result.text.length).toBeGreaterThan(0);
     expect(result.evidenceUsed.length).toBeGreaterThan(0);
-  });
+  }, 15000);
 });

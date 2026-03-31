@@ -72,6 +72,7 @@ enum PromptKind {
   STRATEGIST
   IDEATION
   WRITER
+  VOICE_TUNER
   EDITOR
   VOICE_CHECKER
   COMPLIANCE_CHECKER
@@ -88,6 +89,18 @@ enum ModerationDecision {
   ESCALATE
 }
 
+enum DraftRevisionKind {
+  INITIAL_AI
+  QA_REWRITE
+  HUMAN_EDIT
+  AI_TUNED
+}
+
+enum VoiceExampleStatus {
+  ACTIVE
+  ARCHIVED
+}
+
 model SourceItem {
   id             String             @id @default(cuid())
   kind           SourceKind
@@ -100,6 +113,7 @@ model SourceItem {
   updatedAt      DateTime           @updatedAt
   researchSnapshots ResearchSnapshot[]
   contentIdeas   ContentIdea[]
+  voiceExamples  VoiceExample[]
 }
 
 model ResearchSnapshot {
@@ -166,7 +180,27 @@ model Draft {
   idea               ContentIdea  @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   scheduleSlot       ScheduleSlot? @relation(fields: [scheduleSlotId], references: [id], onDelete: SetNull)
   reviews            DraftReview[]
+  revisions          DraftRevision[]
+  voiceExamples      VoiceExample[]
   publishedPost      PublishedPost?
+}
+
+model DraftRevision {
+  id                 String            @id @default(cuid())
+  draftId            String
+  kind               DraftRevisionKind
+  text               String
+  rationale          String?
+  note               String?
+  feedbackTags       String[]
+  createdBy          String?
+  basedOnRevisionId  String?
+  createdAt          DateTime          @default(now())
+  draft              Draft             @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  basedOnRevision    DraftRevision?    @relation("DraftRevisionLineage", fields: [basedOnRevisionId], references: [id], onDelete: SetNull)
+  derivedRevisions   DraftRevision[]   @relation("DraftRevisionLineage")
+  sourceExamples     VoiceExample[]    @relation("VoiceExampleSourceRevision")
+  preferredExamples  VoiceExample[]    @relation("VoiceExamplePreferredRevision")
 }
 
 model DraftReview {
@@ -319,4 +353,26 @@ model SystemState {
   key       String   @id
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+model VoiceExample {
+  id                  String             @id @default(cuid())
+  draftId             String
+  sourceItemId        String?
+  pillarTag           String?
+  hookTag             String?
+  sourceRevisionId    String
+  preferredRevisionId String
+  status              VoiceExampleStatus @default(ACTIVE)
+  operatorNote        String?
+  feedbackTags        String[]
+  createdBy           String
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  draft               Draft              @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  sourceItem          SourceItem?        @relation(fields: [sourceItemId], references: [id], onDelete: SetNull)
+  sourceRevision      DraftRevision      @relation("VoiceExampleSourceRevision", fields: [sourceRevisionId], references: [id], onDelete: Cascade)
+  preferredRevision   DraftRevision      @relation("VoiceExamplePreferredRevision", fields: [preferredRevisionId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceRevisionId, preferredRevisionId])
 }

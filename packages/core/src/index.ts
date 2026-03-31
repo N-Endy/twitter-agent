@@ -13,3 +13,5 @@ export * from "./scheduling";
 export * from "./security";
 export * from "./system-state";
 export * from "./types/contracts";
+export * from "./voice-training";
+export * from "./voice-guidance";

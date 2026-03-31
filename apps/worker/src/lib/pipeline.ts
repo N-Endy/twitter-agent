@@ -1,13 +1,18 @@
 import {
+  buildSourceGuidance,
+  buildVoiceRules,
   compareXIds,
   createPost,
+  ensureInitialDraftRevision,
   ensureUpcomingScheduleSlots,
   extractTweetIdFromUrl,
+  formatVoiceExamplesForPrompt,
   getEnv,
   getMentions,
   getPost,
   getPrismaClient,
   getQueue,
+  getRelevantVoiceExamples,
   getValidXAccessToken,
   ingestRssSource,
   ingestUrlSource,
@@ -145,78 +150,21 @@ function buildConversationContext(params: { conversationId: string | null; refer
   return parts.join("\n") || "No extra context";
 }
 
-function uniqueLines(values: Array<string | null | undefined>) {
-  const seen = new Set<string>();
-  const lines: string[] = [];
+async function getVoiceExamplePromptText(params: {
+  sourceItemId?: string | null;
+  pillarTag?: string | null;
+  hookTag?: string | null;
+  excludeDraftId?: string | null;
+}) {
+  const examples = await getRelevantVoiceExamples({
+    sourceItemId: params.sourceItemId,
+    pillarTag: params.pillarTag,
+    hookTag: params.hookTag,
+    excludeDraftId: params.excludeDraftId,
+    limit: 3
+  });
 
-  for (const value of values) {
-    const normalized = value?.replace(/\s+/g, " ").trim();
-
-    if (!normalized) {
-      continue;
-    }
-
-    const key = normalized.toLowerCase();
-
-    if (seen.has(key)) {
-      continue;
-    }
-
-    seen.add(key);
-    lines.push(normalized);
-  }
-
-  return lines;
-}
-
-function buildSourceGuidance(
-  source: {
-    title: string;
-    kind: string;
-    notes?: string | null;
-    allowlistHandle?: string | null;
-    uri?: string;
-  },
-  accountVoiceGuide?: string | null,
-  snapshot?: {
-    title?: string;
-    pillarCandidates?: string[];
-    hookIdeas?: string[];
-  }
-) {
-  return uniqueLines([
-    `Source: ${source.title}`,
-    source.allowlistHandle ? `Handle: @${source.allowlistHandle.replace(/^@/, "")}` : null,
-    `Type: ${source.kind}`,
-    source.notes ? `Notes: ${source.notes}` : null,
-    accountVoiceGuide ? `Account voice guide: ${accountVoiceGuide}` : null,
-    snapshot?.title ? `Current material: ${snapshot.title}` : null,
-    snapshot?.pillarCandidates?.length ? `Themes: ${snapshot.pillarCandidates.slice(0, 4).join(", ")}` : null,
-    snapshot?.hookIdeas?.length ? `Natural angles: ${snapshot.hookIdeas.slice(0, 3).join(" | ")}` : null,
-    "Stay inside this source's actual world. Do not drift into generic tech, AI, or builder content unless the source itself is about that."
-  ]).join("\n");
-}
-
-function buildVoiceRules(
-  source: {
-    title: string;
-    notes?: string | null;
-    allowlistHandle?: string | null;
-  },
-  accountVoiceGuide?: string | null,
-  snapshot?: {
-    pillarCandidates?: string[];
-  }
-) {
-  return uniqueLines([
-    "Voice: source-led, clear, human, specific, plain English, no empty hype, no spammy calls to action.",
-    accountVoiceGuide ? `Master voice: ${accountVoiceGuide}` : null,
-    `Match the lane of ${source.title}.`,
-    source.allowlistHandle ? `Preserve the tone signaled by @${source.allowlistHandle.replace(/^@/, "")}.` : null,
-    source.notes ? `Operator notes: ${source.notes}` : null,
-    snapshot?.pillarCandidates?.length ? `Likely themes: ${snapshot.pillarCandidates.slice(0, 4).join(", ")}` : null,
-    "Reject any draft that sounds like generic internet advice or technical-builder content when the source does not support it."
-  ]).join(" ");
+  return formatVoiceExamplesForPrompt(examples);
 }
 
 export async function runSourceIngestJob() {
@@ -383,24 +331,39 @@ export async function runWeeklyBatchJob() {
         audience: ideaOutput.audience,
         supportingEvidence: ideaOutput.supportingEvidence,
         voiceNotes: buildVoiceRules(snapshot.sourceItem, accountVoiceGuide, snapshot),
-        sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot)
+        sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
+        voiceExamplesText: await getVoiceExamplePromptText({
+          sourceItemId: snapshot.sourceItemId,
+          pillarTag: ideaOutput.pillar,
+          hookTag: ideaOutput.hook.slice(0, 40)
+        })
       });
 
-      const draft = await prisma.draft.create({
-        data: {
-          ideaId: idea.id,
+      const draft = await prisma.$transaction(async (tx) => {
+        const createdDraft = await tx.draft.create({
+          data: {
+            ideaId: idea.id,
+            text: draftOutput.text,
+            rationale: draftOutput.rationale,
+            sourceBacked: true,
+            topical: ideaOutput.topical,
+            characterCount: draftOutput.text.length,
+            hookTag: draftOutput.hookTag,
+            pillarTag: draftOutput.pillarTag,
+            evidenceUsed: draftOutput.evidenceUsed,
+            suggestedCta: draftOutput.suggestedCta,
+            confidence: draftOutput.confidence,
+            status: "PENDING_QA"
+          }
+        });
+
+        await ensureInitialDraftRevision(tx, {
+          draftId: createdDraft.id,
           text: draftOutput.text,
-          rationale: draftOutput.rationale,
-          sourceBacked: true,
-          topical: ideaOutput.topical,
-          characterCount: draftOutput.text.length,
-          hookTag: draftOutput.hookTag,
-          pillarTag: draftOutput.pillarTag,
-          evidenceUsed: draftOutput.evidenceUsed,
-          suggestedCta: draftOutput.suggestedCta,
-          confidence: draftOutput.confidence,
-          status: "PENDING_QA"
-        }
+          rationale: draftOutput.rationale
+        });
+
+        return createdDraft;
       });
 
       draftsCreated += 1;
@@ -433,10 +396,17 @@ export async function runDraftQaJob(draftId?: string) {
   let processed = 0;
 
   for (const draft of drafts) {
+    const voiceExamplesText = await getVoiceExamplePromptText({
+      sourceItemId: draft.idea.sourceItem.id,
+      pillarTag: draft.pillarTag ?? draft.idea.pillar,
+      hookTag: draft.hookTag ?? draft.idea.hook.slice(0, 40),
+      excludeDraftId: draft.id
+    });
     const review = await reviewDraft({
       draftText: draft.text,
       supportingEvidence: draft.evidenceUsed,
-      voiceRules: buildVoiceRules(draft.idea.sourceItem, accountVoiceGuide, draft.idea.snapshot ?? undefined)
+      voiceRules: buildVoiceRules(draft.idea.sourceItem, accountVoiceGuide, draft.idea.snapshot ?? undefined),
+      voiceExamplesText
     });
     const moderation = moderateDraft({
       text: review.rewrite || draft.text,
@@ -449,6 +419,13 @@ export async function runDraftQaJob(draftId?: string) {
       moderation.decision === "BLOCK" || !review.approvedForReview ? "REJECTED" : "NEEDS_REVIEW";
 
     await prisma.$transaction(async (tx: any) => {
+      await ensureInitialDraftRevision(tx, {
+        draftId: draft.id,
+        text: draft.text,
+        rationale: draft.rationale,
+        createdAt: draft.createdAt
+      });
+
       await tx.draft.update({
         where: { id: draft.id },
         data: {
@@ -479,6 +456,18 @@ export async function runDraftQaJob(draftId?: string) {
           safetyScore: review.safetyScore,
           sourceConfidenceScore: review.sourceConfidenceScore,
           triggeredRules: moderation.reasons
+        }
+      });
+
+      await tx.draftRevision.create({
+        data: {
+          draftId: draft.id,
+          kind: "QA_REWRITE",
+          text: review.rewrite || draft.text,
+          rationale: "AI QA rewrite candidate.",
+          note: review.issues.join(" ") || null,
+          feedbackTags: [],
+          createdBy: "ai-editor"
         }
       });
 

@@ -98,6 +98,7 @@ export const PromptKind = {
   STRATEGIST: 'STRATEGIST',
   IDEATION: 'IDEATION',
   WRITER: 'WRITER',
+  VOICE_TUNER: 'VOICE_TUNER',
   EDITOR: 'EDITOR',
   VOICE_CHECKER: 'VOICE_CHECKER',
   COMPLIANCE_CHECKER: 'COMPLIANCE_CHECKER',
@@ -118,3 +119,21 @@ export const ModerationDecision = {
 } as const
 
 export type ModerationDecision = (typeof ModerationDecision)[keyof typeof ModerationDecision]
+
+
+export const DraftRevisionKind = {
+  INITIAL_AI: 'INITIAL_AI',
+  QA_REWRITE: 'QA_REWRITE',
+  HUMAN_EDIT: 'HUMAN_EDIT',
+  AI_TUNED: 'AI_TUNED'
+} as const
+
+export type DraftRevisionKind = (typeof DraftRevisionKind)[keyof typeof DraftRevisionKind]
+
+
+export const VoiceExampleStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type VoiceExampleStatus = (typeof VoiceExampleStatus)[keyof typeof VoiceExampleStatus]

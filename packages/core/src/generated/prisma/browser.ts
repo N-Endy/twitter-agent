@@ -38,6 +38,11 @@ export type ContentIdea = Prisma.ContentIdeaModel
  */
 export type Draft = Prisma.DraftModel
 /**
+ * Model DraftRevision
+ * 
+ */
+export type DraftRevision = Prisma.DraftRevisionModel
+/**
  * Model DraftReview
  * 
  */
@@ -92,3 +97,8 @@ export type PromptVersion = Prisma.PromptVersionModel
  * 
  */
 export type SystemState = Prisma.SystemStateModel
+/**
+ * Model VoiceExample
+ * 
+ */
+export type VoiceExample = Prisma.VoiceExampleModel

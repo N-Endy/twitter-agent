@@ -55,6 +55,7 @@ export const ModelName = {
   ResearchSnapshot: 'ResearchSnapshot',
   ContentIdea: 'ContentIdea',
   Draft: 'Draft',
+  DraftRevision: 'DraftRevision',
   DraftReview: 'DraftReview',
   ScheduleSlot: 'ScheduleSlot',
   PublishedPost: 'PublishedPost',
@@ -65,7 +66,8 @@ export const ModelName = {
   ModerationEvent: 'ModerationEvent',
   AuditLog: 'AuditLog',
   PromptVersion: 'PromptVersion',
-  SystemState: 'SystemState'
+  SystemState: 'SystemState',
+  VoiceExample: 'VoiceExample'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -164,6 +166,22 @@ export const DraftScalarFieldEnum = {
 } as const
 
 export type DraftScalarFieldEnum = (typeof DraftScalarFieldEnum)[keyof typeof DraftScalarFieldEnum]
+
+
+export const DraftRevisionScalarFieldEnum = {
+  id: 'id',
+  draftId: 'draftId',
+  kind: 'kind',
+  text: 'text',
+  rationale: 'rationale',
+  note: 'note',
+  feedbackTags: 'feedbackTags',
+  createdBy: 'createdBy',
+  basedOnRevisionId: 'basedOnRevisionId',
+  createdAt: 'createdAt'
+} as const
+
+export type DraftRevisionScalarFieldEnum = (typeof DraftRevisionScalarFieldEnum)[keyof typeof DraftRevisionScalarFieldEnum]
 
 
 export const DraftReviewScalarFieldEnum = {
@@ -332,6 +350,25 @@ export const SystemStateScalarFieldEnum = {
 } as const
 
 export type SystemStateScalarFieldEnum = (typeof SystemStateScalarFieldEnum)[keyof typeof SystemStateScalarFieldEnum]
+
+
+export const VoiceExampleScalarFieldEnum = {
+  id: 'id',
+  draftId: 'draftId',
+  sourceItemId: 'sourceItemId',
+  pillarTag: 'pillarTag',
+  hookTag: 'hookTag',
+  sourceRevisionId: 'sourceRevisionId',
+  preferredRevisionId: 'preferredRevisionId',
+  status: 'status',
+  operatorNote: 'operatorNote',
+  feedbackTags: 'feedbackTags',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VoiceExampleScalarFieldEnum = (typeof VoiceExampleScalarFieldEnum)[keyof typeof VoiceExampleScalarFieldEnum]
 
 
 export const SortOrder = {

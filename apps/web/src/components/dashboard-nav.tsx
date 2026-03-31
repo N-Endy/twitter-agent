@@ -34,7 +34,7 @@ export function DashboardNav({
     return (
       <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {items.map(({ href, label }) => {
-          const isActive = pathname === href;
+          const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
           return (
             <Link
@@ -53,7 +53,7 @@ export function DashboardNav({
   return (
     <nav className="mt-8 space-y-2">
       {items.map(({ href, label }) => {
-        const isActive = pathname === href;
+        const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
         return (
           <Link

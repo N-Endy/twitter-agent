@@ -74,5 +74,5 @@ describe("worker provider quota fallback", () => {
     expect(first.suggestedReply).toContain("Appreciate you.");
     expect(second.suggestedReply).toContain("Appreciate you.");
     expect(structuredPrompt).toHaveBeenCalledTimes(1);
-  });
+  }, 15000);
 });

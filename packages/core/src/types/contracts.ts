@@ -6,6 +6,7 @@ export const draftStatusSchema = z.enum([
   "NEEDS_REVIEW",
   "APPROVED",
   "SCHEDULED",
+  "PUBLISHING",
   "PUBLISHED",
   "REJECTED"
 ]);
@@ -14,6 +15,7 @@ export const promptKindSchema = z.enum([
   "STRATEGIST",
   "IDEATION",
   "WRITER",
+  "VOICE_TUNER",
   "EDITOR",
   "VOICE_CHECKER",
   "COMPLIANCE_CHECKER",

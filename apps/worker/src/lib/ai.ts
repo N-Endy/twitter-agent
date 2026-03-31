@@ -401,6 +401,7 @@ export async function writeDraft(params: {
   supportingEvidence: string[];
   voiceNotes: string;
   sourceGuidance: string;
+  voiceExamplesText?: string;
 }) {
   const prompt = promptCatalog.WRITER;
   return runWithProviderFallback({
@@ -426,7 +427,8 @@ export async function writeDraft(params: {
           angle: params.angle,
           audience: params.audience,
           supportingEvidence: params.supportingEvidence.join("\n"),
-          voiceNotes: params.voiceNotes
+          voiceNotes: params.voiceNotes,
+          voiceExamples: params.voiceExamplesText ?? "No curated voice examples yet."
         })
       })
   });
@@ -436,6 +438,7 @@ export async function reviewDraft(params: {
   draftText: string;
   supportingEvidence: string[];
   voiceRules: string;
+  voiceExamplesText?: string;
 }) {
   const prompt = promptCatalog.EDITOR;
   return runWithProviderFallback({
@@ -455,7 +458,45 @@ export async function reviewDraft(params: {
         userPrompt: renderPromptTemplate(prompt.userTemplate, {
           draftText: params.draftText,
           supportingEvidence: params.supportingEvidence.join("\n"),
-          voiceRules: params.voiceRules
+          voiceRules: params.voiceRules,
+          voiceExamples: params.voiceExamplesText ?? "No curated voice examples yet."
+        })
+      })
+  });
+}
+
+export async function tuneDraftInVoice(params: {
+  draftText: string;
+  humanRewrite: string;
+  operatorFeedback: string;
+  voiceNotes: string;
+  sourceGuidance: string;
+  voiceExamplesText?: string;
+}) {
+  const prompt = promptCatalog.VOICE_TUNER;
+  return runWithProviderFallback({
+    label: "tuneDraftInVoice",
+    fallback: () =>
+      buildFallbackDraft({
+        hook: params.humanRewrite.split(/\s+/).slice(0, 10).join(" "),
+        angle: params.operatorFeedback || "Keep the human rewrite as the strongest guide.",
+        pillar: "voice-tuned",
+        supportingEvidence: [params.humanRewrite]
+      }),
+    execute: () =>
+      runStructuredPrompt({
+        model: getEnv().OPENAI_QUALITY_MODEL,
+        fallbackModel: getEnv().GROQ_QUALITY_MODEL,
+        schema: tweetDraftOutputSchema,
+        schemaName: prompt.schemaName,
+        systemPrompt: prompt.systemPrompt,
+        userPrompt: renderPromptTemplate(prompt.userTemplate, {
+          sourceGuidance: params.sourceGuidance,
+          voiceNotes: params.voiceNotes,
+          draftText: params.draftText,
+          humanRewrite: params.humanRewrite,
+          operatorFeedback: params.operatorFeedback || "No extra operator feedback.",
+          voiceExamples: params.voiceExamplesText ?? "No curated voice examples yet."
         })
       })
   });

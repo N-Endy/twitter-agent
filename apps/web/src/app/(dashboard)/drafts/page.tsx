@@ -1,4 +1,6 @@
-import { MutationButton } from "@/components/mutation-button";
+import type { Route } from "next";
+import Link from "next/link";
+
 import { EmptyState, InfoNotice, Panel, StatusPill, SummaryStrip, Table, TableCell } from "@/components/dashboard";
 import { JobTriggerButton } from "@/components/job-trigger-button";
 import { ScheduleDraftControls } from "@/components/schedule-draft-controls";
@@ -107,6 +109,12 @@ export default async function DraftsPage() {
                   </TableCell>
                   <TableCell label="Actions" className="tech-column">
                     <div className="flex flex-col gap-2">
+                        <Link
+                          href={`/drafts/${draft.id}` as Route}
+                          className="inline-flex w-full justify-center border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-200 transition-all hover:bg-white/10"
+                        >
+                          Open workshop
+                        </Link>
                         {draft.status === "PENDING_QA" ? (
                           <JobTriggerButton
                             job="draft-qa"
@@ -114,9 +122,6 @@ export default async function DraftsPage() {
                             body={{ draftId: draft.id }}
                             tone="neutral"
                           />
-                        ) : null}
-                        {draft.status === "NEEDS_REVIEW" ? (
-                          <MutationButton url={`/api/admin/posts/${draft.id}/approve`} label="Approve" />
                         ) : null}
                         {draft.status === "APPROVED" && !draft.scheduleSlot ? (
                           <ScheduleDraftControls draftId={draft.id} slots={availableSlots} />

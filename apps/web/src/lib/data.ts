@@ -10,7 +10,8 @@ import {
   readSystemState,
   readWeeklyBatchState,
   readXIntegrationState,
-  readXTokens
+  readXTokens,
+  VOICE_FEEDBACK_TAGS
 } from "@twitter-agent/core";
 
 const prisma = getPrismaClient();
@@ -316,16 +317,104 @@ export async function getIncidentsPageData() {
 export async function getPromptsPageData() {
   await requireDashboardAccess();
 
-  const [prompts, brandVoiceGuide] = await Promise.all([
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const [prompts, brandVoiceGuide, voiceExamples, activeVoiceExamples, recentVoiceExamples, sourceBackedVoiceExamples] = await Promise.all([
     prisma.promptVersion.findMany({
       orderBy: [{ kind: "asc" }, { version: "desc" }]
     }),
-    readBrandVoiceProfile()
+    readBrandVoiceProfile(),
+    prisma.voiceExample.findMany({
+      orderBy: { updatedAt: "desc" },
+      take: 30,
+      include: {
+        draft: {
+          include: {
+            idea: true
+          }
+        },
+        sourceItem: true,
+        sourceRevision: true,
+        preferredRevision: true
+      }
+    }),
+    prisma.voiceExample.count({
+      where: {
+        status: "ACTIVE"
+      }
+    }),
+    prisma.voiceExample.count({
+      where: {
+        createdAt: {
+          gte: weekAgo
+        }
+      }
+    }),
+    prisma.voiceExample.findMany({
+      where: {
+        sourceItemId: {
+          not: null
+        }
+      },
+      select: {
+        sourceItemId: true
+      }
+    })
   ]);
 
   return {
     prompts,
-    brandVoiceGuide
+    brandVoiceGuide,
+    voiceExamples,
+    voiceExampleStats: {
+      active: activeVoiceExamples,
+      thisWeek: recentVoiceExamples,
+      bySource: new Set(sourceBackedVoiceExamples.map((example) => example.sourceItemId)).size
+    }
+  };
+}
+
+export async function getDraftWorkshopData(id: string) {
+  await requireDashboardAccess();
+
+  const [draft, brandVoiceGuide] = await Promise.all([
+    prisma.draft.findUnique({
+      where: { id },
+      include: {
+        idea: {
+          include: {
+            sourceItem: true,
+            snapshot: true
+          }
+        },
+        reviews: {
+          orderBy: { createdAt: "desc" },
+          take: 6
+        },
+        revisions: {
+          orderBy: { createdAt: "desc" }
+        },
+        voiceExamples: {
+          orderBy: { updatedAt: "desc" },
+          include: {
+            sourceItem: true,
+            sourceRevision: true,
+            preferredRevision: true
+          }
+        },
+        scheduleSlot: true
+      }
+    }),
+    readBrandVoiceProfile()
+  ]);
+
+  if (!draft) {
+    return null;
+  }
+
+  return {
+    draft,
+    brandVoiceGuide,
+    feedbackTagOptions: [...VOICE_FEEDBACK_TAGS]
   };
 }
 

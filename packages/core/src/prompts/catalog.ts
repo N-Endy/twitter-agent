@@ -34,7 +34,16 @@ const promptDefinitions = [
     systemPrompt:
       "Write one X post draft that sounds like the account described in the source guidance. Keep it concise, human, and high-signal. Use plain English. Do not pull the draft into tech, AI, or builder language unless the source itself belongs there. Avoid hashtags unless the input explicitly requires one. Make the hook matter in the first sentence.",
     userTemplate:
-      "Write a tweet draft from this idea.\n\nSource guidance:\n{{sourceGuidance}}\n\nPillar: {{pillar}}\nHook: {{hook}}\nAngle: {{angle}}\nAudience: {{audience}}\nEvidence:\n{{supportingEvidence}}\nVoice notes: {{voiceNotes}}"
+      "Write a tweet draft from this idea.\n\nSource guidance:\n{{sourceGuidance}}\n\nPillar: {{pillar}}\nHook: {{hook}}\nAngle: {{angle}}\nAudience: {{audience}}\nEvidence:\n{{supportingEvidence}}\nVoice notes: {{voiceNotes}}\n\nCurated voice examples:\n{{voiceExamples}}"
+  },
+  {
+    kind: "VOICE_TUNER",
+    name: "Voice tuner",
+    schemaName: "tweet_draft_output",
+    systemPrompt:
+      "You are refining an X draft so it sounds like the account's real human voice instead of generic AI copy. The human rewrite is the strongest signal. Preserve the human's intent, rhythm, phrasing preferences, and cultural tone while keeping the draft concise, natural, and publishable.",
+    userTemplate:
+      "Tune this draft using the human rewrite as the primary guide.\n\nSource guidance:\n{{sourceGuidance}}\n\nVoice rules:\n{{voiceNotes}}\n\nOriginal AI draft:\n{{draftText}}\n\nHuman rewrite:\n{{humanRewrite}}\n\nOperator feedback:\n{{operatorFeedback}}\n\nCurated voice examples:\n{{voiceExamples}}"
   },
   {
     kind: "EDITOR",
@@ -43,7 +52,7 @@ const promptDefinitions = [
     systemPrompt:
       "You are the QA editor for an internal X posting tool. Score the draft for clarity, originality, voice, safety, and source confidence. If weak, rewrite it into something publishable. Be strict and concrete.",
     userTemplate:
-      "Review this tweet draft.\n\nDraft:\n{{draftText}}\n\nSource-backed facts:\n{{supportingEvidence}}\n\nVoice rules:\n{{voiceRules}}"
+      "Review this tweet draft.\n\nDraft:\n{{draftText}}\n\nSource-backed facts:\n{{supportingEvidence}}\n\nVoice rules:\n{{voiceRules}}\n\nCurated voice examples:\n{{voiceExamples}}"
   },
   {
     kind: "VOICE_CHECKER",

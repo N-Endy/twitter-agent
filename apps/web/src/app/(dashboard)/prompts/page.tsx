@@ -4,7 +4,7 @@ import { EmptyState, InfoNotice, Panel, StatusPill, SummaryStrip, Table, TableCe
 import { formatDashboardDate, getPromptsPageData } from "@/lib/data";
 
 export default async function PromptsPage() {
-  const { prompts, brandVoiceGuide } = await getPromptsPageData();
+  const { prompts, brandVoiceGuide, voiceExamples, voiceExampleStats } = await getPromptsPageData();
   const activePrompts = prompts.filter((prompt) => prompt.isActive).length;
 
   return (
@@ -109,6 +109,115 @@ export default async function PromptsPage() {
                     ) : (
                       <span className="text-[9px] uppercase tracking-widest text-[var(--accent)] font-black">Live</span>
                     )}
+                  </TableCell>
+                </tr>
+              ))}
+            </Table>
+          )}
+        </div>
+      </Panel>
+
+      <Panel
+        title="Voice examples"
+        kicker="Curated training memory"
+        description="These are the before/after pairs you explicitly taught to the system. Active examples shape future writing and QA. Archive weak examples instead of deleting history."
+      >
+        <div className="space-y-5">
+          <SummaryStrip
+            items={[
+              {
+                label: "Active examples",
+                value: voiceExampleStats.active,
+                helper: "Examples currently influencing generation.",
+                tone: voiceExampleStats.active > 0 ? "good" : "warning"
+              },
+              {
+                label: "Added this week",
+                value: voiceExampleStats.thisWeek,
+                helper: "Recent training activity.",
+                tone: voiceExampleStats.thisWeek > 0 ? "good" : "default"
+              },
+              {
+                label: "Source-backed",
+                value: voiceExampleStats.bySource,
+                helper: "Examples tied to a specific source lane.",
+                tone: voiceExampleStats.bySource > 0 ? "good" : "warning"
+              },
+              {
+                label: "Rows loaded",
+                value: voiceExamples.length,
+                helper: "Most recent examples visible here.",
+                tone: voiceExamples.length > 0 ? "default" : "warning"
+              }
+            ]}
+          />
+
+          {voiceExamples.length === 0 ? (
+            <EmptyState
+              title="No voice examples yet"
+              body="Teach strong before/after draft pairs from the draft workshop. They will show up here once you explicitly save them as voice examples."
+            />
+          ) : (
+            <Table
+              headers={[
+                { label: "Draft pair" },
+                { label: "Source", className: "tech-column" },
+                { label: "Tags", className: "tech-column" },
+                { label: "Status", className: "tech-column" },
+                { label: "Updated", className: "tech-column" },
+                { label: "Action", className: "tech-column" }
+              ]}
+            >
+              {voiceExamples.map((example) => (
+                <tr key={example.id}>
+                  <TableCell label="Draft pair">
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Original AI</p>
+                    <p className="mt-2 text-xs leading-6 text-slate-300">{example.sourceRevision.text}</p>
+                    <p className="mt-4 text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Preferred rewrite</p>
+                    <p className="mt-2 text-xs leading-6 text-white">{example.preferredRevision.text}</p>
+                    {example.operatorNote ? (
+                      <p className="mt-3 border-l border-white/10 pl-3 text-xs leading-6 text-slate-400">{example.operatorNote}</p>
+                    ) : null}
+                  </TableCell>
+                  <TableCell label="Source" className="tech-column">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
+                      {example.sourceItem?.title ?? example.draft.idea.pillar}
+                    </p>
+                    <p className="mt-2 text-[9px] uppercase tracking-[0.2em] text-slate-500">
+                      {example.draft.hookTag ?? example.draft.idea.hook.slice(0, 40)}
+                    </p>
+                  </TableCell>
+                  <TableCell label="Tags" className="tech-column">
+                    <div className="flex flex-wrap gap-2">
+                      {example.feedbackTags.length > 0 ? (
+                        example.feedbackTags.map((tag) => (
+                          <span
+                            key={`${example.id}-${tag}`}
+                            className="inline-flex border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-slate-300"
+                          >
+                            {tag.replaceAll("_", " ")}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">No tags</span>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell label="Status" className="tech-column">
+                    <StatusPill tone={example.status === "ACTIVE" ? "good" : "warning"}>
+                      {example.status}
+                    </StatusPill>
+                  </TableCell>
+                  <TableCell label="Updated" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">
+                    {formatDashboardDate(example.updatedAt)}
+                  </TableCell>
+                  <TableCell label="Action" className="tech-column">
+                    <MutationButton
+                      url={`/api/admin/voice-examples/${example.id}/archive`}
+                      label={example.status === "ACTIVE" ? "Archive" : "Restore"}
+                      body={{ action: example.status === "ACTIVE" ? "archive" : "restore" }}
+                      tone={example.status === "ACTIVE" ? "warning" : "success"}
+                    />
                   </TableCell>
                 </tr>
               ))}

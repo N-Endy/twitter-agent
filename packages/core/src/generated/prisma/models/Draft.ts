@@ -343,6 +343,8 @@ export type DraftWhereInput = {
   idea?: Prisma.XOR<Prisma.ContentIdeaScalarRelationFilter, Prisma.ContentIdeaWhereInput>
   scheduleSlot?: Prisma.XOR<Prisma.ScheduleSlotNullableScalarRelationFilter, Prisma.ScheduleSlotWhereInput> | null
   reviews?: Prisma.DraftReviewListRelationFilter
+  revisions?: Prisma.DraftRevisionListRelationFilter
+  voiceExamples?: Prisma.VoiceExampleListRelationFilter
   publishedPost?: Prisma.XOR<Prisma.PublishedPostNullableScalarRelationFilter, Prisma.PublishedPostWhereInput> | null
 }
 
@@ -370,6 +372,8 @@ export type DraftOrderByWithRelationInput = {
   idea?: Prisma.ContentIdeaOrderByWithRelationInput
   scheduleSlot?: Prisma.ScheduleSlotOrderByWithRelationInput
   reviews?: Prisma.DraftReviewOrderByRelationAggregateInput
+  revisions?: Prisma.DraftRevisionOrderByRelationAggregateInput
+  voiceExamples?: Prisma.VoiceExampleOrderByRelationAggregateInput
   publishedPost?: Prisma.PublishedPostOrderByWithRelationInput
 }
 
@@ -400,6 +404,8 @@ export type DraftWhereUniqueInput = Prisma.AtLeast<{
   idea?: Prisma.XOR<Prisma.ContentIdeaScalarRelationFilter, Prisma.ContentIdeaWhereInput>
   scheduleSlot?: Prisma.XOR<Prisma.ScheduleSlotNullableScalarRelationFilter, Prisma.ScheduleSlotWhereInput> | null
   reviews?: Prisma.DraftReviewListRelationFilter
+  revisions?: Prisma.DraftRevisionListRelationFilter
+  voiceExamples?: Prisma.VoiceExampleListRelationFilter
   publishedPost?: Prisma.XOR<Prisma.PublishedPostNullableScalarRelationFilter, Prisma.PublishedPostWhereInput> | null
 }, "id" | "scheduleSlotId">
 
@@ -479,6 +485,8 @@ export type DraftCreateInput = {
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
@@ -504,6 +512,8 @@ export type DraftUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionUncheckedCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
@@ -529,6 +539,8 @@ export type DraftUpdateInput = {
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
@@ -554,6 +566,8 @@ export type DraftUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUncheckedUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
@@ -794,6 +808,20 @@ export type EnumDraftStatusFieldUpdateOperationsInput = {
   set?: $Enums.DraftStatus
 }
 
+export type DraftCreateNestedOneWithoutRevisionsInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutRevisionsInput, Prisma.DraftUncheckedCreateWithoutRevisionsInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutRevisionsInput
+  connect?: Prisma.DraftWhereUniqueInput
+}
+
+export type DraftUpdateOneRequiredWithoutRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutRevisionsInput, Prisma.DraftUncheckedCreateWithoutRevisionsInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutRevisionsInput
+  upsert?: Prisma.DraftUpsertWithoutRevisionsInput
+  connect?: Prisma.DraftWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutRevisionsInput, Prisma.DraftUpdateWithoutRevisionsInput>, Prisma.DraftUncheckedUpdateWithoutRevisionsInput>
+}
+
 export type DraftCreateNestedOneWithoutReviewsInput = {
   create?: Prisma.XOR<Prisma.DraftCreateWithoutReviewsInput, Prisma.DraftUncheckedCreateWithoutReviewsInput>
   connectOrCreate?: Prisma.DraftCreateOrConnectWithoutReviewsInput
@@ -854,6 +882,20 @@ export type DraftUpdateOneRequiredWithoutPublishedPostNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutPublishedPostInput, Prisma.DraftUpdateWithoutPublishedPostInput>, Prisma.DraftUncheckedUpdateWithoutPublishedPostInput>
 }
 
+export type DraftCreateNestedOneWithoutVoiceExamplesInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutVoiceExamplesInput, Prisma.DraftUncheckedCreateWithoutVoiceExamplesInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutVoiceExamplesInput
+  connect?: Prisma.DraftWhereUniqueInput
+}
+
+export type DraftUpdateOneRequiredWithoutVoiceExamplesNestedInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutVoiceExamplesInput, Prisma.DraftUncheckedCreateWithoutVoiceExamplesInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutVoiceExamplesInput
+  upsert?: Prisma.DraftUpsertWithoutVoiceExamplesInput
+  connect?: Prisma.DraftWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutVoiceExamplesInput, Prisma.DraftUpdateWithoutVoiceExamplesInput>, Prisma.DraftUncheckedUpdateWithoutVoiceExamplesInput>
+}
+
 export type DraftCreateWithoutIdeaInput = {
   id?: string
   variantLabel?: string | null
@@ -875,6 +917,8 @@ export type DraftCreateWithoutIdeaInput = {
   updatedAt?: Date | string
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
@@ -899,6 +943,8 @@ export type DraftUncheckedCreateWithoutIdeaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionUncheckedCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
@@ -954,6 +1000,126 @@ export type DraftScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Draft"> | Date | string
 }
 
+export type DraftCreateWithoutRevisionsInput = {
+  id?: string
+  variantLabel?: string | null
+  text: string
+  rationale?: string | null
+  score?: number | null
+  qualitySummary?: string | null
+  sourceBacked?: boolean
+  topical?: boolean
+  characterCount: number
+  hookTag?: string | null
+  pillarTag?: string | null
+  evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
+  suggestedCta?: string | null
+  confidence?: number | null
+  status?: $Enums.DraftStatus
+  approvedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
+  scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
+  reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
+}
+
+export type DraftUncheckedCreateWithoutRevisionsInput = {
+  id?: string
+  ideaId: string
+  scheduleSlotId?: string | null
+  variantLabel?: string | null
+  text: string
+  rationale?: string | null
+  score?: number | null
+  qualitySummary?: string | null
+  sourceBacked?: boolean
+  topical?: boolean
+  characterCount: number
+  hookTag?: string | null
+  pillarTag?: string | null
+  evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
+  suggestedCta?: string | null
+  confidence?: number | null
+  status?: $Enums.DraftStatus
+  approvedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
+}
+
+export type DraftCreateOrConnectWithoutRevisionsInput = {
+  where: Prisma.DraftWhereUniqueInput
+  create: Prisma.XOR<Prisma.DraftCreateWithoutRevisionsInput, Prisma.DraftUncheckedCreateWithoutRevisionsInput>
+}
+
+export type DraftUpsertWithoutRevisionsInput = {
+  update: Prisma.XOR<Prisma.DraftUpdateWithoutRevisionsInput, Prisma.DraftUncheckedUpdateWithoutRevisionsInput>
+  create: Prisma.XOR<Prisma.DraftCreateWithoutRevisionsInput, Prisma.DraftUncheckedCreateWithoutRevisionsInput>
+  where?: Prisma.DraftWhereInput
+}
+
+export type DraftUpdateToOneWithWhereWithoutRevisionsInput = {
+  where?: Prisma.DraftWhereInput
+  data: Prisma.XOR<Prisma.DraftUpdateWithoutRevisionsInput, Prisma.DraftUncheckedUpdateWithoutRevisionsInput>
+}
+
+export type DraftUpdateWithoutRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  variantLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  rationale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  qualitySummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceBacked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  topical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  characterCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hookTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pillarTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
+  suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
+  scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
+  reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
+}
+
+export type DraftUncheckedUpdateWithoutRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ideaId?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  variantLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  rationale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  qualitySummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceBacked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  topical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  characterCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hookTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pillarTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
+  suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
+}
+
 export type DraftCreateWithoutReviewsInput = {
   id?: string
   variantLabel?: string | null
@@ -975,6 +1141,8 @@ export type DraftCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
+  revisions?: Prisma.DraftRevisionCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
@@ -999,6 +1167,8 @@ export type DraftUncheckedCreateWithoutReviewsInput = {
   approvedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  revisions?: Prisma.DraftRevisionUncheckedCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
@@ -1039,6 +1209,8 @@ export type DraftUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
@@ -1063,6 +1235,8 @@ export type DraftUncheckedUpdateWithoutReviewsInput = {
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revisions?: Prisma.DraftRevisionUncheckedUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
@@ -1087,6 +1261,8 @@ export type DraftCreateWithoutScheduleSlotInput = {
   updatedAt?: Date | string
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
 }
 
@@ -1111,6 +1287,8 @@ export type DraftUncheckedCreateWithoutScheduleSlotInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionUncheckedCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutDraftInput
   publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
 }
 
@@ -1151,6 +1329,8 @@ export type DraftUpdateWithoutScheduleSlotInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
@@ -1175,6 +1355,8 @@ export type DraftUncheckedUpdateWithoutScheduleSlotInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUncheckedUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
@@ -1200,6 +1382,8 @@ export type DraftCreateWithoutPublishedPostInput = {
   idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
   scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
   reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutPublishedPostInput = {
@@ -1224,6 +1408,8 @@ export type DraftUncheckedCreateWithoutPublishedPostInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionUncheckedCreateNestedManyWithoutDraftInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutPublishedPostInput = {
@@ -1264,6 +1450,8 @@ export type DraftUpdateWithoutPublishedPostInput = {
   idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutPublishedPostInput = {
@@ -1288,6 +1476,128 @@ export type DraftUncheckedUpdateWithoutPublishedPostInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUncheckedUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutDraftNestedInput
+}
+
+export type DraftCreateWithoutVoiceExamplesInput = {
+  id?: string
+  variantLabel?: string | null
+  text: string
+  rationale?: string | null
+  score?: number | null
+  qualitySummary?: string | null
+  sourceBacked?: boolean
+  topical?: boolean
+  characterCount: number
+  hookTag?: string | null
+  pillarTag?: string | null
+  evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
+  suggestedCta?: string | null
+  confidence?: number | null
+  status?: $Enums.DraftStatus
+  approvedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  idea: Prisma.ContentIdeaCreateNestedOneWithoutDraftsInput
+  scheduleSlot?: Prisma.ScheduleSlotCreateNestedOneWithoutDraftInput
+  reviews?: Prisma.DraftReviewCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostCreateNestedOneWithoutDraftInput
+}
+
+export type DraftUncheckedCreateWithoutVoiceExamplesInput = {
+  id?: string
+  ideaId: string
+  scheduleSlotId?: string | null
+  variantLabel?: string | null
+  text: string
+  rationale?: string | null
+  score?: number | null
+  qualitySummary?: string | null
+  sourceBacked?: boolean
+  topical?: boolean
+  characterCount: number
+  hookTag?: string | null
+  pillarTag?: string | null
+  evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
+  suggestedCta?: string | null
+  confidence?: number | null
+  status?: $Enums.DraftStatus
+  approvedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviews?: Prisma.DraftReviewUncheckedCreateNestedManyWithoutDraftInput
+  revisions?: Prisma.DraftRevisionUncheckedCreateNestedManyWithoutDraftInput
+  publishedPost?: Prisma.PublishedPostUncheckedCreateNestedOneWithoutDraftInput
+}
+
+export type DraftCreateOrConnectWithoutVoiceExamplesInput = {
+  where: Prisma.DraftWhereUniqueInput
+  create: Prisma.XOR<Prisma.DraftCreateWithoutVoiceExamplesInput, Prisma.DraftUncheckedCreateWithoutVoiceExamplesInput>
+}
+
+export type DraftUpsertWithoutVoiceExamplesInput = {
+  update: Prisma.XOR<Prisma.DraftUpdateWithoutVoiceExamplesInput, Prisma.DraftUncheckedUpdateWithoutVoiceExamplesInput>
+  create: Prisma.XOR<Prisma.DraftCreateWithoutVoiceExamplesInput, Prisma.DraftUncheckedCreateWithoutVoiceExamplesInput>
+  where?: Prisma.DraftWhereInput
+}
+
+export type DraftUpdateToOneWithWhereWithoutVoiceExamplesInput = {
+  where?: Prisma.DraftWhereInput
+  data: Prisma.XOR<Prisma.DraftUpdateWithoutVoiceExamplesInput, Prisma.DraftUncheckedUpdateWithoutVoiceExamplesInput>
+}
+
+export type DraftUpdateWithoutVoiceExamplesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  variantLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  rationale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  qualitySummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceBacked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  topical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  characterCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hookTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pillarTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
+  suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  idea?: Prisma.ContentIdeaUpdateOneRequiredWithoutDraftsNestedInput
+  scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
+  reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
+}
+
+export type DraftUncheckedUpdateWithoutVoiceExamplesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ideaId?: Prisma.StringFieldUpdateOperationsInput | string
+  scheduleSlotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  variantLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  rationale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  score?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  qualitySummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceBacked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  topical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  characterCount?: Prisma.IntFieldUpdateOperationsInput | number
+  hookTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pillarTag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
+  suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUncheckedUpdateManyWithoutDraftNestedInput
+  publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
 export type DraftCreateManyIdeaInput = {
@@ -1333,6 +1643,8 @@ export type DraftUpdateWithoutIdeaInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleSlot?: Prisma.ScheduleSlotUpdateOneWithoutDraftNestedInput
   reviews?: Prisma.DraftReviewUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUpdateOneWithoutDraftNestedInput
 }
 
@@ -1357,6 +1669,8 @@ export type DraftUncheckedUpdateWithoutIdeaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.DraftReviewUncheckedUpdateManyWithoutDraftNestedInput
+  revisions?: Prisma.DraftRevisionUncheckedUpdateManyWithoutDraftNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutDraftNestedInput
   publishedPost?: Prisma.PublishedPostUncheckedUpdateOneWithoutDraftNestedInput
 }
 
@@ -1389,10 +1703,14 @@ export type DraftUncheckedUpdateManyWithoutIdeaInput = {
 
 export type DraftCountOutputType = {
   reviews: number
+  revisions: number
+  voiceExamples: number
 }
 
 export type DraftCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviews?: boolean | DraftCountOutputTypeCountReviewsArgs
+  revisions?: boolean | DraftCountOutputTypeCountRevisionsArgs
+  voiceExamples?: boolean | DraftCountOutputTypeCountVoiceExamplesArgs
 }
 
 /**
@@ -1410,6 +1728,20 @@ export type DraftCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type DraftCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DraftReviewWhereInput
+}
+
+/**
+ * DraftCountOutputType without action
+ */
+export type DraftCountOutputTypeCountRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DraftRevisionWhereInput
+}
+
+/**
+ * DraftCountOutputType without action
+ */
+export type DraftCountOutputTypeCountVoiceExamplesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoiceExampleWhereInput
 }
 
 
@@ -1437,6 +1769,8 @@ export type DraftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   idea?: boolean | Prisma.ContentIdeaDefaultArgs<ExtArgs>
   scheduleSlot?: boolean | Prisma.Draft$scheduleSlotArgs<ExtArgs>
   reviews?: boolean | Prisma.Draft$reviewsArgs<ExtArgs>
+  revisions?: boolean | Prisma.Draft$revisionsArgs<ExtArgs>
+  voiceExamples?: boolean | Prisma.Draft$voiceExamplesArgs<ExtArgs>
   publishedPost?: boolean | Prisma.Draft$publishedPostArgs<ExtArgs>
   _count?: boolean | Prisma.DraftCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["draft"]>
@@ -1519,6 +1853,8 @@ export type DraftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   idea?: boolean | Prisma.ContentIdeaDefaultArgs<ExtArgs>
   scheduleSlot?: boolean | Prisma.Draft$scheduleSlotArgs<ExtArgs>
   reviews?: boolean | Prisma.Draft$reviewsArgs<ExtArgs>
+  revisions?: boolean | Prisma.Draft$revisionsArgs<ExtArgs>
+  voiceExamples?: boolean | Prisma.Draft$voiceExamplesArgs<ExtArgs>
   publishedPost?: boolean | Prisma.Draft$publishedPostArgs<ExtArgs>
   _count?: boolean | Prisma.DraftCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1537,6 +1873,8 @@ export type $DraftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     idea: Prisma.$ContentIdeaPayload<ExtArgs>
     scheduleSlot: Prisma.$ScheduleSlotPayload<ExtArgs> | null
     reviews: Prisma.$DraftReviewPayload<ExtArgs>[]
+    revisions: Prisma.$DraftRevisionPayload<ExtArgs>[]
+    voiceExamples: Prisma.$VoiceExamplePayload<ExtArgs>[]
     publishedPost: Prisma.$PublishedPostPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1957,6 +2295,8 @@ export interface Prisma__DraftClient<T, Null = never, ExtArgs extends runtime.Ty
   idea<T extends Prisma.ContentIdeaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentIdeaDefaultArgs<ExtArgs>>): Prisma.Prisma__ContentIdeaClient<runtime.Types.Result.GetResult<Prisma.$ContentIdeaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   scheduleSlot<T extends Prisma.Draft$scheduleSlotArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$scheduleSlotArgs<ExtArgs>>): Prisma.Prisma__ScheduleSlotClient<runtime.Types.Result.GetResult<Prisma.$ScheduleSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.Draft$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  revisions<T extends Prisma.Draft$revisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$revisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  voiceExamples<T extends Prisma.Draft$voiceExamplesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$voiceExamplesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoiceExamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   publishedPost<T extends Prisma.Draft$publishedPostArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$publishedPostArgs<ExtArgs>>): Prisma.Prisma__PublishedPostClient<runtime.Types.Result.GetResult<Prisma.$PublishedPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2448,6 +2788,54 @@ export type Draft$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.DraftReviewScalarFieldEnum | Prisma.DraftReviewScalarFieldEnum[]
+}
+
+/**
+ * Draft.revisions
+ */
+export type Draft$revisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DraftRevision
+   */
+  select?: Prisma.DraftRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DraftRevision
+   */
+  omit?: Prisma.DraftRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DraftRevisionInclude<ExtArgs> | null
+  where?: Prisma.DraftRevisionWhereInput
+  orderBy?: Prisma.DraftRevisionOrderByWithRelationInput | Prisma.DraftRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.DraftRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DraftRevisionScalarFieldEnum | Prisma.DraftRevisionScalarFieldEnum[]
+}
+
+/**
+ * Draft.voiceExamples
+ */
+export type Draft$voiceExamplesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VoiceExample
+   */
+  select?: Prisma.VoiceExampleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VoiceExample
+   */
+  omit?: Prisma.VoiceExampleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoiceExampleInclude<ExtArgs> | null
+  where?: Prisma.VoiceExampleWhereInput
+  orderBy?: Prisma.VoiceExampleOrderByWithRelationInput | Prisma.VoiceExampleOrderByWithRelationInput[]
+  cursor?: Prisma.VoiceExampleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoiceExampleScalarFieldEnum | Prisma.VoiceExampleScalarFieldEnum[]
 }
 
 /**

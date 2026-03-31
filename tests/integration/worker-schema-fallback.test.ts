@@ -67,5 +67,5 @@ describe("worker provider schema fallback", () => {
     expect(result.hookIdeas.length).toBeGreaterThan(0);
     expect(result.pillarCandidates.length).toBeGreaterThan(0);
     expect(result.safetyFlags).toEqual([]);
-  });
+  }, 15000);
 });

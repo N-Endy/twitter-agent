@@ -216,6 +216,7 @@ export type SourceItemWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"SourceItem"> | Date | string
   researchSnapshots?: Prisma.ResearchSnapshotListRelationFilter
   contentIdeas?: Prisma.ContentIdeaListRelationFilter
+  voiceExamples?: Prisma.VoiceExampleListRelationFilter
 }
 
 export type SourceItemOrderByWithRelationInput = {
@@ -230,6 +231,7 @@ export type SourceItemOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   researchSnapshots?: Prisma.ResearchSnapshotOrderByRelationAggregateInput
   contentIdeas?: Prisma.ContentIdeaOrderByRelationAggregateInput
+  voiceExamples?: Prisma.VoiceExampleOrderByRelationAggregateInput
 }
 
 export type SourceItemWhereUniqueInput = Prisma.AtLeast<{
@@ -247,6 +249,7 @@ export type SourceItemWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"SourceItem"> | Date | string
   researchSnapshots?: Prisma.ResearchSnapshotListRelationFilter
   contentIdeas?: Prisma.ContentIdeaListRelationFilter
+  voiceExamples?: Prisma.VoiceExampleListRelationFilter
 }, "id" | "uri">
 
 export type SourceItemOrderByWithAggregationInput = {
@@ -291,6 +294,7 @@ export type SourceItemCreateInput = {
   updatedAt?: Date | string
   researchSnapshots?: Prisma.ResearchSnapshotCreateNestedManyWithoutSourceItemInput
   contentIdeas?: Prisma.ContentIdeaCreateNestedManyWithoutSourceItemInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutSourceItemInput
 }
 
 export type SourceItemUncheckedCreateInput = {
@@ -305,6 +309,7 @@ export type SourceItemUncheckedCreateInput = {
   updatedAt?: Date | string
   researchSnapshots?: Prisma.ResearchSnapshotUncheckedCreateNestedManyWithoutSourceItemInput
   contentIdeas?: Prisma.ContentIdeaUncheckedCreateNestedManyWithoutSourceItemInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutSourceItemInput
 }
 
 export type SourceItemUpdateInput = {
@@ -319,6 +324,7 @@ export type SourceItemUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   researchSnapshots?: Prisma.ResearchSnapshotUpdateManyWithoutSourceItemNestedInput
   contentIdeas?: Prisma.ContentIdeaUpdateManyWithoutSourceItemNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutSourceItemNestedInput
 }
 
 export type SourceItemUncheckedUpdateInput = {
@@ -333,6 +339,7 @@ export type SourceItemUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   researchSnapshots?: Prisma.ResearchSnapshotUncheckedUpdateManyWithoutSourceItemNestedInput
   contentIdeas?: Prisma.ContentIdeaUncheckedUpdateManyWithoutSourceItemNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutSourceItemNestedInput
 }
 
 export type SourceItemCreateManyInput = {
@@ -412,6 +419,11 @@ export type SourceItemScalarRelationFilter = {
   isNot?: Prisma.SourceItemWhereInput
 }
 
+export type SourceItemNullableScalarRelationFilter = {
+  is?: Prisma.SourceItemWhereInput | null
+  isNot?: Prisma.SourceItemWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -460,6 +472,22 @@ export type SourceItemUpdateOneRequiredWithoutContentIdeasNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SourceItemUpdateToOneWithWhereWithoutContentIdeasInput, Prisma.SourceItemUpdateWithoutContentIdeasInput>, Prisma.SourceItemUncheckedUpdateWithoutContentIdeasInput>
 }
 
+export type SourceItemCreateNestedOneWithoutVoiceExamplesInput = {
+  create?: Prisma.XOR<Prisma.SourceItemCreateWithoutVoiceExamplesInput, Prisma.SourceItemUncheckedCreateWithoutVoiceExamplesInput>
+  connectOrCreate?: Prisma.SourceItemCreateOrConnectWithoutVoiceExamplesInput
+  connect?: Prisma.SourceItemWhereUniqueInput
+}
+
+export type SourceItemUpdateOneWithoutVoiceExamplesNestedInput = {
+  create?: Prisma.XOR<Prisma.SourceItemCreateWithoutVoiceExamplesInput, Prisma.SourceItemUncheckedCreateWithoutVoiceExamplesInput>
+  connectOrCreate?: Prisma.SourceItemCreateOrConnectWithoutVoiceExamplesInput
+  upsert?: Prisma.SourceItemUpsertWithoutVoiceExamplesInput
+  disconnect?: Prisma.SourceItemWhereInput | boolean
+  delete?: Prisma.SourceItemWhereInput | boolean
+  connect?: Prisma.SourceItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SourceItemUpdateToOneWithWhereWithoutVoiceExamplesInput, Prisma.SourceItemUpdateWithoutVoiceExamplesInput>, Prisma.SourceItemUncheckedUpdateWithoutVoiceExamplesInput>
+}
+
 export type SourceItemCreateWithoutResearchSnapshotsInput = {
   id?: string
   kind: $Enums.SourceKind
@@ -471,6 +499,7 @@ export type SourceItemCreateWithoutResearchSnapshotsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   contentIdeas?: Prisma.ContentIdeaCreateNestedManyWithoutSourceItemInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutSourceItemInput
 }
 
 export type SourceItemUncheckedCreateWithoutResearchSnapshotsInput = {
@@ -484,6 +513,7 @@ export type SourceItemUncheckedCreateWithoutResearchSnapshotsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   contentIdeas?: Prisma.ContentIdeaUncheckedCreateNestedManyWithoutSourceItemInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutSourceItemInput
 }
 
 export type SourceItemCreateOrConnectWithoutResearchSnapshotsInput = {
@@ -513,6 +543,7 @@ export type SourceItemUpdateWithoutResearchSnapshotsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contentIdeas?: Prisma.ContentIdeaUpdateManyWithoutSourceItemNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutSourceItemNestedInput
 }
 
 export type SourceItemUncheckedUpdateWithoutResearchSnapshotsInput = {
@@ -526,6 +557,7 @@ export type SourceItemUncheckedUpdateWithoutResearchSnapshotsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contentIdeas?: Prisma.ContentIdeaUncheckedUpdateManyWithoutSourceItemNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutSourceItemNestedInput
 }
 
 export type SourceItemCreateWithoutContentIdeasInput = {
@@ -539,6 +571,7 @@ export type SourceItemCreateWithoutContentIdeasInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   researchSnapshots?: Prisma.ResearchSnapshotCreateNestedManyWithoutSourceItemInput
+  voiceExamples?: Prisma.VoiceExampleCreateNestedManyWithoutSourceItemInput
 }
 
 export type SourceItemUncheckedCreateWithoutContentIdeasInput = {
@@ -552,6 +585,7 @@ export type SourceItemUncheckedCreateWithoutContentIdeasInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   researchSnapshots?: Prisma.ResearchSnapshotUncheckedCreateNestedManyWithoutSourceItemInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedCreateNestedManyWithoutSourceItemInput
 }
 
 export type SourceItemCreateOrConnectWithoutContentIdeasInput = {
@@ -581,6 +615,7 @@ export type SourceItemUpdateWithoutContentIdeasInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   researchSnapshots?: Prisma.ResearchSnapshotUpdateManyWithoutSourceItemNestedInput
+  voiceExamples?: Prisma.VoiceExampleUpdateManyWithoutSourceItemNestedInput
 }
 
 export type SourceItemUncheckedUpdateWithoutContentIdeasInput = {
@@ -594,6 +629,79 @@ export type SourceItemUncheckedUpdateWithoutContentIdeasInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   researchSnapshots?: Prisma.ResearchSnapshotUncheckedUpdateManyWithoutSourceItemNestedInput
+  voiceExamples?: Prisma.VoiceExampleUncheckedUpdateManyWithoutSourceItemNestedInput
+}
+
+export type SourceItemCreateWithoutVoiceExamplesInput = {
+  id?: string
+  kind: $Enums.SourceKind
+  title: string
+  uri: string
+  allowlistHandle?: string | null
+  notes?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  researchSnapshots?: Prisma.ResearchSnapshotCreateNestedManyWithoutSourceItemInput
+  contentIdeas?: Prisma.ContentIdeaCreateNestedManyWithoutSourceItemInput
+}
+
+export type SourceItemUncheckedCreateWithoutVoiceExamplesInput = {
+  id?: string
+  kind: $Enums.SourceKind
+  title: string
+  uri: string
+  allowlistHandle?: string | null
+  notes?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  researchSnapshots?: Prisma.ResearchSnapshotUncheckedCreateNestedManyWithoutSourceItemInput
+  contentIdeas?: Prisma.ContentIdeaUncheckedCreateNestedManyWithoutSourceItemInput
+}
+
+export type SourceItemCreateOrConnectWithoutVoiceExamplesInput = {
+  where: Prisma.SourceItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.SourceItemCreateWithoutVoiceExamplesInput, Prisma.SourceItemUncheckedCreateWithoutVoiceExamplesInput>
+}
+
+export type SourceItemUpsertWithoutVoiceExamplesInput = {
+  update: Prisma.XOR<Prisma.SourceItemUpdateWithoutVoiceExamplesInput, Prisma.SourceItemUncheckedUpdateWithoutVoiceExamplesInput>
+  create: Prisma.XOR<Prisma.SourceItemCreateWithoutVoiceExamplesInput, Prisma.SourceItemUncheckedCreateWithoutVoiceExamplesInput>
+  where?: Prisma.SourceItemWhereInput
+}
+
+export type SourceItemUpdateToOneWithWhereWithoutVoiceExamplesInput = {
+  where?: Prisma.SourceItemWhereInput
+  data: Prisma.XOR<Prisma.SourceItemUpdateWithoutVoiceExamplesInput, Prisma.SourceItemUncheckedUpdateWithoutVoiceExamplesInput>
+}
+
+export type SourceItemUpdateWithoutVoiceExamplesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  uri?: Prisma.StringFieldUpdateOperationsInput | string
+  allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  researchSnapshots?: Prisma.ResearchSnapshotUpdateManyWithoutSourceItemNestedInput
+  contentIdeas?: Prisma.ContentIdeaUpdateManyWithoutSourceItemNestedInput
+}
+
+export type SourceItemUncheckedUpdateWithoutVoiceExamplesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumSourceKindFieldUpdateOperationsInput | $Enums.SourceKind
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  uri?: Prisma.StringFieldUpdateOperationsInput | string
+  allowlistHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  researchSnapshots?: Prisma.ResearchSnapshotUncheckedUpdateManyWithoutSourceItemNestedInput
+  contentIdeas?: Prisma.ContentIdeaUncheckedUpdateManyWithoutSourceItemNestedInput
 }
 
 
@@ -604,11 +712,13 @@ export type SourceItemUncheckedUpdateWithoutContentIdeasInput = {
 export type SourceItemCountOutputType = {
   researchSnapshots: number
   contentIdeas: number
+  voiceExamples: number
 }
 
 export type SourceItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   researchSnapshots?: boolean | SourceItemCountOutputTypeCountResearchSnapshotsArgs
   contentIdeas?: boolean | SourceItemCountOutputTypeCountContentIdeasArgs
+  voiceExamples?: boolean | SourceItemCountOutputTypeCountVoiceExamplesArgs
 }
 
 /**
@@ -635,6 +745,13 @@ export type SourceItemCountOutputTypeCountContentIdeasArgs<ExtArgs extends runti
   where?: Prisma.ContentIdeaWhereInput
 }
 
+/**
+ * SourceItemCountOutputType without action
+ */
+export type SourceItemCountOutputTypeCountVoiceExamplesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoiceExampleWhereInput
+}
+
 
 export type SourceItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -648,6 +765,7 @@ export type SourceItemSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updatedAt?: boolean
   researchSnapshots?: boolean | Prisma.SourceItem$researchSnapshotsArgs<ExtArgs>
   contentIdeas?: boolean | Prisma.SourceItem$contentIdeasArgs<ExtArgs>
+  voiceExamples?: boolean | Prisma.SourceItem$voiceExamplesArgs<ExtArgs>
   _count?: boolean | Prisma.SourceItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sourceItem"]>
 
@@ -691,6 +809,7 @@ export type SourceItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type SourceItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   researchSnapshots?: boolean | Prisma.SourceItem$researchSnapshotsArgs<ExtArgs>
   contentIdeas?: boolean | Prisma.SourceItem$contentIdeasArgs<ExtArgs>
+  voiceExamples?: boolean | Prisma.SourceItem$voiceExamplesArgs<ExtArgs>
   _count?: boolean | Prisma.SourceItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SourceItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -701,6 +820,7 @@ export type $SourceItemPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     researchSnapshots: Prisma.$ResearchSnapshotPayload<ExtArgs>[]
     contentIdeas: Prisma.$ContentIdeaPayload<ExtArgs>[]
+    voiceExamples: Prisma.$VoiceExamplePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1108,6 +1228,7 @@ export interface Prisma__SourceItemClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   researchSnapshots<T extends Prisma.SourceItem$researchSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SourceItem$researchSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResearchSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contentIdeas<T extends Prisma.SourceItem$contentIdeasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SourceItem$contentIdeasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentIdeaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  voiceExamples<T extends Prisma.SourceItem$voiceExamplesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SourceItem$voiceExamplesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoiceExamplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1584,6 +1705,30 @@ export type SourceItem$contentIdeasArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.ContentIdeaScalarFieldEnum | Prisma.ContentIdeaScalarFieldEnum[]
+}
+
+/**
+ * SourceItem.voiceExamples
+ */
+export type SourceItem$voiceExamplesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VoiceExample
+   */
+  select?: Prisma.VoiceExampleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VoiceExample
+   */
+  omit?: Prisma.VoiceExampleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoiceExampleInclude<ExtArgs> | null
+  where?: Prisma.VoiceExampleWhereInput
+  orderBy?: Prisma.VoiceExampleOrderByWithRelationInput | Prisma.VoiceExampleOrderByWithRelationInput[]
+  cursor?: Prisma.VoiceExampleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoiceExampleScalarFieldEnum | Prisma.VoiceExampleScalarFieldEnum[]
 }
 
 /**
