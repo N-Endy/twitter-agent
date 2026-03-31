@@ -40,7 +40,7 @@ export function DashboardNav({
             <Link
               key={href}
               href={href}
-              className={`inline-flex min-h-11 items-center justify-center border px-4 py-2 text-center text-[10px] font-bold uppercase tracking-widest transition-all ${linkTone(isActive, "mobile")}`}
+              className={`inline-flex min-h-12 items-center justify-center border px-2 py-2 sm:px-4 text-center text-[9px] sm:text-[10px] leading-tight font-bold uppercase tracking-widest transition-all ${linkTone(isActive, "mobile")}`}
             >
               {label}
             </Link>

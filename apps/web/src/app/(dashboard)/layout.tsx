@@ -13,8 +13,6 @@ export default async function DashboardLayout({
 
   return (
     <AppShell
-      title="Operator Console"
-      subtitle="High-precision control over the content engine. Human-in-the-loop validation for all brand-risk actions."
       actions={
         <>
           <span className="inline-flex w-full items-center justify-center border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 sm:w-auto">

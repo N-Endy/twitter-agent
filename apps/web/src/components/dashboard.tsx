@@ -11,7 +11,7 @@ export function AppShell({
   actions,
   children
 }: {
-  title: string;
+  title?: string;
   subtitle?: string;
   actions?: ReactNode;
   children: ReactNode;
@@ -43,20 +43,6 @@ export function AppShell({
           </p>
 
           <div className="mt-8 flex-1 space-y-8">
-            <div className="border border-white/5 bg-white/[0.01] p-4">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Pipeline Stages</p>
-              <div className="mt-4 space-y-3 text-xs font-medium text-slate-300">
-                {["Sources", "Ideas", "Drafts", "Published", "Mentions", "Replies"].map((step, index) => (
-                  <div key={step} className="flex items-center gap-3">
-                    <span className="flex h-5 w-5 items-center justify-center border border-white/10 bg-white/5 text-[9px] text-slate-400">
-                      0{index + 1}
-                    </span>
-                    <span className="tracking-wide uppercase">{step}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <DashboardNav items={navItems} variant="desktop" />
           </div>
         </aside>
@@ -78,25 +64,27 @@ export function AppShell({
           </div>
 
           <div className="border border-white/10 bg-slate-950/40 p-4 shadow-2xl backdrop-blur-sm sm:p-8">
-            <div className="flex flex-col gap-6 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.4em] text-[var(--accent)] font-semibold">Nexus Terminal v1.0</p>
-                <h1 className="mt-4 text-3xl font-black uppercase tracking-tighter text-white sm:text-5xl">{title}</h1>
-                {subtitle ? (
-                  <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">{subtitle}</p>
-                ) : null}
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {["Research", "Ideation", "Approval", "Safety"].map((item) => (
-                    <span
-                      key={item}
-                      className="inline-flex border border-white/10 bg-white/[0.03] px-2 py-1 text-[9px] uppercase tracking-[0.25em] text-slate-500 font-bold"
-                    >
-                      {item}
-                    </span>
-                  ))}
+            <div className={`flex flex-col gap-6 border-b border-white/10 pb-6 md:flex-row ${title ? 'md:items-end md:justify-between' : 'md:items-center md:justify-end'}`}>
+              {title ? (
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-[var(--accent)] font-semibold">Nexus Terminal v1.0</p>
+                  <h1 className="mt-4 text-3xl font-black uppercase tracking-tighter text-white sm:text-5xl">{title}</h1>
+                  {subtitle ? (
+                    <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">{subtitle}</p>
+                  ) : null}
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {["Research", "Ideation", "Approval", "Safety"].map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex border border-white/10 bg-white/[0.03] px-2 py-1 text-[9px] uppercase tracking-[0.25em] text-slate-500 font-bold"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              {actions ? <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">{actions}</div> : null}
+              ) : null}
+              {actions ? <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">{actions}</div> : null}
             </div>
 
             <div className="mt-8 space-y-8">{children}</div>
@@ -123,7 +111,7 @@ export function MetricGrid({
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">{item.label}</p>
           <p
             className={[
-              "mt-5 text-4xl font-black tracking-tight sm:text-5xl",
+              "mt-5 text-3xl font-black tracking-tight sm:text-4xl truncate",
               item.tone === "good"
                 ? "text-[var(--accent)]"
                 : item.tone === "warning"
@@ -162,7 +150,7 @@ export function Panel({
           <h2 className="mt-2 text-xl font-bold uppercase tracking-tight text-white">{title}</h2>
           {description ? <p className="mt-2 max-w-2xl text-xs leading-6 text-slate-400">{description}</p> : null}
         </div>
-        {actions ? <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">{actions}</div> : null}
+        {actions ? <div className="mt-4 flex w-full flex-col gap-3 sm:mt-0 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">{actions}</div> : null}
       </div>
       <div className="mt-6">{children}</div>
     </section>
@@ -285,7 +273,7 @@ export function Table({
   return (
     <div className="dashboard-table-wrap">
       <table className="dashboard-table min-w-[1000px] w-full divide-y divide-white/10 text-left text-sm">
-        <thead className="bg-white/[0.04] text-slate-500 uppercase tracking-widest text-[9px] font-black">
+        <thead className="bg-white/[0.04] text-slate-500 uppercase tracking-widest text-[10px] font-black">
           <tr>
             {headers.map((h, i) => {
               const label = typeof h === "string" ? h : h.label;
