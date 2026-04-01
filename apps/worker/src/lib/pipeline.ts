@@ -33,6 +33,7 @@ import {
   readBrandVoiceProfile,
   readMentionCursor,
   readXIntegrationState,
+  readXTokens,
   saveMentionCursor
 } from "@twitter-agent/core";
 
@@ -149,11 +150,24 @@ function parseStoredSourcePostId(value: string | null) {
   }
 }
 
-function buildConversationContext(params: { conversationId: string | null; referencedPostText?: string | null }) {
+function buildConversationContext(params: {
+  conversationId: string | null;
+  referencedPostText?: string | null;
+  conversationRootText?: string | null;
+  mentionAuthor?: string | null;
+}) {
   const parts: string[] = [];
 
-  if (params.referencedPostText) {
-    parts.push(`Referenced post: ${params.referencedPostText}`);
+  if (params.conversationRootText) {
+    parts.push(`Original post being discussed: ${params.conversationRootText}`);
+  }
+
+  if (params.referencedPostText && params.referencedPostText !== params.conversationRootText) {
+    parts.push(`The post this mention directly replied to: ${params.referencedPostText}`);
+  }
+
+  if (params.mentionAuthor) {
+    parts.push(`Mention author: @${params.mentionAuthor}`);
   }
 
   if (params.conversationId) {
@@ -983,8 +997,30 @@ export async function runReplyDraftJob(mentionId?: string) {
       continue;
     }
 
+    // Resolve the account's own handle so we can strip it from the mention text
+    let ownHandle: string | null = null;
+
+    try {
+      const storedTokens = await readXTokens();
+      ownHandle = storedTokens?.username ?? null;
+    } catch {
+      // non-critical — proceed without stripping
+    }
+
+    // Strip the account's own @handle from the mention text so the AI
+    // doesn't echo it back. Twitter includes @handles in the raw text.
+    let cleanMentionText = mention.text;
+
+    if (ownHandle) {
+      cleanMentionText = cleanMentionText
+        .replace(new RegExp(`@${ownHandle}\\b`, "gi"), "")
+        .replace(/^\s+/, "")
+        .trim();
+    }
+
     let conversationContext = buildConversationContext({
-      conversationId: mention.conversationId
+      conversationId: mention.conversationId,
+      mentionAuthor: mention.authorUsername
     });
     const sourcePostId = parseStoredSourcePostId(mention.sourcePostId);
 
@@ -995,11 +1031,30 @@ export async function runReplyDraftJob(mentionId?: string) {
           tweetId: sourcePostId
         });
         await markXIntegrationHealthy();
-        const post = response.data.data as { text?: string } | undefined;
+        const parentPost = response.data.data as { text?: string; conversation_id?: string } | undefined;
+
+        // Also try to fetch the conversation root (the original post that started the thread)
+        let conversationRootText: string | null = null;
+        const conversationRootId = parentPost?.conversation_id ?? mention.conversationId;
+
+        if (conversationRootId && conversationRootId !== sourcePostId) {
+          try {
+            const rootResponse = await getPost({
+              authToken: contextAuthToken,
+              tweetId: conversationRootId
+            });
+            const rootPost = rootResponse.data.data as { text?: string } | undefined;
+            conversationRootText = rootPost?.text ?? null;
+          } catch {
+            // non-critical — the parent post context alone is still useful
+          }
+        }
 
         conversationContext = buildConversationContext({
           conversationId: mention.conversationId,
-          referencedPostText: post?.text ?? null
+          referencedPostText: parentPost?.text ?? null,
+          conversationRootText,
+          mentionAuthor: mention.authorUsername
         });
       } catch (error) {
         const billingRequired = await registerXFailure(error);
@@ -1011,7 +1066,7 @@ export async function runReplyDraftJob(mentionId?: string) {
     }
 
     const classification = await classifyMention({
-      mentionText: mention.text,
+      mentionText: cleanMentionText,
       conversationContext
     });
 
@@ -1033,11 +1088,16 @@ export async function runReplyDraftJob(mentionId?: string) {
       take: 3
     });
 
+    // Load the brand voice guide so replies match the account's personality
+    const brandVoice = await readBrandVoiceProfile();
+
     const suggestion = await draftReply({
-      mentionText: mention.text,
+      mentionText: cleanMentionText,
+      mentionAuthor: mention.authorUsername,
       classification: stringify(classification),
       conversationContext,
-      supportingEvidence: supportingEvidence.flatMap((item: (typeof supportingEvidence)[number]) => item.keyFacts).slice(0, 5)
+      supportingEvidence: supportingEvidence.flatMap((item: (typeof supportingEvidence)[number]) => item.keyFacts).slice(0, 5),
+      voiceGuide: brandVoice
     });
 
     await prisma.$transaction(async (tx: any) => {

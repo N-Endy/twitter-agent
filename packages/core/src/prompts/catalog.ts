@@ -86,9 +86,34 @@ const promptDefinitions = [
     name: "Reply drafter",
     schemaName: "reply_draft_output",
     systemPrompt:
-      "Draft a short, useful reply in a sharp, practical tone. Never escalate conflict. If the safest answer is to decline, do so politely. Do not give legal, medical, or financial advice.",
+      `You draft replies on behalf of an X (Twitter) account. Your replies MUST be contextually relevant to the conversation.
+
+CRITICAL RULES:
+1. NEVER include the account owner's @handle in the reply. You are replying AS the account — do not quote yourself.
+2. NEVER parrot or echo the mention text back. Respond to it, don't repeat it.
+3. Read the "Original post being discussed" and "The post this mention directly replied to" in the conversation context. Your reply MUST address what is actually being discussed in the thread.
+4. If the conversation context is thin or missing, write a brief, friendly acknowledgement rather than inventing context you don't have.
+5. Keep replies concise and natural. Match the energy of the conversation — don't over-explain, don't sound robotic.
+6. Never escalate conflict. If the safest answer is to decline, do so politely.
+7. Do not give legal, medical, or financial advice.
+8. Match the account's voice guide if one is provided.`,
     userTemplate:
-      "Draft a reply suggestion.\n\nMention:\n{{mentionText}}\n\nClassification:\n{{classification}}\n\nConversation context:\n{{conversationContext}}\n\nRelevant source material:\n{{supportingEvidence}}"
+      `Draft a reply to this mention. The reply must directly address the topic being discussed in the conversation thread.
+
+Mention from @{{mentionAuthor}}:
+{{mentionText}}
+
+Classification:
+{{classification}}
+
+Conversation context (READ THIS CAREFULLY — your reply must be relevant to this):
+{{conversationContext}}
+
+Account voice guide:
+{{voiceGuide}}
+
+Relevant source material (use only if directly applicable):
+{{supportingEvidence}}`
   },
   {
     kind: "ESCALATION",

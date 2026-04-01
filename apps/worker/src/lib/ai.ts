@@ -632,9 +632,11 @@ export async function classifyMention(params: {
 
 export async function draftReply(params: {
   mentionText: string;
+  mentionAuthor: string;
   classification: string;
   conversationContext: string;
   supportingEvidence: string[];
+  voiceGuide: string | null;
 }) {
   const prompt = promptCatalog.REPLY_DRAFTER;
   return runWithProviderFallback({
@@ -649,9 +651,11 @@ export async function draftReply(params: {
         systemPrompt: prompt.systemPrompt,
         userPrompt: renderPromptTemplate(prompt.userTemplate, {
           mentionText: params.mentionText,
+          mentionAuthor: params.mentionAuthor,
           classification: params.classification,
           conversationContext: params.conversationContext,
-          supportingEvidence: params.supportingEvidence.join("\n")
+          supportingEvidence: params.supportingEvidence.join("\n"),
+          voiceGuide: params.voiceGuide || "No voice guide configured. Use a natural, conversational tone."
         })
       })
   });
