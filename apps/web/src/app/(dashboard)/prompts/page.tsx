@@ -172,9 +172,9 @@ export default async function PromptsPage() {
                 <tr key={example.id}>
                   <TableCell label="Draft pair">
                     <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Original AI</p>
-                    <p className="mt-2 text-xs leading-6 text-slate-300">{example.sourceRevision.text}</p>
+                    <p className="mt-2 text-xs leading-6 text-slate-300 max-w-md line-clamp-4 break-words">{example.sourceRevision.text}</p>
                     <p className="mt-4 text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Preferred rewrite</p>
-                    <p className="mt-2 text-xs leading-6 text-white">{example.preferredRevision.text}</p>
+                    <p className="mt-2 text-xs leading-6 text-white max-w-md line-clamp-4 break-words">{example.preferredRevision.text}</p>
                     {example.operatorNote ? (
                       <p className="mt-3 border-l border-white/10 pl-3 text-xs leading-6 text-slate-400">{example.operatorNote}</p>
                     ) : null}

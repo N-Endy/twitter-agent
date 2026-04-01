@@ -369,8 +369,8 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
                   <StatusPill tone="warning">{formatRevisionKind(latestAiRevision.kind)}</StatusPill>
                 ) : null}
               </div>
-              <p className="text-sm leading-7 text-white">{latestAiRevision?.text ?? workshop.draft.text}</p>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm leading-7 text-white whitespace-pre-wrap break-words">{latestAiRevision?.text ?? workshop.draft.text}</p>
+              <p className="text-xs text-slate-400 whitespace-pre-wrap break-words">
                 {latestAiRevision?.rationale ?? workshop.draft.rationale ?? "No AI rationale was stored for this draft."}
               </p>
             </div>
@@ -391,7 +391,7 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
                 />
                 <div className="space-y-2 text-xs text-slate-300">
                   <p className="font-bold uppercase tracking-[0.22em] text-slate-500">QA notes</p>
-                  <p>{latestReview.notes}</p>
+                  <p className="whitespace-pre-wrap break-words">{latestReview.notes}</p>
                   {latestReview.issues.length > 0 ? (
                     <ul className="space-y-2 text-slate-400">
                       {latestReview.issues.map((issue) => (
@@ -424,8 +424,8 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
                           {formatStamp(revision.createdAt)}
                         </span>
                       </div>
-                      <p className="mt-3 text-sm leading-7 text-white">{revision.text}</p>
-                      {revision.note ? <p className="mt-3 text-xs leading-6 text-slate-400">{revision.note}</p> : null}
+                      <p className="mt-3 text-sm leading-7 text-white whitespace-pre-wrap break-words">{revision.text}</p>
+                      {revision.note ? <p className="mt-3 text-xs leading-6 text-slate-400 whitespace-pre-wrap break-words">{revision.note}</p> : null}
                       {revision.feedbackTags.length > 0 ? (
                         <div className="mt-3 flex flex-wrap gap-2">
                           {revision.feedbackTags.map((tag) => (
@@ -524,8 +524,8 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
                     Use in editor
                   </button>
                 </div>
-                <p className="text-sm leading-7 text-white">{tunedCandidate.text}</p>
-                {tunedCandidate.rationale ? <p className="text-xs leading-6 text-slate-300">{tunedCandidate.rationale}</p> : null}
+                <p className="text-sm leading-7 text-white whitespace-pre-wrap break-words">{tunedCandidate.text}</p>
+                {tunedCandidate.rationale ? <p className="text-xs leading-6 text-slate-300 whitespace-pre-wrap break-words">{tunedCandidate.rationale}</p> : null}
               </div>
             ) : null}
 
@@ -588,9 +588,9 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
             <div className="border border-white/10 bg-white/[0.02] p-4">
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Source lane</p>
               <p className="mt-3 text-sm text-white">{workshop.draft.idea.sourceItem.title}</p>
-              <p className="mt-1 text-xs text-slate-500">{workshop.draft.idea.sourceItem.uri}</p>
+              <p className="mt-1 text-xs text-slate-500 break-words">{workshop.draft.idea.sourceItem.uri}</p>
               {workshop.draft.idea.sourceItem.notes ? (
-                <p className="mt-3 text-xs leading-6 text-slate-300">{workshop.draft.idea.sourceItem.notes}</p>
+                <p className="mt-3 text-xs leading-6 text-slate-300 whitespace-pre-wrap break-words">{workshop.draft.idea.sourceItem.notes}</p>
               ) : (
                 <p className="mt-3 text-xs text-slate-500">No source-specific notes saved yet.</p>
               )}
@@ -599,7 +599,7 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
             <div className="border border-white/10 bg-white/[0.02] p-4">
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Account voice</p>
               {workshop.brandVoiceGuide ? (
-                <p className="mt-3 whitespace-pre-wrap text-xs leading-6 text-slate-300">{workshop.brandVoiceGuide}</p>
+                <p className="mt-3 whitespace-pre-wrap break-words text-xs leading-6 text-slate-300">{workshop.brandVoiceGuide}</p>
               ) : (
                 <p className="mt-3 text-xs text-slate-500">No account-wide voice guide has been saved yet.</p>
               )}
@@ -608,7 +608,7 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
             <div className="border border-white/10 bg-white/[0.02] p-4">
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Snapshot context</p>
               {sourceGuidanceSummary ? (
-                <pre className="mt-3 whitespace-pre-wrap text-xs leading-6 text-slate-300">{sourceGuidanceSummary}</pre>
+                <pre className="mt-3 whitespace-pre-wrap break-words text-xs leading-6 text-slate-300">{sourceGuidanceSummary}</pre>
               ) : (
                 <p className="mt-3 text-xs text-slate-500">No extra voice context was found for this draft.</p>
               )}
@@ -699,11 +699,11 @@ export function DraftWorkshop({ workshop }: { workshop: DraftWorkshopPayload }) 
                     <div className="grid gap-4 lg:grid-cols-2">
                       <div className="border border-white/10 bg-slate-950/30 p-3">
                         <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Original AI version</p>
-                        <p className="mt-3 text-sm leading-7 text-white">{example.sourceRevision.text}</p>
+                        <p className="mt-3 text-sm leading-7 text-white whitespace-pre-wrap break-words">{example.sourceRevision.text}</p>
                       </div>
                       <div className="border border-white/10 bg-slate-950/30 p-3">
                         <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Preferred rewrite</p>
-                        <p className="mt-3 text-sm leading-7 text-white">{example.preferredRevision.text}</p>
+                        <p className="mt-3 text-sm leading-7 text-white whitespace-pre-wrap break-words">{example.preferredRevision.text}</p>
                       </div>
                     </div>
                     {example.operatorNote ? <p className="text-xs leading-6 text-slate-300">{example.operatorNote}</p> : null}
