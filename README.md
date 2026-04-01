@@ -110,6 +110,7 @@ Recommended jobs:
 - `POST /api/cron/publish`
 - `POST /api/cron/metrics-sync`
 - `POST /api/cron/cleanup`
+- `POST /api/cron/performance-analysis`
 
 Suggested frequencies:
 
@@ -119,6 +120,7 @@ Suggested frequencies:
 - `publish`: every 5 minutes
 - `metrics-sync`: hourly
 - `cleanup`: hourly
+- `performance-analysis`: once daily, ideally late evening after the metrics-sync job has had time to collect a full day of post data
 
 ## X billing / credit behavior
 
