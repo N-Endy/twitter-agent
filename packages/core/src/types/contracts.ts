@@ -22,7 +22,9 @@ export const promptKindSchema = z.enum([
   "COMPLIANCE_CHECKER",
   "REPLY_CLASSIFIER",
   "REPLY_DRAFTER",
-  "ESCALATION"
+  "ESCALATION",
+  "THREAD_WRITER",
+  "PERFORMANCE_ANALYST"
 ]);
 export const mentionCategorySchema = z.enum([
   "QUESTION",

@@ -84,6 +84,8 @@ enum PromptKind {
   REPLY_CLASSIFIER
   REPLY_DRAFTER
   ESCALATION
+  THREAD_WRITER
+  PERFORMANCE_ANALYST
 }
 
 enum ModerationDecision {
@@ -154,6 +156,9 @@ model ContentIdea {
   hookTags       String[]
   pillarTags     String[]
   tags           String[]
+  hookPattern    String?
+  format         String      @default("tweet")
+  variantCount   Int         @default(1)
   status         IdeaStatus  @default(ACTIVE)
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
@@ -179,6 +184,9 @@ model Draft {
   evidenceUsed       String[]
   suggestedCta       String?
   confidence         Float?
+  format             String       @default("tweet")
+  threadParts        String[]
+  autoApproved       Boolean      @default(false)
   status             DraftStatus  @default(PENDING_QA)
   approvedAt         DateTime?
   createdAt          DateTime     @default(now())
@@ -381,4 +389,26 @@ model VoiceExample {
   preferredRevision   DraftRevision      @relation("VoiceExamplePreferredRevision", fields: [preferredRevisionId], references: [id], onDelete: Cascade)
 
   @@unique([sourceRevisionId, preferredRevisionId])
+}
+
+model PerformanceLearning {
+  id               String   @id @default(cuid())
+  analysis         String
+  patterns         String[]
+  antiPatterns     String[]
+  recommendations  String[]
+  sampleSize       Int
+  medianLikes      Float
+  winnerThreshold  Float
+  createdAt        DateTime @default(now())
+}
+
+model TimingAnalysis {
+  id              String   @id @default(cuid())
+  bestHours       Int[]
+  bestDays        Int[]
+  worstHours      Int[]
+  sampleSize      Int
+  avgEngagement   Json
+  createdAt       DateTime @default(now())
 }

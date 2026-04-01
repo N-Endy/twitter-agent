@@ -6,7 +6,8 @@ export const queueNames = {
   mentionPoll: "mention-poll",
   replyDraft: "reply-draft",
   metricsSync: "metrics-sync",
-  cleanup: "cleanup-retry"
+  cleanup: "cleanup-retry",
+  performanceAnalysis: "performance-analysis"
 } as const;
 
 export type QueueName = (typeof queueNames)[keyof typeof queueNames];

@@ -272,7 +272,7 @@ export function Table({
 }) {
   return (
     <div className="dashboard-table-wrap">
-      <table className="dashboard-table min-w-[1000px] w-full divide-y divide-white/10 text-left text-sm">
+      <table className="dashboard-table min-w-[800px] w-full divide-y divide-white/10 text-left text-sm">
         <thead className="bg-white/[0.04] text-slate-500 uppercase tracking-widest text-[10px] font-black">
           <tr>
             {headers.map((h, i) => {

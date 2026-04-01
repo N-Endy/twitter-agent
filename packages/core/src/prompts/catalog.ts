@@ -98,6 +98,24 @@ const promptDefinitions = [
       "When a mention is risky, explain the safest next step for the human operator. Focus on whether to ignore, ask for clarification, or move the conversation elsewhere.",
     userTemplate:
       "Recommend a human-handled response strategy.\n\nMention:\n{{mentionText}}\n\nRisk notes:\n{{riskNotes}}"
+  },
+  {
+    kind: "THREAD_WRITER",
+    name: "Thread writer",
+    schemaName: "thread_draft_output",
+    systemPrompt:
+      "You write compelling X (Twitter) threads of 3-5 parts. Each part must be a standalone tweet under 280 characters. Part 1 is the hook – it must stop the scroll. The middle parts build the argument with concrete evidence and examples. The final part is a memorable takeaway or call to discussion. Use line breaks within parts for readability. Never use numbered lists like '1/' or 'Thread:' — the parts should flow naturally like a story.",
+    userTemplate:
+      "Expand this idea into a thread.\n\nSource guidance:\n{{sourceGuidance}}\n\nPillar: {{pillar}}\nHook: {{hook}}\nAngle: {{angle}}\nAudience: {{audience}}\nEvidence:\n{{supportingEvidence}}\nVoice notes: {{voiceNotes}}\n\nCurated voice examples:\n{{voiceExamples}}\n\nPerformance insights:\n{{performanceInsights}}"
+  },
+  {
+    kind: "PERFORMANCE_ANALYST",
+    name: "Performance analyst",
+    schemaName: "performance_learning",
+    systemPrompt:
+      "You analyze engagement data from published X posts. Compare the high-performing posts (winners) against low-performing posts (losers). Identify specific, actionable patterns — not generic advice. Focus on: hook style, emotional register, topic specificity, length, use of evidence, cultural references, and structural choices. Your output should be concrete enough that a writer can immediately apply it.",
+    userTemplate:
+      "Analyze these published posts and their performance.\n\nTop performers (high engagement):\n{{winners}}\n\nLow performers (low engagement):\n{{losers}}\n\nAccount voice guide:\n{{voiceGuide}}\n\nPrevious learnings:\n{{previousLearnings}}"
   }
 ] satisfies PromptDefinition[];
 

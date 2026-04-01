@@ -22,6 +22,9 @@ const envSchema = z.object({
   TOKEN_ENCRYPTION_KEY: z.string().min(16),
   DEFAULT_POST_SLOT_HOURS: z.string().default("12:30,16:30,20:30,23:00"),
   ENABLE_EXPERIMENTAL_SLOT: z.coerce.boolean().default(true),
+  ENABLE_THREADS: z.coerce.boolean().default(true),
+  ENABLE_AUTOPILOT: z.coerce.boolean().default(false),
+  AUTOPILOT_CONFIDENCE_THRESHOLD: z.coerce.number().min(0).max(1).default(0.85),
   CRON_SHARED_SECRET: z.string().min(1),
   NEXTAUTH_URL: z.string().optional()
 });

@@ -13,6 +13,7 @@ export * from "./scheduling";
 export * from "./security";
 export * from "./style-references";
 export * from "./system-state";
+export * from "./timing";
 export * from "./types/contracts";
 export * from "./voice-training";
 export * from "./voice-guidance";

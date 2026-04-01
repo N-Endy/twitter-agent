@@ -35,7 +35,7 @@ export default async function ScheduledPage() {
             { label: "Slot", className: "tech-column" },
             { label: "Draft" },
             { label: "Pillar", className: "tech-column" },
-            { label: "Experimental", className: "tech-column" },
+            { label: "Exp.", className: "tech-column" },
             { label: "Status", className: "tech-column" }
           ]}>
             {slots.map((slot) => (
@@ -44,15 +44,15 @@ export default async function ScheduledPage() {
                 <TableCell label="Draft">
                   {slot.draft ? (
                     <>
-                      <p className="text-white font-medium">{slot.draft.text}</p>
-                      <p className="mt-1 text-xs text-slate-500">{slot.draft.idea.hook}</p>
+                      <p className="text-white font-medium line-clamp-2">{slot.draft.text}</p>
+                      <p className="mt-1 text-xs text-slate-500 truncate max-w-sm">{slot.draft.idea.hook}</p>
                     </>
                   ) : (
                     <span className="text-slate-500 uppercase tracking-widest text-[10px]">Open slot</span>
                   )}
                 </TableCell>
                 <TableCell label="Pillar" className="tech-column text-xs">{slot.draft?.idea.pillar ?? "—"}</TableCell>
-                <TableCell label="Experimental" className="tech-column text-xs uppercase tracking-widest">{slot.isExperimental ? "Yes" : "No"}</TableCell>
+                <TableCell label="Exp." className="tech-column text-xs uppercase tracking-widest">{slot.isExperimental ? "Yes" : "No"}</TableCell>
                 <TableCell label="Status" className="tech-column">
                   <StatusPill tone={slot.status === "POSTED" ? "good" : slot.status === "OPEN" ? "warning" : "neutral"}>
                     {slot.status}

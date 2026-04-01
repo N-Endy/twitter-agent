@@ -400,7 +400,9 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PromptVersion: 'PromptVersion',
   SystemState: 'SystemState',
-  VoiceExample: 'VoiceExample'
+  VoiceExample: 'VoiceExample',
+  PerformanceLearning: 'PerformanceLearning',
+  TimingAnalysis: 'TimingAnalysis'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "sourceItem" | "researchSnapshot" | "contentIdea" | "draft" | "draftRevision" | "draftReview" | "scheduleSlot" | "publishedPost" | "postMetric" | "mention" | "replySuggestion" | "replyAction" | "moderationEvent" | "auditLog" | "promptVersion" | "systemState" | "voiceExample"
+    modelProps: "sourceItem" | "researchSnapshot" | "contentIdea" | "draft" | "draftRevision" | "draftReview" | "scheduleSlot" | "publishedPost" | "postMetric" | "mention" | "replySuggestion" | "replyAction" | "moderationEvent" | "auditLog" | "promptVersion" | "systemState" | "voiceExample" | "performanceLearning" | "timingAnalysis"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1678,6 +1680,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PerformanceLearning: {
+      payload: Prisma.$PerformanceLearningPayload<ExtArgs>
+      fields: Prisma.PerformanceLearningFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PerformanceLearningFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PerformanceLearningFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>
+        }
+        findFirst: {
+          args: Prisma.PerformanceLearningFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PerformanceLearningFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>
+        }
+        findMany: {
+          args: Prisma.PerformanceLearningFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>[]
+        }
+        create: {
+          args: Prisma.PerformanceLearningCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>
+        }
+        createMany: {
+          args: Prisma.PerformanceLearningCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PerformanceLearningCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>[]
+        }
+        delete: {
+          args: Prisma.PerformanceLearningDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>
+        }
+        update: {
+          args: Prisma.PerformanceLearningUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>
+        }
+        deleteMany: {
+          args: Prisma.PerformanceLearningDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PerformanceLearningUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PerformanceLearningUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>[]
+        }
+        upsert: {
+          args: Prisma.PerformanceLearningUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PerformanceLearningPayload>
+        }
+        aggregate: {
+          args: Prisma.PerformanceLearningAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePerformanceLearning>
+        }
+        groupBy: {
+          args: Prisma.PerformanceLearningGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PerformanceLearningGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PerformanceLearningCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PerformanceLearningCountAggregateOutputType> | number
+        }
+      }
+    }
+    TimingAnalysis: {
+      payload: Prisma.$TimingAnalysisPayload<ExtArgs>
+      fields: Prisma.TimingAnalysisFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimingAnalysisFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimingAnalysisFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>
+        }
+        findFirst: {
+          args: Prisma.TimingAnalysisFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimingAnalysisFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>
+        }
+        findMany: {
+          args: Prisma.TimingAnalysisFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>[]
+        }
+        create: {
+          args: Prisma.TimingAnalysisCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>
+        }
+        createMany: {
+          args: Prisma.TimingAnalysisCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimingAnalysisCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>[]
+        }
+        delete: {
+          args: Prisma.TimingAnalysisDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>
+        }
+        update: {
+          args: Prisma.TimingAnalysisUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>
+        }
+        deleteMany: {
+          args: Prisma.TimingAnalysisDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimingAnalysisUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimingAnalysisUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>[]
+        }
+        upsert: {
+          args: Prisma.TimingAnalysisUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimingAnalysisPayload>
+        }
+        aggregate: {
+          args: Prisma.TimingAnalysisAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimingAnalysis>
+        }
+        groupBy: {
+          args: Prisma.TimingAnalysisGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimingAnalysisGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimingAnalysisCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimingAnalysisCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1766,6 +1916,9 @@ export const ContentIdeaScalarFieldEnum = {
   hookTags: 'hookTags',
   pillarTags: 'pillarTags',
   tags: 'tags',
+  hookPattern: 'hookPattern',
+  format: 'format',
+  variantCount: 'variantCount',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1791,6 +1944,9 @@ export const DraftScalarFieldEnum = {
   evidenceUsed: 'evidenceUsed',
   suggestedCta: 'suggestedCta',
   confidence: 'confidence',
+  format: 'format',
+  threadParts: 'threadParts',
+  autoApproved: 'autoApproved',
   status: 'status',
   approvedAt: 'approvedAt',
   createdAt: 'createdAt',
@@ -2003,6 +2159,34 @@ export const VoiceExampleScalarFieldEnum = {
 export type VoiceExampleScalarFieldEnum = (typeof VoiceExampleScalarFieldEnum)[keyof typeof VoiceExampleScalarFieldEnum]
 
 
+export const PerformanceLearningScalarFieldEnum = {
+  id: 'id',
+  analysis: 'analysis',
+  patterns: 'patterns',
+  antiPatterns: 'antiPatterns',
+  recommendations: 'recommendations',
+  sampleSize: 'sampleSize',
+  medianLikes: 'medianLikes',
+  winnerThreshold: 'winnerThreshold',
+  createdAt: 'createdAt'
+} as const
+
+export type PerformanceLearningScalarFieldEnum = (typeof PerformanceLearningScalarFieldEnum)[keyof typeof PerformanceLearningScalarFieldEnum]
+
+
+export const TimingAnalysisScalarFieldEnum = {
+  id: 'id',
+  bestHours: 'bestHours',
+  bestDays: 'bestDays',
+  worstHours: 'worstHours',
+  sampleSize: 'sampleSize',
+  avgEngagement: 'avgEngagement',
+  createdAt: 'createdAt'
+} as const
+
+export type TimingAnalysisScalarFieldEnum = (typeof TimingAnalysisScalarFieldEnum)[keyof typeof TimingAnalysisScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2127,6 +2311,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'IdeaStatus'
  */
 export type EnumIdeaStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdeaStatus'>
@@ -2151,20 +2349,6 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2419,6 +2603,8 @@ export type GlobalOmitConfig = {
   promptVersion?: Prisma.PromptVersionOmit
   systemState?: Prisma.SystemStateOmit
   voiceExample?: Prisma.VoiceExampleOmit
+  performanceLearning?: Prisma.PerformanceLearningOmit
+  timingAnalysis?: Prisma.TimingAnalysisOmit
 }
 
 /* Types for Logging */

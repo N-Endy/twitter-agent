@@ -6,7 +6,8 @@ export function JobTriggerButton({
   body,
   confirmText,
   tone = "neutral",
-  disabled = false
+  disabled = false,
+  fullWidth = false
 }: {
   job: "source-ingest" | "weekly-batch" | "draft-qa" | "publish-post" | "mention-poll" | "reply-draft" | "metrics-sync" | "cleanup";
   label: string;
@@ -14,6 +15,7 @@ export function JobTriggerButton({
   confirmText?: string;
   tone?: "success" | "warning" | "danger" | "neutral";
   disabled?: boolean;
+  fullWidth?: boolean;
 }) {
   return (
     <MutationButton
@@ -23,6 +25,7 @@ export function JobTriggerButton({
       confirmText={confirmText}
       tone={tone}
       disabled={disabled}
+      fullWidth={fullWidth}
     />
   );
 }

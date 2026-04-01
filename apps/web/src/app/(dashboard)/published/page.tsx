@@ -34,14 +34,14 @@ export default async function PublishedPage() {
             { label: "Posted", className: "tech-column" },
             { label: "Text" },
             { label: "Metrics", className: "tech-column" },
-            { label: "Window snapshots", className: "tech-column" },
+            { label: "Snapshots", className: "tech-column" },
             { label: "Origin", className: "tech-column" }
           ]}>
             {posts.map((post) => (
               <tr key={post.id}>
                 <TableCell label="Posted" className="tech-column text-xs font-mono">{formatDashboardDate(post.postedAt)}</TableCell>
                 <TableCell label="Text">
-                  <p className="text-white font-medium">{post.text}</p>
+                  <p className="text-white font-medium line-clamp-2">{post.text}</p>
                   <p className="mt-1 text-xs text-slate-500 font-mono">ID: {post.xPostId}</p>
                 </TableCell>
                 <TableCell label="Metrics" className="tech-column">
@@ -57,12 +57,12 @@ export default async function PublishedPage() {
                     <span className="text-slate-500 uppercase tracking-widest text-[9px]">Awaiting sync</span>
                   )}
                 </TableCell>
-                <TableCell label="Window snapshots" className="tech-column">
+                <TableCell label="Snapshots" className="tech-column">
                   <StatusPill tone={post.metricsSyncedAt ? "good" : "warning"}>
                     {post.metricsSyncedAt ? "Synced" : "Pending"}
                   </StatusPill>
                 </TableCell>
-                <TableCell label="Origin" className="tech-column text-[10px] uppercase tracking-wide text-slate-500">{post.draft.idea.hook}</TableCell>
+                <TableCell label="Origin" className="tech-column text-[10px] uppercase tracking-wide text-slate-500 truncate max-w-[100px]">{post.draft.idea.hook}</TableCell>
               </tr>
             ))}
           </Table>

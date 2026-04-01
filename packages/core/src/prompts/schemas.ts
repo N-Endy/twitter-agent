@@ -62,3 +62,32 @@ export const replyDraftOutputSchema = z.object({
   toneChecklist: z.array(z.string()),
   safetyNotes: z.array(z.string())
 });
+
+export const threadDraftOutputSchema = z.object({
+  parts: z.array(z.string()).min(2).max(10),
+  hookSummary: z.string(),
+  ctaPart: z.string(),
+  rationale: z.string(),
+  hookTag: z.string(),
+  pillarTag: z.string(),
+  evidenceUsed: z.array(z.string()),
+  confidence: z.number().min(0).max(1)
+});
+
+export const performanceLearningSchema = z.object({
+  analysis: z.string(),
+  patterns: z.array(z.string()),
+  antiPatterns: z.array(z.string()),
+  recommendations: z.array(z.string())
+});
+
+export const hookPatternSchema = z.enum([
+  "question",
+  "stat_lead",
+  "story",
+  "contrarian",
+  "controversial",
+  "pattern_break",
+  "observation",
+  "lesson"
+]);

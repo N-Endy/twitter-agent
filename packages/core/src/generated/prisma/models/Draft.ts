@@ -54,6 +54,8 @@ export type DraftMinAggregateOutputType = {
   pillarTag: string | null
   suggestedCta: string | null
   confidence: number | null
+  format: string | null
+  autoApproved: boolean | null
   status: $Enums.DraftStatus | null
   approvedAt: Date | null
   createdAt: Date | null
@@ -76,6 +78,8 @@ export type DraftMaxAggregateOutputType = {
   pillarTag: string | null
   suggestedCta: string | null
   confidence: number | null
+  format: string | null
+  autoApproved: boolean | null
   status: $Enums.DraftStatus | null
   approvedAt: Date | null
   createdAt: Date | null
@@ -99,6 +103,9 @@ export type DraftCountAggregateOutputType = {
   evidenceUsed: number
   suggestedCta: number
   confidence: number
+  format: number
+  threadParts: number
+  autoApproved: number
   status: number
   approvedAt: number
   createdAt: number
@@ -135,6 +142,8 @@ export type DraftMinAggregateInputType = {
   pillarTag?: true
   suggestedCta?: true
   confidence?: true
+  format?: true
+  autoApproved?: true
   status?: true
   approvedAt?: true
   createdAt?: true
@@ -157,6 +166,8 @@ export type DraftMaxAggregateInputType = {
   pillarTag?: true
   suggestedCta?: true
   confidence?: true
+  format?: true
+  autoApproved?: true
   status?: true
   approvedAt?: true
   createdAt?: true
@@ -180,6 +191,9 @@ export type DraftCountAggregateInputType = {
   evidenceUsed?: true
   suggestedCta?: true
   confidence?: true
+  format?: true
+  threadParts?: true
+  autoApproved?: true
   status?: true
   approvedAt?: true
   createdAt?: true
@@ -290,6 +304,9 @@ export type DraftGroupByOutputType = {
   evidenceUsed: string[]
   suggestedCta: string | null
   confidence: number | null
+  format: string
+  threadParts: string[]
+  autoApproved: boolean
   status: $Enums.DraftStatus
   approvedAt: Date | null
   createdAt: Date
@@ -336,6 +353,9 @@ export type DraftWhereInput = {
   evidenceUsed?: Prisma.StringNullableListFilter<"Draft">
   suggestedCta?: Prisma.StringNullableFilter<"Draft"> | string | null
   confidence?: Prisma.FloatNullableFilter<"Draft"> | number | null
+  format?: Prisma.StringFilter<"Draft"> | string
+  threadParts?: Prisma.StringNullableListFilter<"Draft">
+  autoApproved?: Prisma.BoolFilter<"Draft"> | boolean
   status?: Prisma.EnumDraftStatusFilter<"Draft"> | $Enums.DraftStatus
   approvedAt?: Prisma.DateTimeNullableFilter<"Draft"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Draft"> | Date | string
@@ -365,6 +385,9 @@ export type DraftOrderByWithRelationInput = {
   evidenceUsed?: Prisma.SortOrder
   suggestedCta?: Prisma.SortOrderInput | Prisma.SortOrder
   confidence?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrder
+  threadParts?: Prisma.SortOrder
+  autoApproved?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -397,6 +420,9 @@ export type DraftWhereUniqueInput = Prisma.AtLeast<{
   evidenceUsed?: Prisma.StringNullableListFilter<"Draft">
   suggestedCta?: Prisma.StringNullableFilter<"Draft"> | string | null
   confidence?: Prisma.FloatNullableFilter<"Draft"> | number | null
+  format?: Prisma.StringFilter<"Draft"> | string
+  threadParts?: Prisma.StringNullableListFilter<"Draft">
+  autoApproved?: Prisma.BoolFilter<"Draft"> | boolean
   status?: Prisma.EnumDraftStatusFilter<"Draft"> | $Enums.DraftStatus
   approvedAt?: Prisma.DateTimeNullableFilter<"Draft"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Draft"> | Date | string
@@ -426,6 +452,9 @@ export type DraftOrderByWithAggregationInput = {
   evidenceUsed?: Prisma.SortOrder
   suggestedCta?: Prisma.SortOrderInput | Prisma.SortOrder
   confidence?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrder
+  threadParts?: Prisma.SortOrder
+  autoApproved?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -457,6 +486,9 @@ export type DraftScalarWhereWithAggregatesInput = {
   evidenceUsed?: Prisma.StringNullableListFilter<"Draft">
   suggestedCta?: Prisma.StringNullableWithAggregatesFilter<"Draft"> | string | null
   confidence?: Prisma.FloatNullableWithAggregatesFilter<"Draft"> | number | null
+  format?: Prisma.StringWithAggregatesFilter<"Draft"> | string
+  threadParts?: Prisma.StringNullableListFilter<"Draft">
+  autoApproved?: Prisma.BoolWithAggregatesFilter<"Draft"> | boolean
   status?: Prisma.EnumDraftStatusWithAggregatesFilter<"Draft"> | $Enums.DraftStatus
   approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Draft"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Draft"> | Date | string
@@ -478,6 +510,9 @@ export type DraftCreateInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -507,6 +542,9 @@ export type DraftUncheckedCreateInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -532,6 +570,9 @@ export type DraftUpdateInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -561,6 +602,9 @@ export type DraftUncheckedUpdateInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -588,6 +632,9 @@ export type DraftCreateManyInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -609,6 +656,9 @@ export type DraftUpdateManyMutationInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -632,6 +682,9 @@ export type DraftUncheckedUpdateManyInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -665,6 +718,9 @@ export type DraftCountOrderByAggregateInput = {
   evidenceUsed?: Prisma.SortOrder
   suggestedCta?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  threadParts?: Prisma.SortOrder
+  autoApproved?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -693,6 +749,8 @@ export type DraftMaxOrderByAggregateInput = {
   pillarTag?: Prisma.SortOrder
   suggestedCta?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  autoApproved?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -715,6 +773,8 @@ export type DraftMinOrderByAggregateInput = {
   pillarTag?: Prisma.SortOrder
   suggestedCta?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  autoApproved?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -783,6 +843,10 @@ export type DraftCreateevidenceUsedInput = {
   set: string[]
 }
 
+export type DraftCreatethreadPartsInput = {
+  set: string[]
+}
+
 export type NullableFloatFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -791,15 +855,12 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type DraftUpdateevidenceUsedInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
-export type DraftUpdateevidenceUsedInput = {
+export type DraftUpdatethreadPartsInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -911,6 +972,9 @@ export type DraftCreateWithoutIdeaInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -938,6 +1002,9 @@ export type DraftUncheckedCreateWithoutIdeaInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -994,6 +1061,9 @@ export type DraftScalarWhereInput = {
   evidenceUsed?: Prisma.StringNullableListFilter<"Draft">
   suggestedCta?: Prisma.StringNullableFilter<"Draft"> | string | null
   confidence?: Prisma.FloatNullableFilter<"Draft"> | number | null
+  format?: Prisma.StringFilter<"Draft"> | string
+  threadParts?: Prisma.StringNullableListFilter<"Draft">
+  autoApproved?: Prisma.BoolFilter<"Draft"> | boolean
   status?: Prisma.EnumDraftStatusFilter<"Draft"> | $Enums.DraftStatus
   approvedAt?: Prisma.DateTimeNullableFilter<"Draft"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Draft"> | Date | string
@@ -1015,6 +1085,9 @@ export type DraftCreateWithoutRevisionsInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1043,6 +1116,9 @@ export type DraftUncheckedCreateWithoutRevisionsInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1083,6 +1159,9 @@ export type DraftUpdateWithoutRevisionsInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1111,6 +1190,9 @@ export type DraftUncheckedUpdateWithoutRevisionsInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1135,6 +1217,9 @@ export type DraftCreateWithoutReviewsInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1163,6 +1248,9 @@ export type DraftUncheckedCreateWithoutReviewsInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1203,6 +1291,9 @@ export type DraftUpdateWithoutReviewsInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1231,6 +1322,9 @@ export type DraftUncheckedUpdateWithoutReviewsInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1255,6 +1349,9 @@ export type DraftCreateWithoutScheduleSlotInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1282,6 +1379,9 @@ export type DraftUncheckedCreateWithoutScheduleSlotInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1323,6 +1423,9 @@ export type DraftUpdateWithoutScheduleSlotInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1350,6 +1453,9 @@ export type DraftUncheckedUpdateWithoutScheduleSlotInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1375,6 +1481,9 @@ export type DraftCreateWithoutPublishedPostInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1403,6 +1512,9 @@ export type DraftUncheckedCreateWithoutPublishedPostInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1443,6 +1555,9 @@ export type DraftUpdateWithoutPublishedPostInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1471,6 +1586,9 @@ export type DraftUncheckedUpdateWithoutPublishedPostInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1495,6 +1613,9 @@ export type DraftCreateWithoutVoiceExamplesInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1523,6 +1644,9 @@ export type DraftUncheckedCreateWithoutVoiceExamplesInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1563,6 +1687,9 @@ export type DraftUpdateWithoutVoiceExamplesInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1591,6 +1718,9 @@ export type DraftUncheckedUpdateWithoutVoiceExamplesInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1616,6 +1746,9 @@ export type DraftCreateManyIdeaInput = {
   evidenceUsed?: Prisma.DraftCreateevidenceUsedInput | string[]
   suggestedCta?: string | null
   confidence?: number | null
+  format?: string
+  threadParts?: Prisma.DraftCreatethreadPartsInput | string[]
+  autoApproved?: boolean
   status?: $Enums.DraftStatus
   approvedAt?: Date | string | null
   createdAt?: Date | string
@@ -1637,6 +1770,9 @@ export type DraftUpdateWithoutIdeaInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1664,6 +1800,9 @@ export type DraftUncheckedUpdateWithoutIdeaInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1690,6 +1829,9 @@ export type DraftUncheckedUpdateManyWithoutIdeaInput = {
   evidenceUsed?: Prisma.DraftUpdateevidenceUsedInput | string[]
   suggestedCta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  threadParts?: Prisma.DraftUpdatethreadPartsInput | string[]
+  autoApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1762,6 +1904,9 @@ export type DraftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   evidenceUsed?: boolean
   suggestedCta?: boolean
   confidence?: boolean
+  format?: boolean
+  threadParts?: boolean
+  autoApproved?: boolean
   status?: boolean
   approvedAt?: boolean
   createdAt?: boolean
@@ -1792,6 +1937,9 @@ export type DraftSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   evidenceUsed?: boolean
   suggestedCta?: boolean
   confidence?: boolean
+  format?: boolean
+  threadParts?: boolean
+  autoApproved?: boolean
   status?: boolean
   approvedAt?: boolean
   createdAt?: boolean
@@ -1817,6 +1965,9 @@ export type DraftSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   evidenceUsed?: boolean
   suggestedCta?: boolean
   confidence?: boolean
+  format?: boolean
+  threadParts?: boolean
+  autoApproved?: boolean
   status?: boolean
   approvedAt?: boolean
   createdAt?: boolean
@@ -1842,13 +1993,16 @@ export type DraftSelectScalar = {
   evidenceUsed?: boolean
   suggestedCta?: boolean
   confidence?: boolean
+  format?: boolean
+  threadParts?: boolean
+  autoApproved?: boolean
   status?: boolean
   approvedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DraftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ideaId" | "scheduleSlotId" | "variantLabel" | "text" | "rationale" | "score" | "qualitySummary" | "sourceBacked" | "topical" | "characterCount" | "hookTag" | "pillarTag" | "evidenceUsed" | "suggestedCta" | "confidence" | "status" | "approvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["draft"]>
+export type DraftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ideaId" | "scheduleSlotId" | "variantLabel" | "text" | "rationale" | "score" | "qualitySummary" | "sourceBacked" | "topical" | "characterCount" | "hookTag" | "pillarTag" | "evidenceUsed" | "suggestedCta" | "confidence" | "format" | "threadParts" | "autoApproved" | "status" | "approvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["draft"]>
 export type DraftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   idea?: boolean | Prisma.ContentIdeaDefaultArgs<ExtArgs>
   scheduleSlot?: boolean | Prisma.Draft$scheduleSlotArgs<ExtArgs>
@@ -1894,6 +2048,9 @@ export type $DraftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     evidenceUsed: string[]
     suggestedCta: string | null
     confidence: number | null
+    format: string
+    threadParts: string[]
+    autoApproved: boolean
     status: $Enums.DraftStatus
     approvedAt: Date | null
     createdAt: Date
@@ -2343,6 +2500,9 @@ export interface DraftFieldRefs {
   readonly evidenceUsed: Prisma.FieldRef<"Draft", 'String[]'>
   readonly suggestedCta: Prisma.FieldRef<"Draft", 'String'>
   readonly confidence: Prisma.FieldRef<"Draft", 'Float'>
+  readonly format: Prisma.FieldRef<"Draft", 'String'>
+  readonly threadParts: Prisma.FieldRef<"Draft", 'String[]'>
+  readonly autoApproved: Prisma.FieldRef<"Draft", 'Boolean'>
   readonly status: Prisma.FieldRef<"Draft", 'DraftStatus'>
   readonly approvedAt: Prisma.FieldRef<"Draft", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Draft", 'DateTime'>

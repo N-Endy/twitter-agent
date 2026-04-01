@@ -1,8 +1,10 @@
 import {
+  analyzePostTiming,
   buildSourceGuidance,
   buildVoiceRules,
   compareXIds,
   createPost,
+  createThread,
   ensureInitialDraftRevision,
   ensureUpcomingScheduleSlots,
   extractTweetIdFromUrl,
@@ -25,6 +27,7 @@ import {
   markXIntegrationHealthy,
   moderateDraft,
   moderateMention,
+  pickNextUnscheduledSlot,
   Prisma,
   queueNames,
   readBrandVoiceProfile,
@@ -34,12 +37,15 @@ import {
 } from "@twitter-agent/core";
 
 import {
+  analyzePerformance,
+  classifyHookPattern,
   classifyMention,
   draftReply,
   extractResearch,
   generateIdeas,
   reviewDraft,
-  writeDraft
+  writeDraft,
+  writeThread
 } from "./ai";
 
 const prisma = getPrismaClient();
@@ -265,6 +271,7 @@ export async function runSourceIngestJob() {
 export async function runWeeklyBatchJob() {
   await ensureUpcomingScheduleSlots();
 
+  const env = getEnv();
   const accountVoiceGuide = await readBrandVoiceProfile();
   const styleReferenceText = await getStyleOnlyReferenceText();
 
@@ -283,7 +290,7 @@ export async function runWeeklyBatchJob() {
   });
 
   if (snapshots.length === 0) {
-    return { ideas: 0, drafts: 0 };
+    return { ideas: 0, drafts: 0, threads: 0 };
   }
 
   const recentMetrics = await prisma.postMetric.findMany({
@@ -291,20 +298,36 @@ export async function runWeeklyBatchJob() {
       publishedPost: true
     },
     orderBy: { capturedAt: "desc" },
-    take: 20
+    take: 40
   });
 
+  const allLikes = recentMetrics
+    .map((metric: (typeof recentMetrics)[number]) => metric.likes ?? 0)
+    .sort((a: number, b: number) => a - b);
+  const medianLikes = allLikes.length > 0
+    ? allLikes[Math.floor(allLikes.length / 2)] ?? 0
+    : 0;
+  const winnerThreshold = Math.max(Math.round(medianLikes * 1.5), 5);
+
   const recentWinners = recentMetrics
-    .filter((metric: (typeof recentMetrics)[number]) => (metric.likes ?? 0) >= 10)
+    .filter((metric: (typeof recentMetrics)[number]) => (metric.likes ?? 0) >= winnerThreshold)
     .map((metric: (typeof recentMetrics)[number]) => metric.publishedPost.text)
     .slice(0, 6);
   const recentLosers = recentMetrics
-    .filter((metric: (typeof recentMetrics)[number]) => (metric.likes ?? 0) < 10)
+    .filter((metric: (typeof recentMetrics)[number]) => (metric.likes ?? 0) < winnerThreshold)
     .map((metric: (typeof recentMetrics)[number]) => metric.publishedPost.text)
     .slice(0, 6);
 
+  const latestLearning = await prisma.performanceLearning.findFirst({
+    orderBy: { createdAt: "desc" }
+  });
+  const performanceInsights = latestLearning
+    ? `${latestLearning.analysis}\nPatterns that work: ${latestLearning.patterns.join(", ")}\nPatterns to avoid: ${latestLearning.antiPatterns.join(", ")}\nRecommendations: ${latestLearning.recommendations.join("; ")}`
+    : undefined;
+
   let ideasCreated = 0;
   let draftsCreated = 0;
+  let threadsCreated = 0;
 
   for (const snapshot of snapshots.slice(0, 4)) {
     const batch = await generateIdeas({
@@ -315,10 +338,15 @@ export async function runWeeklyBatchJob() {
       sourceName: snapshot.sourceItem.title,
       sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
       sourceHooks: snapshot.hookIdeas,
-      sourcePillars: snapshot.pillarCandidates
+      sourcePillars: snapshot.pillarCandidates,
+      performanceInsights
     });
 
     for (const ideaOutput of batch.ideas.slice(0, 7)) {
+      const hookPattern = classifyHookPattern(ideaOutput.hook);
+      const hasRichEvidence = ideaOutput.supportingEvidence.length >= 3;
+      const ideaFormat = env.ENABLE_THREADS && hasRichEvidence ? "thread" : "tweet";
+
       const idea = await prisma.contentIdea.create({
         data: {
           sourceItemId: snapshot.sourceItemId,
@@ -332,68 +360,180 @@ export async function runWeeklyBatchJob() {
           topical: ideaOutput.topical,
           hookTags: [ideaOutput.hook.slice(0, 40)],
           pillarTags: [ideaOutput.pillar],
-          tags: ideaOutput.tags
+          tags: ideaOutput.tags,
+          hookPattern,
+          format: ideaFormat,
+          variantCount: 1
         }
       });
 
       ideasCreated += 1;
 
-      const draftOutput = await writeDraft({
-        pillar: ideaOutput.pillar,
-        hook: ideaOutput.hook,
-        angle: ideaOutput.angle,
-        audience: ideaOutput.audience,
-        supportingEvidence: ideaOutput.supportingEvidence,
-        voiceNotes: mergeVoiceRulesWithStyleReferences(
-          buildVoiceRules(snapshot.sourceItem, accountVoiceGuide, snapshot),
-          styleReferenceText
-        ),
-        sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
-        voiceExamplesText: await getVoiceExamplePromptText({
-          sourceItemId: snapshot.sourceItemId,
-          pillarTag: ideaOutput.pillar,
-          hookTag: ideaOutput.hook.slice(0, 40)
-        })
+      const voiceNotes = mergeVoiceRulesWithStyleReferences(
+        buildVoiceRules(snapshot.sourceItem, accountVoiceGuide, snapshot),
+        styleReferenceText
+      );
+      const voiceExamplesText = await getVoiceExamplePromptText({
+        sourceItemId: snapshot.sourceItemId,
+        pillarTag: ideaOutput.pillar,
+        hookTag: ideaOutput.hook.slice(0, 40)
       });
 
-      const draft = await prisma.$transaction(async (tx) => {
-        const createdDraft = await tx.draft.create({
-          data: {
-            ideaId: idea.id,
+      if (ideaFormat === "thread") {
+        const threadOutput = await writeThread({
+          pillar: ideaOutput.pillar,
+          hook: ideaOutput.hook,
+          angle: ideaOutput.angle,
+          audience: ideaOutput.audience,
+          supportingEvidence: ideaOutput.supportingEvidence,
+          voiceNotes,
+          sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
+          voiceExamplesText,
+          performanceInsights
+        });
+
+        const fullText = threadOutput.parts.join("\n\n---\n\n");
+
+        const draft = await prisma.$transaction(async (tx) => {
+          const createdDraft = await tx.draft.create({
+            data: {
+              ideaId: idea.id,
+              text: fullText,
+              rationale: threadOutput.rationale,
+              sourceBacked: true,
+              topical: ideaOutput.topical,
+              characterCount: fullText.length,
+              hookTag: threadOutput.hookTag,
+              pillarTag: threadOutput.pillarTag,
+              evidenceUsed: threadOutput.evidenceUsed,
+              suggestedCta: threadOutput.ctaPart,
+              confidence: threadOutput.confidence,
+              format: "thread",
+              threadParts: threadOutput.parts,
+              status: "PENDING_QA"
+            }
+          });
+
+          await ensureInitialDraftRevision(tx, {
+            draftId: createdDraft.id,
+            text: fullText,
+            rationale: threadOutput.rationale
+          });
+
+          return createdDraft;
+        });
+
+        threadsCreated += 1;
+
+        await getQueue(queueNames.draftQa).add("draft", {
+          draftId: draft.id
+        });
+      } else {
+        const draftOutput = await writeDraft({
+          pillar: ideaOutput.pillar,
+          hook: ideaOutput.hook,
+          angle: ideaOutput.angle,
+          audience: ideaOutput.audience,
+          supportingEvidence: ideaOutput.supportingEvidence,
+          voiceNotes,
+          sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
+          voiceExamplesText
+        });
+
+        const draft = await prisma.$transaction(async (tx) => {
+          const createdDraft = await tx.draft.create({
+            data: {
+              ideaId: idea.id,
+              text: draftOutput.text,
+              rationale: draftOutput.rationale,
+              sourceBacked: true,
+              topical: ideaOutput.topical,
+              characterCount: draftOutput.text.length,
+              hookTag: draftOutput.hookTag,
+              pillarTag: draftOutput.pillarTag,
+              evidenceUsed: draftOutput.evidenceUsed,
+              suggestedCta: draftOutput.suggestedCta,
+              confidence: draftOutput.confidence,
+              format: "tweet",
+              status: "PENDING_QA"
+            }
+          });
+
+          await ensureInitialDraftRevision(tx, {
+            draftId: createdDraft.id,
             text: draftOutput.text,
-            rationale: draftOutput.rationale,
-            sourceBacked: true,
-            topical: ideaOutput.topical,
-            characterCount: draftOutput.text.length,
-            hookTag: draftOutput.hookTag,
-            pillarTag: draftOutput.pillarTag,
-            evidenceUsed: draftOutput.evidenceUsed,
-            suggestedCta: draftOutput.suggestedCta,
-            confidence: draftOutput.confidence,
-            status: "PENDING_QA"
-          }
+            rationale: draftOutput.rationale
+          });
+
+          return createdDraft;
         });
 
-        await ensureInitialDraftRevision(tx, {
-          draftId: createdDraft.id,
-          text: draftOutput.text,
-          rationale: draftOutput.rationale
+        draftsCreated += 1;
+
+        await getQueue(queueNames.draftQa).add("draft", {
+          draftId: draft.id
         });
 
-        return createdDraft;
-      });
+        if (draftOutput.confidence >= 0.75 && ideaOutput.supportingEvidence.length >= 2) {
+          const variantOutput = await writeDraft({
+            pillar: ideaOutput.pillar,
+            hook: ideaOutput.hook,
+            angle: `Alternative angle: ${ideaOutput.angle}. Try a different hook style or emotional register.`,
+            audience: ideaOutput.audience,
+            supportingEvidence: ideaOutput.supportingEvidence,
+            voiceNotes,
+            sourceGuidance: buildSourceGuidance(snapshot.sourceItem, accountVoiceGuide, snapshot),
+            voiceExamplesText
+          });
 
-      draftsCreated += 1;
+          const variantDraft = await prisma.$transaction(async (tx) => {
+            const created = await tx.draft.create({
+              data: {
+                ideaId: idea.id,
+                variantLabel: "B: Alt angle",
+                text: variantOutput.text,
+                rationale: variantOutput.rationale,
+                sourceBacked: true,
+                topical: ideaOutput.topical,
+                characterCount: variantOutput.text.length,
+                hookTag: variantOutput.hookTag,
+                pillarTag: variantOutput.pillarTag,
+                evidenceUsed: variantOutput.evidenceUsed,
+                suggestedCta: variantOutput.suggestedCta,
+                confidence: variantOutput.confidence,
+                format: "tweet",
+                status: "PENDING_QA"
+              }
+            });
 
-      await getQueue(queueNames.draftQa).add("draft", {
-        draftId: draft.id
-      });
+            await ensureInitialDraftRevision(tx, {
+              draftId: created.id,
+              text: variantOutput.text,
+              rationale: variantOutput.rationale
+            });
+
+            return created;
+          });
+
+          await prisma.contentIdea.update({
+            where: { id: idea.id },
+            data: { variantCount: 2 }
+          });
+
+          draftsCreated += 1;
+
+          await getQueue(queueNames.draftQa).add("draft", {
+            draftId: variantDraft.id
+          });
+        }
+      }
     }
   }
 
   return {
     ideas: ideasCreated,
-    drafts: draftsCreated
+    drafts: draftsCreated,
+    threads: threadsCreated
   };
 }
 
@@ -436,8 +576,40 @@ export async function runDraftQaJob(draftId?: string) {
       mentionsThirdParty: /@\w+/.test(review.rewrite || draft.text)
     });
 
-    const nextStatus =
+    let nextStatus =
       moderation.decision === "BLOCK" || !review.approvedForReview ? "REJECTED" : "NEEDS_REVIEW";
+
+    let scheduleSlotId: string | undefined = undefined;
+    let autoApproved = false;
+
+    if (
+      getEnv().ENABLE_AUTOPILOT &&
+      (draft.confidence ?? 0) >= getEnv().AUTOPILOT_CONFIDENCE_THRESHOLD &&
+      nextStatus === "NEEDS_REVIEW" &&
+      moderation.decision === "ALLOW" &&
+      review.voiceScore >= 7 &&
+      review.clarityScore >= 7 &&
+      review.noveltyScore >= 7 &&
+      review.safetyScore >= 7 &&
+      review.sourceConfidenceScore >= 7
+    ) {
+      const openSlot = await prisma.scheduleSlot.findFirst({
+        where: {
+          draft: null,
+          slotAt: { gt: new Date() },
+          status: "OPEN"
+        },
+        orderBy: { slotAt: "asc" }
+      });
+
+      if (openSlot) {
+        scheduleSlotId = openSlot.id;
+        nextStatus = "SCHEDULED";
+      } else {
+        nextStatus = "APPROVED";
+      }
+      autoApproved = true;
+    }
 
     await prisma.$transaction(async (tx: any) => {
       await ensureInitialDraftRevision(tx, {
@@ -459,9 +631,19 @@ export async function runDraftQaJob(draftId?: string) {
             review.noveltyScore +
             review.safetyScore +
             review.sourceConfidenceScore,
-          status: nextStatus
+          status: nextStatus,
+          autoApproved,
+          scheduleSlotId,
+          ...(autoApproved ? { approvedAt: new Date() } : {})
         }
       });
+
+      if (scheduleSlotId) {
+        await tx.scheduleSlot.update({
+          where: { id: scheduleSlotId },
+          data: { status: "FILLED" }
+        });
+      }
 
       await tx.draftReview.create({
         data: {
@@ -573,10 +755,17 @@ export async function runPublishPostJob() {
     let response;
 
     try {
-      response = await createPost({
-        accessToken: tokens.accessToken,
-        text: draft.text
-      });
+      if (draft.format === "thread" && draft.threadParts.length > 0) {
+        response = await createThread({
+          accessToken: tokens.accessToken,
+          parts: draft.threadParts
+        });
+      } else {
+        response = await createPost({
+          accessToken: tokens.accessToken,
+          text: draft.text
+        });
+      }
       await markXIntegrationHealthy();
     } catch (error) {
       const billingRequired = await registerXFailure(error);
@@ -598,7 +787,9 @@ export async function runPublishPostJob() {
       throw error;
     }
 
-    const xPostId = String((response.data.data as { id?: string } | undefined)?.id ?? "");
+    const xPostId = draft.format === "thread" && draft.threadParts.length > 0
+      ? String((response as { firstPostId: string }).firstPostId)
+      : String(((response as any).data.data as { id?: string } | undefined)?.id ?? "");
 
     await prisma.$transaction(async (tx: any) => {
       await tx.publishedPost.create({

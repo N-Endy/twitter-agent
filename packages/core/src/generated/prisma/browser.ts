@@ -102,3 +102,13 @@ export type SystemState = Prisma.SystemStateModel
  * 
  */
 export type VoiceExample = Prisma.VoiceExampleModel
+/**
+ * Model PerformanceLearning
+ * 
+ */
+export type PerformanceLearning = Prisma.PerformanceLearningModel
+/**
+ * Model TimingAnalysis
+ * 
+ */
+export type TimingAnalysis = Prisma.TimingAnalysisModel

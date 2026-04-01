@@ -2,6 +2,8 @@ import {
   contentIdeaBatchSchema,
   draftReviewOutputSchema,
   getOpenAIErrorMessage,
+  hookPatternSchema,
+  performanceLearningSchema,
   promptCatalog,
   renderPromptTemplate,
   replyClassificationOutputSchema,
@@ -12,6 +14,7 @@ import {
   isOpenAISchemaValidationError,
   isOpenAIToolUseError,
   runStructuredPrompt,
+  threadDraftOutputSchema,
   tweetDraftOutputSchema,
   getEnv
 } from "@twitter-agent/core";
@@ -361,6 +364,7 @@ export async function generateIdeas(params: {
   sourceGuidance: string;
   sourceHooks: string[];
   sourcePillars: string[];
+  performanceInsights?: string;
 }) {
   const prompt = promptCatalog.IDEATION;
   return runWithProviderFallback({
@@ -379,7 +383,9 @@ export async function generateIdeas(params: {
         fallbackModel: getEnv().GROQ_QUALITY_MODEL,
         schema: contentIdeaBatchSchema,
         schemaName: prompt.schemaName,
-        systemPrompt: prompt.systemPrompt,
+        systemPrompt: params.performanceInsights
+          ? `${prompt.systemPrompt}\n\nPerformance insights from past posts:\n${params.performanceInsights}`
+          : prompt.systemPrompt,
         userPrompt: renderPromptTemplate(prompt.userTemplate, {
           sourceGuidance: params.sourceGuidance,
           sourceHooks: params.sourceHooks.join("\n") || "None provided",
@@ -432,6 +438,105 @@ export async function writeDraft(params: {
         })
       })
   });
+}
+
+export async function writeThread(params: {
+  pillar: string;
+  hook: string;
+  angle: string;
+  audience: string;
+  supportingEvidence: string[];
+  voiceNotes: string;
+  sourceGuidance: string;
+  voiceExamplesText?: string;
+  performanceInsights?: string;
+}) {
+  const prompt = promptCatalog.THREAD_WRITER;
+  return runWithProviderFallback({
+    label: "writeThread",
+    fallback: () => {
+      const part1 = `${params.hook}\n\n${params.angle}`;
+      const part2 = params.supportingEvidence[0] ?? "Here's what the data shows.";
+      const part3 = params.supportingEvidence[1] ?? "The lesson is clear.";
+      const part4 = "What's your take on this? Drop a reply.";
+      return threadDraftOutputSchema.parse({
+        parts: [part1.slice(0, 270), part2.slice(0, 270), part3.slice(0, 270), part4],
+        hookSummary: params.hook,
+        ctaPart: part4,
+        rationale: "Fallback thread composed from idea evidence.",
+        hookTag: params.hook.split(" ").slice(0, 4).join("-").toLowerCase(),
+        pillarTag: params.pillar.toLowerCase().replace(/\s+/g, "-"),
+        evidenceUsed: params.supportingEvidence.slice(0, 3),
+        confidence: 0.45
+      });
+    },
+    execute: () =>
+      runStructuredPrompt({
+        model: getEnv().OPENAI_QUALITY_MODEL,
+        fallbackModel: getEnv().GROQ_QUALITY_MODEL,
+        schema: threadDraftOutputSchema,
+        schemaName: prompt.schemaName,
+        systemPrompt: prompt.systemPrompt,
+        userPrompt: renderPromptTemplate(prompt.userTemplate, {
+          sourceGuidance: params.sourceGuidance,
+          pillar: params.pillar,
+          hook: params.hook,
+          angle: params.angle,
+          audience: params.audience,
+          supportingEvidence: params.supportingEvidence.join("\n"),
+          voiceNotes: params.voiceNotes,
+          voiceExamples: params.voiceExamplesText ?? "No curated voice examples yet.",
+          performanceInsights: params.performanceInsights ?? "No performance data yet."
+        })
+      })
+  });
+}
+
+export async function analyzePerformance(params: {
+  winners: string[];
+  losers: string[];
+  voiceGuide: string;
+  previousLearnings?: string;
+}) {
+  const prompt = promptCatalog.PERFORMANCE_ANALYST;
+  return runWithProviderFallback({
+    label: "analyzePerformance",
+    fallback: () =>
+      performanceLearningSchema.parse({
+        analysis: "Insufficient data for AI analysis. Continue publishing to build a performance baseline.",
+        patterns: ["source-backed-content", "specific-examples"],
+        antiPatterns: ["generic-motivation", "unsupported-claims"],
+        recommendations: ["Focus on posts grounded in real research.", "Vary hook styles."]
+      }),
+    execute: () =>
+      runStructuredPrompt({
+        model: getEnv().OPENAI_QUALITY_MODEL,
+        fallbackModel: getEnv().GROQ_QUALITY_MODEL,
+        schema: performanceLearningSchema,
+        schemaName: prompt.schemaName,
+        systemPrompt: prompt.systemPrompt,
+        userPrompt: renderPromptTemplate(prompt.userTemplate, {
+          winners: params.winners.join("\n---\n") || "No winners yet",
+          losers: params.losers.join("\n---\n") || "No losers yet",
+          voiceGuide: params.voiceGuide,
+          previousLearnings: params.previousLearnings ?? "No previous learnings."
+        })
+      })
+  });
+}
+
+export function classifyHookPattern(hookText: string) {
+  const lowered = hookText.toLowerCase();
+
+  if (lowered.includes("?")) return "question";
+  if (/\d+%|\d+x|\$\d/.test(lowered)) return "stat_lead";
+  if (/\bi (was|did|had|used|tried|built|learned)\b/.test(lowered)) return "story";
+  if (/\bnot\b|\bnever\b|\bstop\b|\bwrong\b|\blie\b/.test(lowered)) return "contrarian";
+  if (/\bunpopular\b|\bhot take\b|\bcontroversial\b/.test(lowered)) return "controversial";
+  if (/\beveryone\b.*\bbut\b|\bmost people\b/.test(lowered)) return "pattern_break";
+  if (/\bnoticed\b|\brealized\b|\bthe thing about\b/.test(lowered)) return "observation";
+
+  return "lesson";
 }
 
 export async function reviewDraft(params: {
@@ -551,3 +656,4 @@ export async function draftReply(params: {
       })
   });
 }
+

@@ -216,6 +216,36 @@ export async function createPost(params: {
   });
 }
 
+export async function createThread(params: {
+  accessToken: string;
+  parts: string[];
+}) {
+  if (params.parts.length === 0) {
+    throw new Error("Thread must have at least one part.");
+  }
+
+  const postIds: string[] = [];
+  let previousPostId: string | undefined;
+
+  for (const part of params.parts) {
+    const response = await createPost({
+      accessToken: params.accessToken,
+      text: part,
+      replyToPostId: previousPostId
+    });
+
+    const postId = String((response.data.data as { id?: string } | undefined)?.id ?? "");
+    postIds.push(postId);
+    previousPostId = postId;
+
+    if (params.parts.indexOf(part) < params.parts.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 1_500));
+    }
+  }
+
+  return { postIds, firstPostId: postIds[0] ?? "" };
+}
+
 export async function getAuthenticatedUser(accessToken: string) {
   const response = await xFetch("/2/users/me?user.fields=username,name", {
     authToken: accessToken,

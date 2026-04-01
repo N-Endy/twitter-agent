@@ -67,7 +67,9 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PromptVersion: 'PromptVersion',
   SystemState: 'SystemState',
-  VoiceExample: 'VoiceExample'
+  VoiceExample: 'VoiceExample',
+  PerformanceLearning: 'PerformanceLearning',
+  TimingAnalysis: 'TimingAnalysis'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -135,6 +137,9 @@ export const ContentIdeaScalarFieldEnum = {
   hookTags: 'hookTags',
   pillarTags: 'pillarTags',
   tags: 'tags',
+  hookPattern: 'hookPattern',
+  format: 'format',
+  variantCount: 'variantCount',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -160,6 +165,9 @@ export const DraftScalarFieldEnum = {
   evidenceUsed: 'evidenceUsed',
   suggestedCta: 'suggestedCta',
   confidence: 'confidence',
+  format: 'format',
+  threadParts: 'threadParts',
+  autoApproved: 'autoApproved',
   status: 'status',
   approvedAt: 'approvedAt',
   createdAt: 'createdAt',
@@ -370,6 +378,34 @@ export const VoiceExampleScalarFieldEnum = {
 } as const
 
 export type VoiceExampleScalarFieldEnum = (typeof VoiceExampleScalarFieldEnum)[keyof typeof VoiceExampleScalarFieldEnum]
+
+
+export const PerformanceLearningScalarFieldEnum = {
+  id: 'id',
+  analysis: 'analysis',
+  patterns: 'patterns',
+  antiPatterns: 'antiPatterns',
+  recommendations: 'recommendations',
+  sampleSize: 'sampleSize',
+  medianLikes: 'medianLikes',
+  winnerThreshold: 'winnerThreshold',
+  createdAt: 'createdAt'
+} as const
+
+export type PerformanceLearningScalarFieldEnum = (typeof PerformanceLearningScalarFieldEnum)[keyof typeof PerformanceLearningScalarFieldEnum]
+
+
+export const TimingAnalysisScalarFieldEnum = {
+  id: 'id',
+  bestHours: 'bestHours',
+  bestDays: 'bestDays',
+  worstHours: 'worstHours',
+  sampleSize: 'sampleSize',
+  avgEngagement: 'avgEngagement',
+  createdAt: 'createdAt'
+} as const
+
+export type TimingAnalysisScalarFieldEnum = (typeof TimingAnalysisScalarFieldEnum)[keyof typeof TimingAnalysisScalarFieldEnum]
 
 
 export const SortOrder = {

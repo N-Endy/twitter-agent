@@ -20,8 +20,18 @@ export type ContentIdeaModel = runtime.Types.Result.DefaultSelection<Prisma.$Con
 
 export type AggregateContentIdea = {
   _count: ContentIdeaCountAggregateOutputType | null
+  _avg: ContentIdeaAvgAggregateOutputType | null
+  _sum: ContentIdeaSumAggregateOutputType | null
   _min: ContentIdeaMinAggregateOutputType | null
   _max: ContentIdeaMaxAggregateOutputType | null
+}
+
+export type ContentIdeaAvgAggregateOutputType = {
+  variantCount: number | null
+}
+
+export type ContentIdeaSumAggregateOutputType = {
+  variantCount: number | null
 }
 
 export type ContentIdeaMinAggregateOutputType = {
@@ -35,6 +45,9 @@ export type ContentIdeaMinAggregateOutputType = {
   rationale: string | null
   sourceBacked: boolean | null
   topical: boolean | null
+  hookPattern: string | null
+  format: string | null
+  variantCount: number | null
   status: $Enums.IdeaStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,6 +64,9 @@ export type ContentIdeaMaxAggregateOutputType = {
   rationale: string | null
   sourceBacked: boolean | null
   topical: boolean | null
+  hookPattern: string | null
+  format: string | null
+  variantCount: number | null
   status: $Enums.IdeaStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -70,12 +86,23 @@ export type ContentIdeaCountAggregateOutputType = {
   hookTags: number
   pillarTags: number
   tags: number
+  hookPattern: number
+  format: number
+  variantCount: number
   status: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type ContentIdeaAvgAggregateInputType = {
+  variantCount?: true
+}
+
+export type ContentIdeaSumAggregateInputType = {
+  variantCount?: true
+}
 
 export type ContentIdeaMinAggregateInputType = {
   id?: true
@@ -88,6 +115,9 @@ export type ContentIdeaMinAggregateInputType = {
   rationale?: true
   sourceBacked?: true
   topical?: true
+  hookPattern?: true
+  format?: true
+  variantCount?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -104,6 +134,9 @@ export type ContentIdeaMaxAggregateInputType = {
   rationale?: true
   sourceBacked?: true
   topical?: true
+  hookPattern?: true
+  format?: true
+  variantCount?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -123,6 +156,9 @@ export type ContentIdeaCountAggregateInputType = {
   hookTags?: true
   pillarTags?: true
   tags?: true
+  hookPattern?: true
+  format?: true
+  variantCount?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -167,6 +203,18 @@ export type ContentIdeaAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ContentIdeaAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ContentIdeaSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ContentIdeaMinAggregateInputType
@@ -197,6 +245,8 @@ export type ContentIdeaGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: ContentIdeaCountAggregateInputType | true
+  _avg?: ContentIdeaAvgAggregateInputType
+  _sum?: ContentIdeaSumAggregateInputType
   _min?: ContentIdeaMinAggregateInputType
   _max?: ContentIdeaMaxAggregateInputType
 }
@@ -215,10 +265,15 @@ export type ContentIdeaGroupByOutputType = {
   hookTags: string[]
   pillarTags: string[]
   tags: string[]
+  hookPattern: string | null
+  format: string
+  variantCount: number
   status: $Enums.IdeaStatus
   createdAt: Date
   updatedAt: Date
   _count: ContentIdeaCountAggregateOutputType | null
+  _avg: ContentIdeaAvgAggregateOutputType | null
+  _sum: ContentIdeaSumAggregateOutputType | null
   _min: ContentIdeaMinAggregateOutputType | null
   _max: ContentIdeaMaxAggregateOutputType | null
 }
@@ -255,6 +310,9 @@ export type ContentIdeaWhereInput = {
   hookTags?: Prisma.StringNullableListFilter<"ContentIdea">
   pillarTags?: Prisma.StringNullableListFilter<"ContentIdea">
   tags?: Prisma.StringNullableListFilter<"ContentIdea">
+  hookPattern?: Prisma.StringNullableFilter<"ContentIdea"> | string | null
+  format?: Prisma.StringFilter<"ContentIdea"> | string
+  variantCount?: Prisma.IntFilter<"ContentIdea"> | number
   status?: Prisma.EnumIdeaStatusFilter<"ContentIdea"> | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFilter<"ContentIdea"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContentIdea"> | Date | string
@@ -277,6 +335,9 @@ export type ContentIdeaOrderByWithRelationInput = {
   hookTags?: Prisma.SortOrder
   pillarTags?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  hookPattern?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrder
+  variantCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -302,6 +363,9 @@ export type ContentIdeaWhereUniqueInput = Prisma.AtLeast<{
   hookTags?: Prisma.StringNullableListFilter<"ContentIdea">
   pillarTags?: Prisma.StringNullableListFilter<"ContentIdea">
   tags?: Prisma.StringNullableListFilter<"ContentIdea">
+  hookPattern?: Prisma.StringNullableFilter<"ContentIdea"> | string | null
+  format?: Prisma.StringFilter<"ContentIdea"> | string
+  variantCount?: Prisma.IntFilter<"ContentIdea"> | number
   status?: Prisma.EnumIdeaStatusFilter<"ContentIdea"> | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFilter<"ContentIdea"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContentIdea"> | Date | string
@@ -324,12 +388,17 @@ export type ContentIdeaOrderByWithAggregationInput = {
   hookTags?: Prisma.SortOrder
   pillarTags?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  hookPattern?: Prisma.SortOrderInput | Prisma.SortOrder
+  format?: Prisma.SortOrder
+  variantCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ContentIdeaCountOrderByAggregateInput
+  _avg?: Prisma.ContentIdeaAvgOrderByAggregateInput
   _max?: Prisma.ContentIdeaMaxOrderByAggregateInput
   _min?: Prisma.ContentIdeaMinOrderByAggregateInput
+  _sum?: Prisma.ContentIdeaSumOrderByAggregateInput
 }
 
 export type ContentIdeaScalarWhereWithAggregatesInput = {
@@ -349,6 +418,9 @@ export type ContentIdeaScalarWhereWithAggregatesInput = {
   hookTags?: Prisma.StringNullableListFilter<"ContentIdea">
   pillarTags?: Prisma.StringNullableListFilter<"ContentIdea">
   tags?: Prisma.StringNullableListFilter<"ContentIdea">
+  hookPattern?: Prisma.StringNullableWithAggregatesFilter<"ContentIdea"> | string | null
+  format?: Prisma.StringWithAggregatesFilter<"ContentIdea"> | string
+  variantCount?: Prisma.IntWithAggregatesFilter<"ContentIdea"> | number
   status?: Prisma.EnumIdeaStatusWithAggregatesFilter<"ContentIdea"> | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ContentIdea"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ContentIdea"> | Date | string
@@ -366,6 +438,9 @@ export type ContentIdeaCreateInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -388,6 +463,9 @@ export type ContentIdeaUncheckedCreateInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -406,6 +484,9 @@ export type ContentIdeaUpdateInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -428,6 +509,9 @@ export type ContentIdeaUncheckedUpdateInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -448,6 +532,9 @@ export type ContentIdeaCreateManyInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -465,6 +552,9 @@ export type ContentIdeaUpdateManyMutationInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -484,6 +574,9 @@ export type ContentIdeaUncheckedUpdateManyInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -513,9 +606,16 @@ export type ContentIdeaCountOrderByAggregateInput = {
   hookTags?: Prisma.SortOrder
   pillarTags?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  hookPattern?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  variantCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ContentIdeaAvgOrderByAggregateInput = {
+  variantCount?: Prisma.SortOrder
 }
 
 export type ContentIdeaMaxOrderByAggregateInput = {
@@ -529,6 +629,9 @@ export type ContentIdeaMaxOrderByAggregateInput = {
   rationale?: Prisma.SortOrder
   sourceBacked?: Prisma.SortOrder
   topical?: Prisma.SortOrder
+  hookPattern?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  variantCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -545,9 +648,16 @@ export type ContentIdeaMinOrderByAggregateInput = {
   rationale?: Prisma.SortOrder
   sourceBacked?: Prisma.SortOrder
   topical?: Prisma.SortOrder
+  hookPattern?: Prisma.SortOrder
+  format?: Prisma.SortOrder
+  variantCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ContentIdeaSumOrderByAggregateInput = {
+  variantCount?: Prisma.SortOrder
 }
 
 export type ContentIdeaScalarRelationFilter = {
@@ -666,6 +776,14 @@ export type ContentIdeaUpdatetagsInput = {
   push?: string | string[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EnumIdeaStatusFieldUpdateOperationsInput = {
   set?: $Enums.IdeaStatus
 }
@@ -696,6 +814,9 @@ export type ContentIdeaCreateWithoutSourceItemInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -716,6 +837,9 @@ export type ContentIdeaUncheckedCreateWithoutSourceItemInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -765,6 +889,9 @@ export type ContentIdeaScalarWhereInput = {
   hookTags?: Prisma.StringNullableListFilter<"ContentIdea">
   pillarTags?: Prisma.StringNullableListFilter<"ContentIdea">
   tags?: Prisma.StringNullableListFilter<"ContentIdea">
+  hookPattern?: Prisma.StringNullableFilter<"ContentIdea"> | string | null
+  format?: Prisma.StringFilter<"ContentIdea"> | string
+  variantCount?: Prisma.IntFilter<"ContentIdea"> | number
   status?: Prisma.EnumIdeaStatusFilter<"ContentIdea"> | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFilter<"ContentIdea"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContentIdea"> | Date | string
@@ -782,6 +909,9 @@ export type ContentIdeaCreateWithoutSnapshotInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -802,6 +932,9 @@ export type ContentIdeaUncheckedCreateWithoutSnapshotInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -846,6 +979,9 @@ export type ContentIdeaCreateWithoutDraftsInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -867,6 +1003,9 @@ export type ContentIdeaUncheckedCreateWithoutDraftsInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -900,6 +1039,9 @@ export type ContentIdeaUpdateWithoutDraftsInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -921,6 +1063,9 @@ export type ContentIdeaUncheckedUpdateWithoutDraftsInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -939,6 +1084,9 @@ export type ContentIdeaCreateManySourceItemInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -956,6 +1104,9 @@ export type ContentIdeaUpdateWithoutSourceItemInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -976,6 +1127,9 @@ export type ContentIdeaUncheckedUpdateWithoutSourceItemInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -995,6 +1149,9 @@ export type ContentIdeaUncheckedUpdateManyWithoutSourceItemInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,6 +1170,9 @@ export type ContentIdeaCreateManySnapshotInput = {
   hookTags?: Prisma.ContentIdeaCreatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaCreatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaCreatetagsInput | string[]
+  hookPattern?: string | null
+  format?: string
+  variantCount?: number
   status?: $Enums.IdeaStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1030,6 +1190,9 @@ export type ContentIdeaUpdateWithoutSnapshotInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1050,6 +1213,9 @@ export type ContentIdeaUncheckedUpdateWithoutSnapshotInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1069,6 +1235,9 @@ export type ContentIdeaUncheckedUpdateManyWithoutSnapshotInput = {
   hookTags?: Prisma.ContentIdeaUpdatehookTagsInput | string[]
   pillarTags?: Prisma.ContentIdeaUpdatepillarTagsInput | string[]
   tags?: Prisma.ContentIdeaUpdatetagsInput | string[]
+  hookPattern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  format?: Prisma.StringFieldUpdateOperationsInput | string
+  variantCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumIdeaStatusFieldUpdateOperationsInput | $Enums.IdeaStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1119,6 +1288,9 @@ export type ContentIdeaSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   hookTags?: boolean
   pillarTags?: boolean
   tags?: boolean
+  hookPattern?: boolean
+  format?: boolean
+  variantCount?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1142,6 +1314,9 @@ export type ContentIdeaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   hookTags?: boolean
   pillarTags?: boolean
   tags?: boolean
+  hookPattern?: boolean
+  format?: boolean
+  variantCount?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1163,6 +1338,9 @@ export type ContentIdeaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   hookTags?: boolean
   pillarTags?: boolean
   tags?: boolean
+  hookPattern?: boolean
+  format?: boolean
+  variantCount?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1184,12 +1362,15 @@ export type ContentIdeaSelectScalar = {
   hookTags?: boolean
   pillarTags?: boolean
   tags?: boolean
+  hookPattern?: boolean
+  format?: boolean
+  variantCount?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ContentIdeaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sourceItemId" | "snapshotId" | "pillar" | "hook" | "angle" | "audience" | "rationale" | "sourceBacked" | "topical" | "hookTags" | "pillarTags" | "tags" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["contentIdea"]>
+export type ContentIdeaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sourceItemId" | "snapshotId" | "pillar" | "hook" | "angle" | "audience" | "rationale" | "sourceBacked" | "topical" | "hookTags" | "pillarTags" | "tags" | "hookPattern" | "format" | "variantCount" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["contentIdea"]>
 export type ContentIdeaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sourceItem?: boolean | Prisma.SourceItemDefaultArgs<ExtArgs>
   snapshot?: boolean | Prisma.ContentIdea$snapshotArgs<ExtArgs>
@@ -1226,6 +1407,9 @@ export type $ContentIdeaPayload<ExtArgs extends runtime.Types.Extensions.Interna
     hookTags: string[]
     pillarTags: string[]
     tags: string[]
+    hookPattern: string | null
+    format: string
+    variantCount: number
     status: $Enums.IdeaStatus
     createdAt: Date
     updatedAt: Date
@@ -1668,6 +1852,9 @@ export interface ContentIdeaFieldRefs {
   readonly hookTags: Prisma.FieldRef<"ContentIdea", 'String[]'>
   readonly pillarTags: Prisma.FieldRef<"ContentIdea", 'String[]'>
   readonly tags: Prisma.FieldRef<"ContentIdea", 'String[]'>
+  readonly hookPattern: Prisma.FieldRef<"ContentIdea", 'String'>
+  readonly format: Prisma.FieldRef<"ContentIdea", 'String'>
+  readonly variantCount: Prisma.FieldRef<"ContentIdea", 'Int'>
   readonly status: Prisma.FieldRef<"ContentIdea", 'IdeaStatus'>
   readonly createdAt: Prisma.FieldRef<"ContentIdea", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ContentIdea", 'DateTime'>

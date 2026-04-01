@@ -10,6 +10,7 @@ import { handlePublishPost } from "./jobs/publish-post";
 import { handleReplyDraft } from "./jobs/reply-draft";
 import { handleSourceIngest } from "./jobs/source-ingest";
 import { handleWeeklyBatch } from "./jobs/weekly-batch";
+import { handlePerformanceAnalysis } from "./jobs/performance-analysis";
 
 const connection = getRedisConnection();
 
@@ -21,7 +22,8 @@ const workers = [
   new Worker(queueNames.mentionPoll, handleMentionPoll, { connection }),
   new Worker(queueNames.replyDraft, handleReplyDraft, { connection }),
   new Worker(queueNames.metricsSync, handleMetricsSync, { connection }),
-  new Worker(queueNames.cleanup, handleCleanup, { connection })
+  new Worker(queueNames.cleanup, handleCleanup, { connection }),
+  new Worker(queueNames.performanceAnalysis, handlePerformanceAnalysis, { connection })
 ];
 
 for (const worker of workers) {

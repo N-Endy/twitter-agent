@@ -79,8 +79,8 @@ export default async function SourcesPage() {
               <tr key={source.id}>
                 <TableCell label="Source">
                   <p className="font-bold text-white uppercase tracking-tight text-xs">{source.title}</p>
-                  <p className="mt-1 text-[9px] text-slate-500 font-mono tracking-tighter">{source.uri}</p>
-                  {source.notes ? <p className="mt-3 text-xs leading-6 text-slate-400 border-l border-white/10 pl-3">{source.notes}</p> : null}
+                  <p className="mt-1 text-[9px] text-slate-500 font-mono tracking-tighter truncate max-w-[240px]">{source.uri}</p>
+                  {source.notes ? <p className="mt-3 text-xs leading-6 text-slate-400 border-l border-white/10 pl-3 line-clamp-2 max-w-sm">{source.notes}</p> : null}
                 </TableCell>
                 <TableCell label="Kind" className="tech-column text-[10px] uppercase tracking-widest text-slate-500 font-bold">{source.kind}</TableCell>
                 <TableCell label="Mode" className="tech-column">

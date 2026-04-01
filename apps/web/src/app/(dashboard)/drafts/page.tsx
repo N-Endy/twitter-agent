@@ -79,8 +79,8 @@ export default async function DraftsPage() {
               return (
                 <tr key={draft.id}>
                   <TableCell label="Draft">
-                    <p className="font-bold text-white uppercase tracking-tight text-xs">{draft.idea.hook}</p>
-                    <p className="mt-2 text-xs leading-6 text-slate-400">{draft.text}</p>
+                    <p className="font-bold text-white uppercase tracking-tight text-xs truncate max-w-sm">{draft.idea.hook}</p>
+                    <p className="mt-2 text-xs leading-6 text-slate-400 line-clamp-3">{draft.text}</p>
                   </TableCell>
                   <TableCell label="Scores" className="tech-column text-[10px] uppercase tracking-wider text-slate-500">
                     <p>Chars: <span className="text-slate-300 font-bold">{draft.characterCount}</span></p>
@@ -122,6 +122,7 @@ export default async function DraftsPage() {
                             label="Run QA"
                             body={{ draftId: draft.id }}
                             tone="neutral"
+                            fullWidth
                           />
                         ) : null}
                         {draft.status === "APPROVED" && !draft.scheduleSlot ? (
@@ -137,17 +138,19 @@ export default async function DraftsPage() {
                             fullWidth
                           />
                         ) : null}
-                        <StatusPill
-                          tone={
-                            draft.status === "REJECTED"
-                              ? "bad"
-                              : draft.status === "APPROVED" || draft.status === "SCHEDULED" || draft.status === "PUBLISHED"
-                                ? "good"
-                                : "warning"
-                          }
-                        >
-                          {draft.status}
-                        </StatusPill>
+                        <div className="flex w-full justify-center text-center">
+                          <StatusPill
+                            tone={
+                              draft.status === "REJECTED"
+                                ? "bad"
+                                : draft.status === "APPROVED" || draft.status === "SCHEDULED" || draft.status === "PUBLISHED"
+                                  ? "good"
+                                  : "warning"
+                            }
+                          >
+                            {draft.status}
+                          </StatusPill>
+                        </div>
                     </div>
                   </TableCell>
                 </tr>
