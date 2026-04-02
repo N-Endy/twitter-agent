@@ -5,34 +5,45 @@ import { formatDashboardDate, formatRelative, getDashboardMetrics, getOverviewFe
 export default async function OverviewPage() {
   const [metrics, feed] = await Promise.all([getDashboardMetrics(), getOverviewFeed()]);
   const weeklyBatchRunning = feed.weeklyBatch?.status === "RUNNING";
+  const xAccountAction = (
+    <a
+      href="/api/auth/x/start"
+      className="inline-flex justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
+    >
+      {metrics.xConnected ? "Reconnect X account" : "Connect X account"}
+    </a>
+  );
   const nextAction =
     metrics.xStatus.label === "Missing"
       ? {
           title: "Connect the X account first",
           tone: "warning" as const,
           body: "Posting, mentions, and reply sending stay blocked until the owner account is connected.",
-          actions: (
-            <a
-              href="/api/auth/x/start"
-              className="inline-flex justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
-            >
-              Connect account
-            </a>
-          )
+          actions: xAccountAction
         }
       : metrics.xStatus.label === "Billing blocked"
         ? {
             title: "X credits are blocking live actions",
             tone: "bad" as const,
             body: "Source ingestion from X, publish checks, mention polling, and metrics sync are paused until X billing is healthy again.",
-            actions: <JobTriggerButton job="source-ingest" label="Retry ingest" tone="warning" />
+            actions: (
+              <>
+                <JobTriggerButton job="source-ingest" label="Retry ingest" tone="warning" />
+                {xAccountAction}
+              </>
+            )
           }
         : metrics.sources === 0
           ? {
               title: "Start by shaping the source mix",
               tone: "neutral" as const,
               body: "Add sources with strong notes so the system knows the themes, tone, and audience it should learn from.",
-              actions: <GhostLink href="/sources">Open sources</GhostLink>
+              actions: (
+                <>
+                  <GhostLink href="/sources">Open sources</GhostLink>
+                  {xAccountAction}
+                </>
+              )
             }
           : metrics.drafts === 0
             ? {
@@ -43,6 +54,7 @@ export default async function OverviewPage() {
                   <>
                     <JobTriggerButton job="source-ingest" label="Run ingest" />
                     <GhostLink href="/ideas">Open ideas</GhostLink>
+                    {xAccountAction}
                   </>
                 )
               }
@@ -51,13 +63,23 @@ export default async function OverviewPage() {
                   title: "The mention queue needs attention",
                   tone: "warning" as const,
                   body: "Draft or resolve replies before the queue goes stale. Mentions feel more manageable when you process them in small batches.",
-                  actions: <GhostLink href="/replies">Open replies</GhostLink>
+                  actions: (
+                    <>
+                      <GhostLink href="/replies">Open replies</GhostLink>
+                      {xAccountAction}
+                    </>
+                  )
                 }
               : {
                   title: "The system is healthy enough to operate",
                   tone: "good" as const,
                   body: "Use the controls below to keep the content engine moving and focus your attention on drafts that need human judgment.",
-                  actions: <GhostLink href="/drafts">Open drafts</GhostLink>
+                  actions: (
+                    <>
+                      <GhostLink href="/drafts">Open drafts</GhostLink>
+                      {xAccountAction}
+                    </>
+                  )
                 };
 
   return (
@@ -300,7 +322,10 @@ export default async function OverviewPage() {
               <p className="mt-1 text-xs text-slate-400">{feed.xStatus.detail}</p>
               <p className="mt-2 text-xs text-slate-500">Mention cursor: {feed.lastCursor ?? "Not started yet"}</p>
             </div>
-            <GhostLink href="/prompts">Manage prompts & voice</GhostLink>
+            <div className="flex flex-wrap gap-2">
+              {xAccountAction}
+              <GhostLink href="/prompts">Manage prompts & voice</GhostLink>
+            </div>
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             <JobTriggerButton job="cleanup" label="Run cleanup" tone="neutral" />

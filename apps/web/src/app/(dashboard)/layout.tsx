@@ -12,6 +12,7 @@ export default async function DashboardLayout({
 }) {
   const session = await requireSession();
   const xTokens = await readXTokens();
+  const xAccountLabel = xTokens ? "Reconnect X account" : "Connect X account";
 
   return (
     <AppShell
@@ -20,14 +21,12 @@ export default async function DashboardLayout({
           <span className="inline-flex w-full items-center justify-center border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 sm:w-auto">
             {session.user.email}
           </span>
-          {!xTokens ? (
-            <a
-              href="/api/auth/x/start"
-              className="inline-flex w-full justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20 sm:w-auto"
-            >
-              Connect X account
-            </a>
-          ) : null}
+          <a
+            href="/api/auth/x/start"
+            className="inline-flex w-full justify-center border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20 sm:w-auto"
+          >
+            {xAccountLabel}
+          </a>
           <SignOutButton />
         </>
       }
