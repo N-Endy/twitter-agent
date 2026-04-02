@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
 
 import { requireSession } from "@/lib/guards";
 import {
@@ -244,18 +244,49 @@ export async function getDraftsPageData() {
 
 export async function getScheduledPageData() {
   await requireDashboardAccess();
+  const timezone = getEnv().DEFAULT_TIMEZONE;
+  const todayKey = formatInTimeZone(new Date(), timezone, "yyyy-MM-dd");
+  const todayStart = fromZonedTime(`${todayKey}T00:00:00`, timezone);
 
-  return prisma.scheduleSlot.findMany({
-    orderBy: { slotAt: "asc" },
-    take: 30,
-    include: {
-      draft: {
-        include: {
-          idea: true
+  const [upcomingSlots, pastSlots] = await Promise.all([
+    prisma.scheduleSlot.findMany({
+      where: {
+        slotAt: {
+          gte: todayStart
+        }
+      },
+      orderBy: { slotAt: "asc" },
+      take: 30,
+      include: {
+        draft: {
+          include: {
+            idea: true
+          }
         }
       }
-    }
-  });
+    }),
+    prisma.scheduleSlot.findMany({
+      where: {
+        slotAt: {
+          lt: todayStart
+        }
+      },
+      orderBy: { slotAt: "desc" },
+      take: 12,
+      include: {
+        draft: {
+          include: {
+            idea: true
+          }
+        }
+      }
+    })
+  ]);
+
+  return {
+    upcomingSlots,
+    pastSlots
+  };
 }
 
 export async function getPublishedPageData() {
