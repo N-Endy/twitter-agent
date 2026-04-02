@@ -21,6 +21,13 @@ export default async function OverviewPage() {
           body: "Posting, mentions, and reply sending stay blocked until the owner account is connected.",
           actions: xAccountAction
         }
+      : metrics.xStatus.label === "Error"
+        ? {
+            title: "X integration needs attention",
+            tone: "bad" as const,
+            body: metrics.xStatus.detail,
+            actions: xAccountAction
+          }
       : metrics.xStatus.label === "Billing blocked"
         ? {
             title: "X credits are blocking live actions",

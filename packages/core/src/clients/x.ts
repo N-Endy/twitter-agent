@@ -26,6 +26,7 @@ export class XApiError extends Error {
     bodyJson: Record<string, unknown> | null;
     rateLimitRemaining: number | null;
     rateLimitReset: number | null;
+    billingRequired: boolean;
   }) {
     super(`X API request failed: ${params.status} ${params.bodyText}`.trim());
     this.name = "XApiError";
@@ -34,7 +35,7 @@ export class XApiError extends Error {
     this.bodyJson = params.bodyJson;
     this.rateLimitRemaining = params.rateLimitRemaining;
     this.rateLimitReset = params.rateLimitReset;
-    this.billingRequired = params.status === 402;
+    this.billingRequired = params.billingRequired;
   }
 }
 
@@ -60,12 +61,24 @@ async function buildXApiError(response: Response) {
     response.statusText ||
     "Request failed.";
 
+  const detail = typeof bodyJson?.detail === "string" ? bodyJson.detail.toLowerCase() : "";
+  const title = typeof bodyJson?.title === "string" ? bodyJson.title.toLowerCase() : "";
+  const type = typeof bodyJson?.type === "string" ? bodyJson.type.toLowerCase() : "";
+  const billingRequired =
+    response.status === 402 ||
+    title === "spendcapreached" ||
+    type.includes("/problems/credits") ||
+    detail.includes("spend cap") ||
+    detail.includes("billing cycle") ||
+    detail.includes("increase your spend cap");
+
   return new XApiError({
     status: response.status,
     bodyText: preferredMessage,
     bodyJson,
     rateLimitRemaining: Number(response.headers.get("x-rate-limit-remaining")) || null,
-    rateLimitReset: Number(response.headers.get("x-rate-limit-reset")) || null
+    rateLimitReset: Number(response.headers.get("x-rate-limit-reset")) || null,
+    billingRequired
   });
 }
 

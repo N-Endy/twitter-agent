@@ -48,4 +48,33 @@ describe("x helpers", () => {
       bodyText: "Upgrade plan for access."
     });
   });
+
+  it("treats X spend-cap 403 responses as billing errors", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        new Response(
+          JSON.stringify({
+            title: "SpendCapReached",
+            detail:
+              "Your enrolled account [2036414865577738240] has reached its billing cycle spend cap. API requests will be blocked until the next cycle begins on 2026-04-24. To resume access immediately, you can increase your spend cap in the developer console.",
+            type: "https://api.twitter.com/2/problems/credits"
+          }),
+          {
+            status: 403,
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        )
+      )
+    );
+
+    await expect(createPost({ accessToken: "token", text: "hello" })).rejects.toMatchObject<XApiError>({
+      name: "XApiError",
+      status: 403,
+      billingRequired: true,
+      bodyText: expect.stringContaining("spend cap")
+    });
+  });
 });

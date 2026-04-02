@@ -22,6 +22,7 @@ export function MutationButton({
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const toneClass =
     tone === "warning"
@@ -50,6 +51,7 @@ export function MutationButton({
 
           startTransition(async () => {
             setError(null);
+            setSuccess(null);
 
             const response = await fetch(url, {
               method: "POST",
@@ -65,12 +67,25 @@ export function MutationButton({
               return;
             }
 
+            const payload = (await response.json().catch(() => null)) as
+              | { ok?: boolean; jobId?: string | number; queue?: string; message?: string }
+              | null;
+
+            if (payload?.message) {
+              setSuccess(payload.message);
+            } else if (payload?.jobId && payload?.queue) {
+              setSuccess(`Queued on ${payload.queue} (#${payload.jobId}).`);
+            } else {
+              setSuccess("Done.");
+            }
+
             router.refresh();
           });
         }}
       >
         {isPending ? "Working..." : label}
       </button>
+      {success ? <p className="text-xs text-emerald-300" role="status">{success}</p> : null}
       {error ? <p className="text-xs text-rose-300" role="alert">{error}</p> : null}
     </div>
   );

@@ -33,6 +33,15 @@ function getXStatusSummary(params: {
     };
   }
 
+  if (params.integration?.status === "ERROR") {
+    return {
+      label: "Error",
+      tone: "bad" as const,
+      detail: params.integration.reason ?? "X calls are failing even though credentials exist. Reconnect X and check the worker logs for the latest failure.",
+      timestamp: params.integration.lastFailureAt ?? null
+    };
+  }
+
   if (params.tokens?.accessToken) {
     return {
       label: "Connected",
